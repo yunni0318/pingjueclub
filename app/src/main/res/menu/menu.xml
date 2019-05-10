@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_dashboard"
+            android:icon="@drawable/sidebar_dashboard"
+            android:title="@string/nav_menu_dashboard" />
+        <item
+            android:id="@+id/menu_account"
+            android:icon="@drawable/sidebar_account"
+            android:title="@string/nav_menu_account" />
+        <item
+            android:id="@+id/menu_my_booking"
+            android:icon="@drawable/sidebar_my_booking"
+            android:title="@string/nav_menu_my_booking" />
+        <item
+            android:id="@+id/menu_my_transactions_report"
+            android:icon="@drawable/sidebar_my_booking"
+            android:title="@string/nav_menu_transactions_report" />
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/sidebar_logout"
+            android:title="@string/nav_menu_logout" />
+    </group>
+
+</menu>

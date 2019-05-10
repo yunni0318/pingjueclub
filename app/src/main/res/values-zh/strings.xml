@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">品爵俱乐部</string>
+
+    <!-- Login Activity-->
+    <string name="login_activity_login">登入</string>
+    <string name="login_activity_edittext_hint_username">用户名</string>
+    <string name="login_activity_edittext_hint_password">密码</string>
+    <string name="login_activity_button_forgot_password">忘记密码？</string>
+    <string name="login_activity_button_forgot_password_clickhere">点击这里</string>
+
+    <!-- Forgot Password Activity-->
+    <string name="forgotpassword_activity_edittext_email">邮件</string>
+    <string name="forgotpassword_activity_button_submit">提交</string>
+
+    <!-- Member Dashboard Activity-->
+    <string name="member_dashboard_textview_popular_trip">热门旅行</string>
+    <string name="member_dashboard_eventstartdate">%s %s月 %s</string>
+    <string name="member_dashboard_eventenddate">%s %s月 %s</string>
+
+    <!-- Navigation Drawer Menu -->
+    <string name="nav_menu_dashboard">仪表板</string>
+    <string name="nav_menu_account">账户</string>
+    <string name="nav_menu_my_booking">我的预定</string>
+    <string name="nav_menu_transactions_report">我的交易报告</string>
+    <string name="nav_menu_logout">登出</string>
+
+    <!-- Event Detail Activity -->
+    <string name="event_detail_title">行程资料</string>
+    <string name="event_detail_join_trip_bell">按"加入旅行"支付费用</string>
+    <string name="event_detail_trip_detail_title">旅行细节</string>
+    <string name="event_detail_join_trip">加入行程</string>
+    <string name="event_detail_joined_status_false">按“加入旅行”支付费用。</string>
+    <string name="event_detail_confirm_join_trip">确认加入此行程？</string>
+    <string name="event_detail_trip_confirmed">行程确定加入！</string>
+
+    <!-- Edit Profile Activity -->
+    <string name="edit_profile_profile_title">用户资料</string>
+    <string name="edit_profile_fullname_title">全名</string>
+    <string name="edit_profile_username_title">用户名</string>
+    <string name="edit_profile_dob_title">生日日期</string>
+    <string name="edit_profile_email_title">电子邮件</string>
+    <string name="edit_profile_country_title">国家</string>
+    <string name="edit_profile_state_title">州/省</string>
+    <string name="edit_profile_address_title">邮寄地址</string>
+    <string name="edit_profile_phone_title">手机号码</string>
+    <string name="edit_profile_save_profile">保存用户配置文件</string>
+    <string name="edit_profile_save_profile_success">用户资料更新成功!</string>
+    <string name="edit_profile_change_password_current_password_title">当前密码</string>
+    <string name="edit_profile_change_password_new_password_title">新密码</string>
+    <string name="edit_profile_change_password_confirm_password_title">确认新密码</string>
+    <string name="edit_profile_change_password_button">修改密码</string>
+    <string name="edit_profile_change_password_success">用户密码更新成功!</string>
+
+    <!-- My Booking List-->
+    <string name="my_booking_title">我的预订</string>
+    <string name="my_booking_eventstartdate">%s %s月 %s</string>
+    <string name="my_booking_eventenddate">%s %s月 %s</string>
+
+    <!-- My Transactions Report -->
+    <string name="transaction_report_title">我的交易报告</string>
+    <string name="transaction_report_type_title">类型</string>
+    <string name="transaction_report_amount_title">金额T</string>
+    <string name="transaction_report_remarks_title">备注</string>
+
+    <!-- Error Message-->
+    <string name="login_username_error">请输入您的用户名</string>
+    <string name="login_password_error">请输入您的密码</string>
+
+    <string name="forgotpassword_email_error">请输入您的邮件！</string>
+    <string name="forgotpassword_email_invalid_error">邮件格式无效！</string>
+
+    <string name="logout_confirmation">确定登出？</string>
+
+    <string name="edit_profile_email_empty_error">请输入您的邮件！ </string>
+    <string name="edit_profile_email_invalid_format_error">邮件格式无效！</string>
+
+    <string name="edit_profile_change_password_empty_error">请输入您的密码。 </string>
+    <string name="edit_profile_change_password_invalid_error">密码应包含字母和数字字符。 最小长度（6） - 最大长度（50）</string>
+
+    <string name="edit_profile_change_password_current_password_error">现有密码不正确 </string>
+    <string name="edit_profile_change_password_confirm_password_error">确认新密码与新密码字段不匹配</string>
+
+    <string name="warning_title">注意</string>
+    <string name="error_title">错误</string>
+    <string name="error_unknown">Unknown Error</string>
+    <string name="error_1502">登录ID或密码不正确。</string>
+    <string name="error_1503">由于登录尝试次数过多，此帐户已暂停。请在一小时后再试一次。</string>
+    <string name="error_1504">您的帐户已被暂停。我们已在您的帐户中检测到可疑活动，并已将其作为安全预防措施暂停。请与支持小组联系以解锁您的帐户。</string>
+    <string name="error_1506">Session已过期，请重新登录。</string>
+    <string name="error_1509">已通过电子邮件向您发送重置密码链接。您可以按照该链接配置新密码。如果电子邮件未到达，请与支持小组联系。</string>
+    <string name="error_1510">您提供的ID或电子邮件不存在。</string>
+    <string name="error_1511">您的重置链接在2小时后过期或已被使用过期。</string>
+    <string name="error_1512">您的密码已成功重置。请使用您的新密码登录。</string>
+    <string name="error_2501">名字不能为空。</string>
+    <string name="error_2502">电子邮件不能为空。</string>
+    <string name="error_2503">请选择您的国家。</string>
+    <string name="error_2504">请选择您的州/省。</string>
+    <string name="error_2505">地址不能为空。</string>
+    <string name="error_2506">电话号码不能为空。</string>
+    <string name="error_2507">名字的长度应为2到80个字符。</string>
+    <string name="error_2508">请输入有效的地址。</string>
+    <string name="error_2509">请输入有效的电话号码。</string>
+    <string name="error_2510">请输入有效的电子邮件。</string>
+    <string name="error_2511">现有密码不能为空。</string>
+    <string name="error_2512">新密码不能为空。</string>
+    <string name="error_2513">确认密码不能为空。</string>
+    <string name="error_2514">现有密码不正确。</string>
+    <string name="error_2515">新密码和确认密码不匹配。</string>
+    <string name="error_2516">密码的长度应为6 到50个字符。</string>
+    <string name="error_2517">密码应包含字母和数字字符。</string>
+    <string name="error_2518">电子邮件已被使用。</string>
+    <string name="error_2519">电话号码已被使用。</string>
+    <string name="error_2520">您的个人资料已成功更新。</string>
+    <string name="error_2521">您的密码已成功更新。</string>
+    <string name="error_3001">这次旅行已不再可用。它可能已过期或已完全预订。</string>
+    <string name="error_3501">您不能参加此次旅行，因为它仅适用于{0}会员</string>
+    <string name="error_3502">你已经加入了这次旅行。</string>
+    <string name="error_3503">你成功地加入了这次旅行。</string>
+    <string name="error_3504">余额不足。必需：{0} (钱包余额：{1})。请联系支持人员以充值您的钱包</string>
+    <string name="error_3505">支付失败。出于安全原因，您的现金钱包已被冻结。请联系支持部门以激活您的现金钱包。</string>
+    <!-- Success Message-->
+    <string name="success_title">成功</string>
+
+    <!-- Button Message-->
+    <string name="Ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="join_trip">加入行程</string>
+    <!-- Others -->
+    <string name="userrank_bronze">青铜级</string>
+    <string name="userrank_gold">金级</string>
+    <string name="userrank_platinum">铂级</string>
+
+</resources>

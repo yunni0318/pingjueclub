@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:background="#333333"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/imagebutton_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
+                    android:adjustViewBounds="true"
+                    android:onClick="imagebutton_change_language_onclick"
+                    android:scaleType="center"
+                    android:src="@drawable/language_usa" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/pingjue_logo_vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/login_activity_login"
+                    android:textColor="#ffd35c" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:id="@+id/edittext_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edittext_login_style"
+                    android:drawableStart="@mipmap/username"
+                    android:drawableLeft="@mipmap/username"
+                    android:drawablePadding="15dp"
+                    android:hint="@string/login_activity_edittext_hint_username"
+                    android:imeOptions="actionGo"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="#ffffff"
+                    android:textColorHint="@color/edittext_hint_username" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp">
+
+                <EditText
+                    android:id="@+id/edittext_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edittext_login_style"
+                    android:drawableStart="@mipmap/password"
+                    android:drawableLeft="@mipmap/password"
+                    android:drawablePadding="15dp"
+                    android:hint="@string/login_activity_edittext_hint_password"
+                    android:imeOptions="actionGo"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="#ffffff"
+                    android:textColorHint="@color/edittext_hint_password" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp">
+
+                <Button
+                    android:id="@+id/login_acitivity_button_forgotpassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="end"
+                    android:onClick="button_forgot_password_onclick"
+                    android:text="Forgot Password"
+                    android:textAlignment="textEnd"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_login_style"
+                    android:onClick="button_login_onclick"
+                    android:text="@string/login_activity_login" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>

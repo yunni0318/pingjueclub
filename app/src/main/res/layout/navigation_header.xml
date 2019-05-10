@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333333"
+    android:orientation="vertical"
+    android:paddingTop="30dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/textview_user_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:background="@drawable/radius_all"
+                android:gravity="center"
+                android:paddingStart="30dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="Loading..."
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+            <ImageView
+                android:id="@+id/imageview_user_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:gravity="left|center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/user_level_bronze" />
+
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/imagebutton_language"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:adjustViewBounds="true"
+            android:onClick="button_change_language"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/language_china" />
+    </RelativeLayout>
+
+    <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imageview_user_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:adjustViewBounds="true"
+        android:layout_marginBottom="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_profile"
+        app:riv_border_color="#ffffff"
+        app:riv_border_width="2dp"
+        app:riv_corner_radius="50dp"
+        app:riv_mutate_background="true"
+        app:riv_oval="true" />
+
+
+    <TextView
+        android:id="@+id/textview_user_full_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Loading..."
+        android:textAlignment="center"
+        android:textColor="@color/textview_sidebar"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textview_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textAlignment="center"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:id="@+id/textview_user_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Loading..."
+        android:textAlignment="center"
+        android:textColor="#ffffff" />
+
+</LinearLayout>
+
+

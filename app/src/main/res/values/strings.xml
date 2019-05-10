@@ -1,0 +1,139 @@
+<resources>
+    <string name="app_name">PingJueClub</string>
+
+    <!-- Login Activity-->
+    <string name="login_activity_login">LOGIN</string>
+    <string name="login_activity_edittext_hint_username">Username</string>
+    <string name="login_activity_edittext_hint_password">Password</string>
+    <string name="login_activity_button_forgot_password">Forgot Password?</string>
+    <string name="login_activity_button_forgot_password_clickhere">Click Here</string>
+
+    <string name="login_username_error">Name must be filled!</string>
+    <string name="login_password_error">Password must be filled!</string>
+
+    <!-- Forgot Password Activity-->
+    <string name="forgotpassword_activity_edittext_email">Email</string>
+    <string name="forgotpassword_activity_button_submit">SUBMIT</string>
+
+    <string name="forgotpassword_email_error">Please Enter your email!</string>
+    <string name="forgotpassword_email_invalid_error">Invalid Email Format!</string>
+
+    <!-- Member Dashboard Activity-->
+    <string name="member_dashboard_textview_popular_trip">POPULAR TRIP</string>
+    <string name="member_dashboard_eventstartdate">%s %s %s</string>
+    <string name="member_dashboard_eventenddate">%s %s %s</string>
+
+    <!-- Event Detail Activity -->
+    <string name="event_detail_title">Event Detail</string>
+    <string name="event_detail_join_trip_bell">Press \'JOIN TRIP\' to make your payment.</string>
+    <string name="event_detail_trip_detail_title">TRIP DETAILS</string>
+    <string name="event_detail_join_trip">JOIN TRIP</string>
+    <string name="event_detail_joined_status_false">Press \'JOIN TRIP\' to make your payment.</string>
+    <string name="event_detail_confirm_join_trip">Confirm to join this trip?</string>
+    <string name="event_detail_trip_confirmed">JOIN TRIP CONFIRMED!</string>
+
+    <!-- Edit Profile Activity -->
+    <string name="edit_profile_profile_title">PROFILE</string>
+    <string name="edit_profile_fullname_title">Full Name</string>
+    <string name="edit_profile_username_title">Username</string>
+    <string name="edit_profile_dob_title">Date of Birth</string>
+    <string name="edit_profile_email_title">Email</string>
+    <string name="edit_profile_country_title">Country</string>
+    <string name="edit_profile_state_title">State/Province</string>
+    <string name="edit_profile_address_title">Mailing Address</string>
+    <string name="edit_profile_phone_title">Phone</string>
+    <string name="edit_profile_save_profile">SAVE PROFILE</string>
+    <string name="edit_profile_save_profile_success">ACCOUNT UPDATED!</string>
+    <string name="edit_profile_change_password_current_password_title">Current Password</string>
+    <string name="edit_profile_change_password_new_password_title">New Password</string>
+    <string name="edit_profile_change_password_confirm_password_title">Confirm New Password</string>
+    <string name="edit_profile_change_password_button">CHANGE PASSWORD</string>
+    <string name="edit_profile_change_password_success">PASSWORD UPDATED!</string>
+
+    <!-- My Booking List-->
+    <string name="my_booking_title">MY BOOKING</string>
+    <string name="my_booking_eventstartdate">%s %s %</string>
+    <string name="my_booking_eventenddate">%s %s %</string>
+
+    <!-- My Transactions Report -->
+    <string name="transaction_report_title">MY TRANSACTIONS REPORT</string>
+    <string name="transaction_report_type_title">Type</string>
+    <string name="transaction_report_amount_title">Amount</string>
+    <string name="transaction_report_remarks_title">Remarks</string>
+
+
+
+    <!-- Navigation Drawer Menu -->
+    <string name="nav_menu_dashboard">Dashboard</string>
+    <string name="nav_menu_account">Account</string>
+    <string name="nav_menu_my_booking">My Booking</string>
+    <string name="nav_menu_transactions_report">My Transactions Report</string>
+    <string name="nav_menu_logout">Logout</string>
+
+
+
+    <!-- Error Message-->
+    <string name="warning_title">Warning</string>
+    <string name="error_title">Error</string>
+    <string name="error_unknown">Unknown Error</string>
+
+    <string name="logout_confirmation">Are you sure to logout?</string>
+
+    <string name="edit_profile_email_empty_error">Please Enter your email!</string>
+    <string name="edit_profile_email_invalid_format_error">Invalid Email Format !</string>
+
+    <string name="edit_profile_change_password_empty_error">Please enter your password.</string>
+    <string name="edit_profile_change_password_invalid_error">The password should contain alphabetic and numeric characters. Min length (6) - Max Length (50)</string>
+
+    <string name="edit_profile_change_password_current_password_error">Your current password was incorrect. </string>
+    <string name="edit_profile_change_password_confirm_password_error">Confirm new password are not match with the new password field</string>
+
+    <string name="error_1502">Incorrect username or password.</string>'
+    <string name="error_1503">This account has been temporarily suspended due to too many incorrect login attempts. Please try again after an hour.</string>
+    <string name="error_1504">Your account has been temporarily suspended. Suspicious activity has been detected on your account and it has been suspended as a security precaution. Please contact support to unlock your account.</string>
+    <string name="error_1506">Session expired. Please login again.</string>
+    <string name="error_1509">A reset password link has been sent to you via email. You can follow that link to configure your new password. If the email does not arrive, please contact support.</string>
+    <string name="error_1510">There is no account with the ID or email you provided.</string>
+    <string name="error_1511">Your reset link expired after 2 hours or has already been used.</string>
+    <string name="error_1512">Your password successfully reset. Please log in using your new password.</string>
+    <string name="error_2501">Full Name cannot be empty.</string>
+    <string name="error_2502">Email cannot be empty.</string>
+    <string name="error_2503">Please select a Country.</string>
+    <string name="error_2504">Please select a State/Province.</string>
+    <string name="error_2505">Address cannot be empty.</string>
+    <string name="error_2506">Phone cannot be empty.</string>
+    <string name="error_2507">The length of Full Name should be 2 \- 80 characters.</string>
+    <string name="error_2508">Please enter a valid address.</string>
+    <string name="error_2509">Please enter a valid phone number.</string>
+    <string name="error_2510">Please enter a valid email address.</string>
+    <string name="error_2511">Current password cannot be empty.</string>
+    <string name="error_2512">New password cannot be empty.</string>
+    <string name="error_2513">Confirm password cannot be empty.</string>
+    <string name="error_2514">Your current password was incorrect.</string>
+    <string name="error_2515">New password and confirm password do not match.</string>
+    <string name="error_2516">The length of password should be 6 \- 50 characters.</string>
+    <string name="error_2517">The password should contain alphabetic and numeric characters.</string>
+    <string name="error_2518">Email address already in use.</string>
+    <string name="error_2519">Phone number already in use.</string>
+    <string name="error_2520">Your profile has been updated successfully.</string>
+    <string name="error_2521">Your password has been changed successfully.</string>
+    <string name="error_3001">This trip is no longer available. It may have expired or been fully booked.</string>
+    <string name="error_3501">You are not allow to join this trip due because it is only for {0} members.</string>
+    <string name="error_3502">You have already joined this trip.</string>
+    <string name="error_3503">You have succesfully join the trip.</string>
+    <string name="error_3504">Insufficient balance for this trip. Required: {0} (Available: {1}). Please contact support to topup your wallet.</string>
+    <string name="error_3505">Payment failed. Your cash wallet has been frozen for security reason. Please contact support to activate your cash wallet.</string>
+
+    <!-- Success Message-->
+    <string name="success_title">Success</string>
+
+    <!-- Button Message-->
+    <string name="Ok">Ok</string>
+    <string name="cancel">CANCEL</string>
+    <string name="join_trip">JOIN TRIP</string>
+
+    <!-- Others -->
+    <string name="userrank_bronze">BRONZE</string>
+    <string name="userrank_gold">GOLD</string>
+    <string name="userrank_platinum">PLATINUM</string>
+</resources>

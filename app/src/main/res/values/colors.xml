@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <!--<color name="colorPrimary">@android:color/transparent</color>-->
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- Login Activity -->
+    <color name="edittext_hint_username">#6F777F</color>
+    <color name="edittext_hint_password">#6F777F</color>
+
+    <!-- Forgot Password Activity -->
+    <color name="edittext_hint_email">#6F777F</color>
+
+
+    <!-- Navigation Bar -->
+    <color name="textview_sidebar">#ffd35c</color>
+    <color name="sidebar_selected_background_color">#20ffffff</color>
+    <color name="sidebar_default_background_color">#333333</color>
+
+</resources>

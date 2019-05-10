@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333333"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?android:actionBarSize"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/textview_my_booking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textview_dashboard_title"
+            android:drawableStart="@drawable/small_yellow_dot"
+            android:drawableLeft="@drawable/small_yellow_dot"
+            android:drawableEnd="@drawable/small_yellow_dot"
+            android:drawableRight="@drawable/small_yellow_dot"
+            android:drawablePadding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="@string/my_booking_title"
+            android:textColor="#ffd35c"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_bookingdata"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
