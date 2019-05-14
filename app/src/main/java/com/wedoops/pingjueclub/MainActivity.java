@@ -1,20 +1,29 @@
 package com.wedoops.pingjueclub;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,7 +34,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,14 +48,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.orm.StringUtil;
+import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.CustomTypefaceSpan;
+import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
+import com.wedoops.pingjueclub.helper.IImagePickerLister;
+import com.wedoops.pingjueclub.helper.ImagePickerEnum;
 import com.wedoops.pingjueclub.helper.LocaleHelper;
+import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.model.AspectRatio;
+import com.yalantis.ucrop.util.FileUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,8 +82,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.wedoops.pingjueclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements IImagePickerLister {
 
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -66,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton imagebutton_language;
     private SwipeRefreshLayout swipeRefreshLayout;
     boolean doubleBackToExitPressedOnce = false;
+    private String currentPhotoPath = "";
+    private static ProgressDialog progress;
 
     public static int navItemIndex = 0;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
@@ -88,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
 
+            progress = new ProgressDialog(this);
+
             setupViewByID();
             setupToolbar();
             setupNavigationDrawer();
@@ -96,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
 
         }
-
 
     }
 
@@ -115,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
         }
+
         return true;
     }
 
@@ -169,6 +205,36 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+            }
+            case CONSTANTS_VALUE.CAMERA_STORAGE_REQUEST_CODE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
+                else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, R.string.storage_access_required, Toast.LENGTH_SHORT).show();
+                } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.camera_access_required, Toast.LENGTH_SHORT).show();
+                } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, R.string.camera_and_storage_access_required, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+
+            case CONSTANTS_VALUE.ONLY_CAMERA_REQUEST_CODE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
+
+                else {
+                    Toast.makeText(this, R.string.camera_access_required, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case CONSTANTS_VALUE.ONLY_STORAGE_REQUEST_CODE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
+                else {
+                    Toast.makeText(this, R.string.storage_access_required, Toast.LENGTH_SHORT).show();
+                }
+                break;
             }
         }
 
@@ -360,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
 
             textview_user_wallet.setText(String.format("%s POINTS", cash_wallet));
 
-            Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).placeholder(R.drawable.default_profile).into(imageview_user_profile);
+            Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).into(imageview_user_profile);
 
             Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
             textview_user_full_name.setTypeface(typeface);
@@ -385,6 +451,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void button_change_profile_image(View v) {
+        Toast.makeText(this, "SomethingSomething", Toast.LENGTH_SHORT).show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (new ApplicationClass().checkSelfPermissions(this)) {
+                new DisplayAlertDialog().displayImageSelectDialog(this, this);
+
+            }
+        }
+
+
+    }
+
 
     private void loadHomeFragment() {
 
@@ -529,6 +609,104 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void callChangeProfilePictureWebService(String base64_string) {
+
+        new ApplicationClass().showProgressDialog(progress);
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("access_token", ud_list.get(0).getAccessToken());
+        b.putString("ProfilePictureBase64", base64_string);
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE);
+
+        new CallWebServices(Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE, MainActivity.this, true).execute(b);
+
+    }
+
+    public void processWSData(JSONObject returnedObject, int command) {
+        new ApplicationClass().closeProgressDialog(progress);
+
+        if (command == Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+                    if (returnedObject.getInt("StatusCode") == 200) {
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+                        JSONObject success_object = response_object.getJSONObject("SuccessMessage");
+                        JSONObject profile_object = response_object.getJSONObject("UserQuickProfile");
+
+                        String Srno = String.valueOf(profile_object.getInt("Srno"));
+                        String LoginID = profile_object.getString("LoginID");
+                        String Name = profile_object.getString("Name");
+                        String DOB = profile_object.getString("DOB");
+                        String Email = profile_object.getString("Email");
+                        String Phone = profile_object.getString("Phone");
+                        String CountryCode = profile_object.getString("CountryCode");
+                        String StateCode = profile_object.getString("StateCode");
+                        String Address = profile_object.getString("Address");
+                        String Gender = profile_object.getString("Gender");
+                        String ProfilePictureImagePath = profile_object.getString("ProfilePictureImagePath");
+                        String UserLevelCode = profile_object.getString("UserLevelCode");
+                        String JoinedDate = profile_object.getString("JoinedDate");
+                        String CashWallet = String.valueOf(profile_object.getString("CashWallet"));
+
+                        List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud_listall.get(0).getLoginID());
+
+                        UserDetails ud = UserDetails.find(UserDetails.class, loginid_field + " = ?", ud_listall.get(0).getLoginID()).get(0);
+
+                        ud.setAccessToken(ud_list.get(0).getAccessToken());
+                        ud.setRefreshToken(ud_list.get(0).getRefreshToken());
+                        ud.setSrno(Srno);
+                        ud.setLoginID(LoginID);
+                        ud.setName(Name);
+                        ud.setDOB(DOB);
+                        ud.setEmail(Email);
+                        ud.setPhone(Phone);
+                        ud.setCountryCode(CountryCode);
+                        ud.setStateCode(StateCode);
+                        ud.setAddress(Address);
+                        ud.setGender(Gender);
+                        ud.setProfilePictureImagePath(ProfilePictureImagePath);
+                        ud.setUserLevelCode(UserLevelCode);
+                        ud.setJoinedDate(JoinedDate);
+                        ud.setCashWallet(CashWallet);
+                        ud.save();
+
+                        new DisplayAlertDialog().displayAlertDialogSuccess(success_object.getInt("Code"), MainActivity.this);
+
+                        setupNavigationDrawer();
+
+//                        navItemIndex = 0;
+//                        loadHomeFragment();
+
+//                        displayResult();
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);
+
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+        }
+
+    }
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent objEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -536,5 +714,123 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyUp(keyCode, objEvent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = Uri.parse(currentPhotoPath);
+            openCropActivity(uri, uri);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri uri = UCrop.getOutput(data);
+                showImage(uri);
+            }
+        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            try {
+                Uri sourceUri = data.getData();
+                File file = getImageFile();
+                Uri destinationUri = Uri.fromFile(file);
+                openCropActivity(sourceUri, destinationUri);
+            } catch (Exception e) {
+                Log.e("Error Image", e.toString());
+            }
+        }
+    }
+
+    private void showImage(Uri imageUri) {
+        try {
+            File file;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                file = com.wedoops.pingjueclub.helper.FileUtils.getFile(this, imageUri);
+            } else {
+                file = new File(currentPhotoPath);
+            }
+
+            InputStream inputStream = new FileInputStream(file);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//            imageView.setImageBitmap(bitmap);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            callChangeProfilePictureWebService(encoded);
+
+        } catch (Exception e) {
+            Log.e("Error", e.toString());
+        }
+    }
+
+    @Override
+    public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
+        if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
+            openCamera();
+        else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
+            openImagesDocument();
+    }
+
+    private void openImagesDocument() {
+        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pictureIntent.setType("image/*");
+        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
+            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }
+        startActivityForResult(Intent.createChooser(pictureIntent, "Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);
+    }
+
+    private void openCamera() {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file;
+        try {
+            file = getImageFile(); // 1
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) // 2
+            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
+        else
+            uri = Uri.fromFile(file); // 3
+        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 4
+        startActivityForResult(pictureIntent, CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE);
+    }
+
+    private File getImageFile() throws IOException {
+        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+
+        System.out.println(storageDir.getAbsolutePath());
+        if (storageDir.exists()) {
+            System.out.println("File exists");
+        } else {
+            System.out.println("File not exists");
+            storageDir.mkdirs();
+        }
+        File file = File.createTempFile(
+                imageFileName, ".jpg", storageDir
+        );
+        currentPhotoPath = "file:" + file.getAbsolutePath();
+        return file;
+    }
+
+    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true);
+        options.setDimmedLayerColor(Color.parseColor("#50ffffff"));
+        options.setHideBottomControls(true);
+        options.setShowCropGrid(false);
+        options.setCropFrameStrokeWidth(5);
+        options.setCropFrameColor(Color.WHITE);
+        options.setShowCropFrame(false);
+        UCrop.of(sourceUri, destinationUri).withOptions(options)
+                .withAspectRatio(1, 1)
+                .withMaxResultSize(300, 300)
+                .start(this);
     }
 }

@@ -544,4 +544,8 @@ public class EventDetailActivity extends Activity {
         res.updateConfiguration(conf, dm);
     }
 
+    public void button_back(View v) {
+        this.onBackPressed();
+    }
+
 }

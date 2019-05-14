@@ -15,4 +15,9 @@ public class CONSTANTS_VALUE {
     public static final String EVENT_DETAIL_PAYMENT_BOOKING_STATUS_NEW = "NEW";
     public static final String EVENT_DETAIL_PAYMENT_STATUS_PARTIAL = "PARTIALLY_PAID";
 
+    public static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
+    public static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
+    public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
+    public static final int ONLY_CAMERA_REQUEST_CODE = 612;
+    public static final int ONLY_STORAGE_REQUEST_CODE = 613;
 }

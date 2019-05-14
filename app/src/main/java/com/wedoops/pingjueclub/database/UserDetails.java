@@ -47,124 +47,124 @@ public class UserDetails extends SugarRecord {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public String getRefreshToken() {
         return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public String getSrno() {
         return Srno;
     }
 
-    public void setSrno(String srno) {
-        Srno = srno;
-    }
-
     public String getLoginID() {
         return LoginID;
-    }
-
-    public void setLoginID(String loginID) {
-        LoginID = loginID;
     }
 
     public String getName() {
         return Name;
     }
 
-    public void setName(String name) {
-        Name = name;
-    }
-
     public String getDOB() {
         return DOB;
-    }
-
-    public void setDOB(String DOB) {
-        this.DOB = DOB;
     }
 
     public String getEmail() {
         return Email;
     }
 
-    public void setEmail(String email) {
-        Email = email;
-    }
-
     public String getPhone() {
         return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
     }
 
     public String getCountryCode() {
         return CountryCode;
     }
 
-    public void setCountryCode(String countryCode) {
-        CountryCode = countryCode;
-    }
-
     public String getStateCode() {
         return StateCode;
-    }
-
-    public void setStateCode(String stateCode) {
-        StateCode = stateCode;
     }
 
     public String getAddress() {
         return Address;
     }
 
-    public void setAddress(String address) {
-        Address = address;
-    }
-
     public String getGender() {
         return Gender;
-    }
-
-    public void setGender(String gender) {
-        Gender = gender;
     }
 
     public String getProfilePictureImagePath() {
         return ProfilePictureImagePath;
     }
 
-    public void setProfilePictureImagePath(String profilePictureImagePath) {
-        ProfilePictureImagePath = profilePictureImagePath;
-    }
-
     public String getUserLevelCode() {
         return UserLevelCode;
-    }
-
-    public void setUserLevelCode(String userLevelCode) {
-        UserLevelCode = userLevelCode;
     }
 
     public String getJoinedDate() {
         return JoinedDate;
     }
 
-    public void setJoinedDate(String joinedDate) {
-        JoinedDate = joinedDate;
-    }
-
     public String getCashWallet() {
         return CashWallet;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void setSrno(String srno) {
+        Srno = srno;
+    }
+
+    public void setLoginID(String loginID) {
+        LoginID = loginID;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
+    }
+
+    public void setCountryCode(String countryCode) {
+        CountryCode = countryCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        StateCode = stateCode;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public void setProfilePictureImagePath(String profilePictureImagePath) {
+        ProfilePictureImagePath = profilePictureImagePath;
+    }
+
+    public void setUserLevelCode(String userLevelCode) {
+        UserLevelCode = userLevelCode;
+    }
+
+    public void setJoinedDate(String joinedDate) {
+        JoinedDate = joinedDate;
     }
 
     public void setCashWallet(String cashWallet) {

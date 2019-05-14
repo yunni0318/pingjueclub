@@ -105,6 +105,26 @@ public class DisplayAlertDialog {
         builder.show();
     }
 
+    public void displayImageSelectDialog(Context context, final IImagePickerLister imagePickerLister) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                context);
+        builder.setTitle(context.getString(R.string.change_profile_title));
+        builder.setCancelable(false);
+        builder.setItems(R.array.imagePicker, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0)
+                    imagePickerLister.onOptionSelected(ImagePickerEnum.FROM_GALLERY);
+                else if (which == 1)
+                    imagePickerLister.onOptionSelected(ImagePickerEnum.FROM_CAMERA);
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+
     private String getMessage(int code, Context context) {
 
         String message = "";
@@ -234,6 +254,10 @@ public class DisplayAlertDialog {
             }
             case 2521: {
                 message = context.getString(R.string.error_2521);
+                break;
+            }
+            case 2522: {
+                message = context.getString(R.string.error_2522);
                 break;
             }
             case 3501: {

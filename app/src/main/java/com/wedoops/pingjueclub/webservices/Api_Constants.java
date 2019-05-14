@@ -2,6 +2,7 @@ package com.wedoops.pingjueclub.webservices;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -15,6 +16,7 @@ import com.wedoops.pingjueclub.EditProfileActivity;
 import com.wedoops.pingjueclub.EventDetailActivity;
 import com.wedoops.pingjueclub.ForgotPasswordActivity;
 import com.wedoops.pingjueclub.LoginActivity;
+import com.wedoops.pingjueclub.MainActivity;
 import com.wedoops.pingjueclub.MemberDashboardActivity;
 import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
@@ -52,6 +54,7 @@ public class Api_Constants {
     public static final int API_EVENT_BOOKING_LIST = 11;
     public static final int API_EVENT_BOOKING_DETAIL = 12;
     public static final int API_CASH_WALLET_TRANSACTION = 13;
+    public static final int API_MEMBER_CHANGE_PROFILE_PICTURE = 14;
 
 
     public static final String COMMAND = "command";
@@ -232,6 +235,7 @@ public class Api_Constants {
                                 @Override
                                 public void onResponse(String response) {
                                     MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
+
                                 }
                             },
                             new Response.ErrorListener() {
@@ -609,6 +613,47 @@ public class Api_Constants {
                             String auth_token = access_token_prefix + b.getString("access_token");
                             params.put("Authorization", auth_token);
 
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+                case API_MEMBER_CHANGE_PROFILE_PICTURE: {
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_member + "ChangeProfilePicture",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ((MainActivity) context).processWSData(convertResponseToJsonObject(response), API_MEMBER_CHANGE_PROFILE_PICTURE);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("ProfilePictureBase64", b.getString("ProfilePictureBase64"));
                             return params;
                         }
 

@@ -23,6 +23,14 @@
     <string name="nav_menu_my_booking">我的预定</string>
     <string name="nav_menu_transactions_report">我的交易报告</string>
     <string name="nav_menu_logout">登出</string>
+    <string name="change_profile_title">选择头像</string>
+    <string-array name="imagePicker">
+        <item>相册取出</item>
+        <item>相机拍摄</item>
+    </string-array>
+    <string name="storage_access_required">需要手机存储权限以存储您的个人图片。</string>
+    <string name="camera_access_required">需要相机权限才能拍摄个人资料照片。</string>
+    <string name="camera_and_storage_access_required">需要相机和存储权限才能拍摄个人照片。</string>
 
     <!-- Event Detail Activity -->
     <string name="event_detail_title">行程资料</string>
@@ -112,6 +120,7 @@
     <string name="error_2519">电话号码已被使用。</string>
     <string name="error_2520">您的个人资料已成功更新。</string>
     <string name="error_2521">您的密码已成功更新。</string>
+    <string name="error_2522">您的个人资料照片已成功更新。</string>
     <string name="error_3001">这次旅行已不再可用。它可能已过期或已完全预订。</string>
     <string name="error_3501">您不能参加此次旅行，因为它仅适用于{0}会员</string>
     <string name="error_3502">你已经加入了这次旅行。</string>

@@ -62,15 +62,20 @@
     <string name="transaction_report_remarks_title">Remarks</string>
 
 
-
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">Dashboard</string>
     <string name="nav_menu_account">Account</string>
     <string name="nav_menu_my_booking">My Booking</string>
     <string name="nav_menu_transactions_report">My Transactions Report</string>
     <string name="nav_menu_logout">Logout</string>
-
-
+    <string name="change_profile_title">Select Profile Image</string>
+    <string-array name="imagePicker">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+    </string-array>
+    <string name="storage_access_required">Required Storage Access in order to store your profile picture.</string>
+    <string name="camera_access_required">Required Camera access in order to take profile picture.</string>
+    <string name="camera_and_storage_access_required">Required Camera and Storage access in order to take profile picture.</string>
 
     <!-- Error Message-->
     <string name="warning_title">Warning</string>
@@ -117,6 +122,7 @@
     <string name="error_2519">Phone number already in use.</string>
     <string name="error_2520">Your profile has been updated successfully.</string>
     <string name="error_2521">Your password has been changed successfully.</string>
+    <string name="error_2522">Your profile picture has been updated successfully.</string>
     <string name="error_3001">This trip is no longer available. It may have expired or been fully booked.</string>
     <string name="error_3501">You are not allow to join this trip due because it is only for {0} members.</string>
     <string name="error_3502">You have already joined this trip.</string>
