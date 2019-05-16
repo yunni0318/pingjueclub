@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PingJueClub</string>
+    <string name="app_name">品爵</string>
 
     <!-- Login Activity-->
     <string name="login_activity_login">LOGIN</string>
@@ -139,6 +139,7 @@
     <string name="join_trip">JOIN TRIP</string>
 
     <!-- Others -->
+    <string name="loading_please_wait">Loading...</string>
     <string name="userrank_bronze">BRONZE</string>
     <string name="userrank_gold">GOLD</string>
     <string name="userrank_platinum">PLATINUM</string>

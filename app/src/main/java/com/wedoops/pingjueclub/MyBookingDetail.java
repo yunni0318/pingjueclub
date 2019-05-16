@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.orm.StringUtil;
 import com.wedoops.pingjueclub.database.EventDetailBookingData;
 import com.wedoops.pingjueclub.database.EventDetailEventData;
 import com.wedoops.pingjueclub.database.MyBookingBookingData;
@@ -33,7 +34,9 @@ import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -90,6 +93,22 @@ public class MyBookingDetail extends Activity {
         b.putInt(Api_Constants.COMMAND, Api_Constants.API_EVENT_BOOKING_DETAIL);
 
         new CallWebServices(Api_Constants.API_EVENT_BOOKING_DETAIL, MyBookingDetail.this, true).execute(b);
+    }
+
+    private void callRefreshTokenWebService(int origin) {
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, origin).execute(b);
     }
 
     private void setupFindById() {
@@ -165,8 +184,25 @@ public class MyBookingDetail extends Activity {
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ee) {
+                    Log.e("Date", e.toString());
+                }
             }
+
         } else {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
@@ -182,7 +218,22 @@ public class MyBookingDetail extends Activity {
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ee) {
+                    Log.e("Date", e.toString());
+                }
             }
         }
 
@@ -324,7 +375,7 @@ public class MyBookingDetail extends Activity {
             listview_event_detail_timeline.setAdapter(timeline_Adapter);
         }
 
-        event_detail_webview.loadData(mbed_all.get(0).getEventDescription(), "text/html", null);
+        event_detail_webview.loadData("<body style=\"word-wrap:break-word;\">" + mbed_all.get(0).getEventDescription() + "</body>", "text/html", null);
         event_detail_webview.setBackgroundColor(Color.TRANSPARENT);
     }
 
@@ -373,31 +424,15 @@ public class MyBookingDetail extends Activity {
                     }
 
                 } else {
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("StatusCode");
-//                    new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), EventDetailActivity.this);
+                    if (errorCode == 401) {
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
-
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
-
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
 
                     }
                 }
@@ -405,7 +440,12 @@ public class MyBookingDetail extends Activity {
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
-        } else if (command == Api_Constants.API_EVENT_DETAILS_MAKE_BOOKING) {
+        }
+    }
+
+    public void processRefreshToken(JSONObject returnedObject, int command, int origin) {
+        if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
+
             boolean isSuccess = false;
             try {
                 isSuccess = returnedObject.getBoolean("Success");
@@ -414,57 +454,63 @@ public class MyBookingDetail extends Activity {
 
                     if (returnedObject.getInt("StatusCode") == 200) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(
-                                this);
-                        builder.setTitle(this.getString(R.string.success_title));
-                        builder.setMessage(this.getResources().getString(R.string.event_detail_trip_confirmed));
-                        builder.setPositiveButton(this.getString(R.string.Ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        dialog.dismiss();
-                                        onBackPressed();
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
 
-                                    }
-                                });
+                        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-                        builder.show();
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                        ud_list.get(0).setAccessToken(response_object.getString("AccessToken"));
+                        ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
+
+                        ud_list.get(0).save();
+
+                        if (origin == RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL) {
+                            callEventDetailWebServices();
+                        }
+
 
                     } else {
-
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MyBookingDetail.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
 
                     }
 
                 } else {
 
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
-//                    new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), EventDetailActivity.this);
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
-
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
-
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                    if (errorCode == 401) {
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
 
+                        JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                        errorCode = 0;
+                        String errorMessageEN = "";
+                        String errorMessageCN = "";
+
+                        for (int i = 0; i < errorCode_array.length(); i++) {
+                            JSONObject error_object = errorCode_array.getJSONObject(i);
+                            errorCode = error_object.getInt("Code");
+                            errorMessageEN = error_object.getString("MessageEN");
+                            errorMessageCN = error_object.getString("MessageCN");
+
+                        }
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
+
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                        }
                     }
-
                 }
 
             } catch (Exception e) {
@@ -472,6 +518,7 @@ public class MyBookingDetail extends Activity {
             }
         }
     }
+
 
     private void loadLanguage() {
         String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);

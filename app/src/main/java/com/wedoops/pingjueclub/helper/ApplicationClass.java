@@ -41,11 +41,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class ApplicationClass extends com.orm.SugarApp {
 
     private static Context mContext;
     private static String prefs_name = "PJC";
-    private ProgressDialog progress;
+    private ACProgressFlower progress;
 
     @Override
     public void onCreate() {
@@ -93,20 +95,20 @@ public class ApplicationClass extends com.orm.SugarApp {
         return value;
     }
 
-    public void showProgressDialog(ProgressDialog mProgress) {
+    public void showProgressDialog(ACProgressFlower  mProgress) {
+
         progress = mProgress;
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
         progress.setCancelable(false);
         progress.show();
     }
 
-    public void closeProgressDialog(ProgressDialog mProgress) {
+    public void closeProgressDialog(ACProgressFlower mProgress) {
         progress = mProgress;
 
         if (progress != null && progress.isShowing()) {
             try {
-                progress.dismiss();
+//                progress.dismiss();
+                progress.hide();
             } catch (Exception e) {
                 e.printStackTrace();
             }

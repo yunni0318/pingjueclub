@@ -42,7 +42,10 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.wedoops.pingjueclub" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/splashScreenTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,11 +53,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".EventDetailActivity" />
-        <activity android:name=".MyBookingDetail" />
-        <activity android:name="com.yalantis.ucrop.UCropActivity" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EventDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyBookingDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

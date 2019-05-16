@@ -36,7 +36,9 @@ import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,10 +48,13 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class EditProfileActivity extends Fragment {
 
     private static View view;
-    private static Activity activity;
+    public static Activity get_activity;
 
     private static ImageView imageview_user_profile, imageview_user_rank;
     private static TextView textview_user_rank, textview_user_full_name, textview_user_email, textview_profile_title, textview_fullname_title, textview_username_title, textview_dob_title, textview_email_title, textview_country_title, textview_state_title, textview_address_title, textview_phone_title, textview_change_password_title, textview_current_password_title, textview_new_password_title, textview_confirm_password;
@@ -57,7 +62,7 @@ public class EditProfileActivity extends Fragment {
 
     private static Button button_save_profile, button_change_password;
 
-    private static ProgressDialog progress;
+    private static ACProgressFlower progress;
     private static final String KEY_LANG = "key_lang"; // preference key
 
     @Nullable
@@ -73,9 +78,16 @@ public class EditProfileActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        activity = getActivity();
+        get_activity = getActivity();
 
-        progress = new ProgressDialog(view.getContext());
+        progress = new ACProgressFlower.Builder(get_activity)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .petalThickness(5)
+                .textColor(Color.WHITE)
+                .textSize(20)
+                .text(get_activity.getResources().getString(R.string.loading_please_wait))
+                .fadeColor(Color.parseColor("#50000000")).build();
 
         loadLanguage();
         setupViewById();
@@ -224,7 +236,7 @@ public class EditProfileActivity extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new ApplicationClass().hideSoftKeyboard(activity);
+                new ApplicationClass().hideSoftKeyboard(get_activity);
                 callUpdateAccountProfileWebService();
 
             }
@@ -234,7 +246,7 @@ public class EditProfileActivity extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new ApplicationClass().hideSoftKeyboard(activity);
+                new ApplicationClass().hideSoftKeyboard(get_activity);
                 callUpdateAccountSecurityWebService();
             }
         });
@@ -444,7 +456,7 @@ public class EditProfileActivity extends Fragment {
 
     }
 
-    private static void callRefreshTokenWebService() {
+    private static void callRefreshTokenWebService(int origin) {
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -455,9 +467,9 @@ public class EditProfileActivity extends Fragment {
 
         Bundle b = new Bundle();
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_REFRESH_TOKEN);
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, origin).execute(b);
     }
 
 
@@ -503,41 +515,28 @@ public class EditProfileActivity extends Fragment {
                         if (returnedObject.getInt("StatusCode") == 401) {
                             new ApplicationClass().showProgressDialog(progress);
 
-                            callRefreshTokenWebService();
+                            callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
-                        }else{
-
-                        }
+                        } else {
                             new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
 
+                        }
                     }
 
                 } else {
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
+                    if (errorCode == 401) {
+                        new ApplicationClass().showProgressDialog(progress);
 
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
 
                     }
-
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
@@ -570,32 +569,29 @@ public class EditProfileActivity extends Fragment {
                         }
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        if (returnedObject.getInt("StatusCode") == 401) {
+
+                            callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        }
                     }
 
                 } else {
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
+                    if (errorCode == 401) {
+                        new ApplicationClass().showProgressDialog(progress);
 
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+
                     }
 
                 }
@@ -629,32 +625,27 @@ public class EditProfileActivity extends Fragment {
                         builder.show();
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        if (returnedObject.getInt("StatusCode") == 401) {
+
+                            callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        }
                     }
 
                 } else {
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    int statuscode = returnedObject.getInt("StatusCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
-
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                    if (statuscode == 401) {
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(statuscode, get_activity);
+
                     }
 
                 }
@@ -693,39 +684,44 @@ public class EditProfileActivity extends Fragment {
                         builder.show();
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        if (returnedObject.getInt("StatusCode") == 401) {
+
+                            callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        }
+
                     }
 
                 } else {
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
+                    if (errorCode == 401) {
+                        new ApplicationClass().showProgressDialog(progress);
 
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
-        }else if (command == Api_Constants.API_REFRESH_TOKEN_EDIT_PROFILE) {
+        }
+    }
+
+    public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
+        if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
+
+            new ApplicationClass().closeProgressDialog(progress);
 
             boolean isSuccess = false;
             try {
@@ -749,43 +745,38 @@ public class EditProfileActivity extends Fragment {
 
                         ud_list.get(0).save();
 
-                        callCountryStateListWebService();
-                        callMemberAccountSettingWebService();
+                        if (origin == RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING) {
+                            callMemberAccountSettingWebService();
+
+                        } else if (origin == RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST) {
+                            callCountryStateListWebService();
+                            callMemberAccountSettingWebService();
+
+                        } else if (origin == RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION) {
+                            callUpdateAccountProfileWebService();
+
+                        } else if (origin == RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY) {
+                            callUpdateAccountSecurityWebService();
+
+                        }
+
 
                     } else {
-
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
 
                     }
 
                 } else {
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
+                    if (errorCode == 401) {
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
                     } else {
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageEN, false, view.getContext());
 
-                        } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageCN, false, view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
 
-                        }
                     }
                 }
 
@@ -810,7 +801,7 @@ public class EditProfileActivity extends Fragment {
     }
 
     private void loadLanguage() {
-        String lang = new ApplicationClass().readFromSharedPreferences(activity, KEY_LANG);
+        String lang = new ApplicationClass().readFromSharedPreferences(get_activity, KEY_LANG);
         Locale myLocale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();

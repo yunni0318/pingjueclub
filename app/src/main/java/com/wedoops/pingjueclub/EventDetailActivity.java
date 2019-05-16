@@ -35,7 +35,9 @@ import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -106,6 +108,22 @@ public class EventDetailActivity extends Activity {
         b.putInt(Api_Constants.COMMAND, Api_Constants.API_EVENT_DETAILS_MAKE_BOOKING);
 
         new CallWebServices(Api_Constants.API_EVENT_DETAILS_MAKE_BOOKING, EventDetailActivity.this, true).execute(b);
+    }
+
+    private void callRefreshTokenWebService(int origin) {
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, EventDetailActivity.this, origin).execute(b);
     }
 
     private void setupFindById() {
@@ -342,7 +360,9 @@ public class EventDetailActivity extends Activity {
             listview_event_detail_timeline.setAdapter(timeline_Adapter);
         }
 
-        event_detail_webview.loadData(eded_all.get(0).getEventDescription(), "text/html", null);
+        event_detail_webview.loadData("<body style=\"word-wrap:break-word;\" >" + eded_all.get(0).getEventDescription() + "</body>", "text/html", null);
+
+
         event_detail_webview.setBackgroundColor(Color.TRANSPARENT);
     }
 
@@ -422,43 +442,52 @@ public class EventDetailActivity extends Activity {
 
                 } else {
 
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("StatusCode");
-//                    new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), EventDetailActivity.this);
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    if (errorCode == 401) {
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
-
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
-
-                    if (errorCode == 3001) {
-
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(3001, errorMessageEN, false, this);
-
-                        } else {
-                            new DisplayAlertDialog().displayAlertDialogString(3001, errorMessageCN, false, this);
-
-                        }
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_DETAILS);
 
                     } else {
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(0, errorMessageEN, false, this);
 
-                        } else {
-                            new DisplayAlertDialog().displayAlertDialogString(0, errorMessageCN, false, this);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
 
-                        }
                     }
+
+//                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+//
+//                    int errorCode = 0;
+//                    String errorMessageEN = "";
+//                    String errorMessageCN = "";
+//
+//                    for (int i = 0; i < errorCode_array.length(); i++) {
+//                        JSONObject error_object = errorCode_array.getJSONObject(i);
+//                        errorCode = error_object.getInt("Code");
+//                        errorMessageEN = error_object.getString("MessageEN");
+//                        errorMessageCN = error_object.getString("MessageCN");
+//
+//                    }
+//                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
+//
+//                    if (errorCode == 3001) {
+//
+//                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+//                            new DisplayAlertDialog().displayAlertDialogString(3001, errorMessageEN, false, this);
+//
+//                        } else {
+//                            new DisplayAlertDialog().displayAlertDialogString(3001, errorMessageCN, false, this);
+//
+//                        }
+//
+//                    } else {
+//                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+//                            new DisplayAlertDialog().displayAlertDialogString(0, errorMessageEN, false, this);
+//
+//                        } else {
+//                            new DisplayAlertDialog().displayAlertDialogString(0, errorMessageCN, false, this);
+//
+//                        }
+//                    }
 
 
                 }
@@ -499,33 +528,97 @@ public class EventDetailActivity extends Activity {
 
                 } else {
 
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
-//                    new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), EventDetailActivity.this);
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+                    if (errorCode == 401) {
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
-
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
-
-                    }
-
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
-
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_DETAILS_MAKE_BOOKING);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+//                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+                        JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                        errorCode = 0;
+                        String errorMessageEN = "";
+                        String errorMessageCN = "";
+
+                        for (int i = 0; i < errorCode_array.length(); i++) {
+                            JSONObject error_object = errorCode_array.getJSONObject(i);
+                            errorCode = error_object.getInt("Code");
+                            errorMessageEN = error_object.getString("MessageEN");
+                            errorMessageCN = error_object.getString("MessageCN");
+
+                        }
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
+
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                        }
+                    }
+
+                }
+
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+        }
+    }
+
+    public void processRefreshToken(JSONObject returnedObject, int command, int origin) {
+        if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
+
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                        ud_list.get(0).setAccessToken(response_object.getString("AccessToken"));
+                        ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
+
+                        ud_list.get(0).save();
+
+                        if (origin == RefreshTokenAPI.ORIGIN_EVENT_DETAILS) {
+                            callEventDetailWebServices();
+                        } else if (origin == RefreshTokenAPI.ORIGIN_EVENT_DETAILS_MAKE_BOOKING) {
+                            callEventDetailMakeBooking();
+                        }
+
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
 
                     }
 
+                } else {
+
+                    int errorCode = returnedObject.getInt("StatusCode");
+
+                    if (errorCode == 401) {
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
+
+                    } else {
+
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+
+                    }
                 }
 
             } catch (Exception e) {

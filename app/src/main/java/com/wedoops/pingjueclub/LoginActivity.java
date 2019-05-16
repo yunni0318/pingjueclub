@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -29,13 +30,16 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button button_forgot_password;
     private EditText edittext_username;
     private EditText edittext_password;
     private ImageButton imagebutton_language;
-    private ProgressDialog progress;
+    private ACProgressFlower progress;
     private static final String KEY_LANG = "key_lang"; // preference key
 
 
@@ -44,8 +48,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_activity);
-        progress = new ProgressDialog(this);
-
+        progress = new ACProgressFlower.Builder(this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text(this.getResources().getString(R.string.loading_please_wait))
+                .petalThickness(5)
+                .textColor(Color.WHITE)
+                .textSize(30)
+                .fadeColor(Color.DKGRAY).build();
         loadLanguage();
         setupViewByID();
         setupLanguage();

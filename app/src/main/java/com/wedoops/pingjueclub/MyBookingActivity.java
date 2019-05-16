@@ -1,7 +1,9 @@
 package com.wedoops.pingjueclub;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,16 +23,21 @@ import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class MyBookingActivity extends Fragment {
 
-    private static ProgressDialog progress;
+    private static ACProgressFlower progress;
 
     private static MyBookingAdapter bookinglist_adapter;
 
@@ -39,6 +46,7 @@ public class MyBookingActivity extends Fragment {
 
     private static View view;
     private static RecyclerView recyclerview_bookingdata;
+    private static Activity get_activity;
 
     private static View.OnClickListener onMyBookingItemClickListener = new View.OnClickListener() {
         @Override
@@ -69,8 +77,15 @@ public class MyBookingActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        progress = new ProgressDialog(view.getContext());
-
+        get_activity = getActivity();
+        progress = new ACProgressFlower.Builder(getActivity())
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text(this.getResources().getString(R.string.loading_please_wait))
+                .petalThickness(5)
+                .textColor(Color.WHITE)
+                .textSize(30)
+                .fadeColor(Color.DKGRAY).build();
         setupViewByID();
         callBookingListWebService();
 
@@ -98,7 +113,22 @@ public class MyBookingActivity extends Fragment {
 
         new CallWebServices(Api_Constants.API_EVENT_BOOKING_LIST, view.getContext(), true).execute(b);
 
+    }
 
+    private static void callRefreshTokenWebService(int origin) {
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, origin).execute(b);
     }
 
     private static void setupRecyclerView() {
@@ -115,12 +145,13 @@ public class MyBookingActivity extends Fragment {
 
     }
 
-    private static void displayResult(){
+    private static void displayResult() {
 
         setupRecyclerView();
         bookinglist_adapter.notifyDataSetChanged();
 
     }
+
     public static void processWSData(JSONObject returnedObject, int command) {
 
         new ApplicationClass().closeProgressDialog(progress);
@@ -157,35 +188,120 @@ public class MyBookingActivity extends Fragment {
                     }
 
                 } else {
-                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
 
-                    int errorCode = 0;
-                    String errorMessageEN = "";
-                    String errorMessageCN = "";
+                    int errorCode = returnedObject.getInt("StatusCode");
 
-                    for (int i = 0; i < errorCode_array.length(); i++) {
-                        JSONObject error_object = errorCode_array.getJSONObject(i);
-                        errorCode = error_object.getInt("Code");
-                        errorMessageEN = error_object.getString("MessageEN");
-                        errorMessageCN = error_object.getString("MessageCN");
+                    if (errorCode == 401) {
+                        new ApplicationClass().showProgressDialog(progress);
 
-                    }
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
 
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
-
-                    if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
                     } else {
+
+                        JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                        errorCode = 0;
+                        String errorMessageEN = "";
+                        String errorMessageCN = "";
+
+                        for (int i = 0; i < errorCode_array.length(); i++) {
+                            JSONObject error_object = errorCode_array.getJSONObject(i);
+                            errorCode = error_object.getInt("Code");
+                            errorMessageEN = error_object.getString("MessageEN");
+                            errorMessageCN = error_object.getString("MessageCN");
+
+                        }
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
+
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
 
                         }
                     }
 
 
+                }
+
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+        }
+    }
+
+    public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
+        if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
+
+            new ApplicationClass().closeProgressDialog(progress);
+
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                        ud_list.get(0).setAccessToken(response_object.getString("AccessToken"));
+                        ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
+
+                        ud_list.get(0).save();
+
+                        if (origin == RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST) {
+                            callBookingListWebService();
+                        }
+
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                    }
+
+                } else {
+
+                    int errorCode = returnedObject.getInt("StatusCode");
+
+                    if (errorCode == 401) {
+                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
+
+                    } else {
+
+                        JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                        errorCode = 0;
+                        String errorMessageEN = "";
+                        String errorMessageCN = "";
+
+                        for (int i = 0; i < errorCode_array.length(); i++) {
+                            JSONObject error_object = errorCode_array.getJSONObject(i);
+                            errorCode = error_object.getInt("Code");
+                            errorMessageEN = error_object.getString("MessageEN");
+                            errorMessageCN = error_object.getString("MessageCN");
+
+                        }
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
+
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        }
+                    }
                 }
 
             } catch (Exception e) {

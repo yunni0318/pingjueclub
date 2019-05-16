@@ -3,6 +3,7 @@ package com.wedoops.pingjueclub;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,16 +36,21 @@ import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.helper.LinePagerIndicatorDecoration;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class MemberDashboardActivity extends Fragment {
 
-    private static ProgressDialog progress;
+    private static ACProgressFlower progress;
 
     private static View view;
     private static RecyclerView recyclerview_top_banner, recyclerview_eventdata;
@@ -53,7 +59,7 @@ public class MemberDashboardActivity extends Fragment {
 
     private static final Handler handler = new Handler();
     private static Runnable runnable;
-    private static Activity get_activity;
+    public static Activity get_activity;
 
     private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
     private static MemberDashboardEventDataRecyclerAdapter eventData_adapter;
@@ -124,7 +130,14 @@ public class MemberDashboardActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
 
-        progress = new ProgressDialog(view.getContext());
+        progress = new ACProgressFlower.Builder(getActivity())
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text(this.getResources().getString(R.string.loading_please_wait))
+                .petalThickness(5)
+                .textColor(Color.WHITE)
+                .textSize(30)
+                .fadeColor(Color.DKGRAY).build();
 
         checkLoginStatus();
         setupViewByID();
@@ -395,9 +408,11 @@ public class MemberDashboardActivity extends Fragment {
 
         Bundle b = new Bundle();
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_REFRESH_TOKEN);
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
+//        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, RefreshTokenAPI.ORIGIN_MEMBER_DASHBOARD).execute(b);
+
     }
 
 
@@ -471,7 +486,7 @@ public class MemberDashboardActivity extends Fragment {
 
                             JSONObject ed = event_data_array.getJSONObject(i);
 
-                            MemberDashboardEventData mded = new MemberDashboardEventData(String.valueOf(ed.getInt("Srno")), ed.getString("EventGUID"), ed.getString("EventName"), ed.getString("EventCategoryCode"), ed.getString("EventDescription"), ed.getString("EventBannerImagePath"), ed.getDouble("EventPrice"), ed.getDouble("EventUpfrontRate"), ed.getString("UserLevelCode"), ed.getString("UserLevelCodeVisibility")
+                            MemberDashboardEventData mded = new MemberDashboardEventData(String.valueOf(ed.getInt("Srno")), ed.getString("EventGUID"), ed.getString("EventName"), ed.getString("EventCategoryCode"), ed.getString("EventDescription").replace("\\\"", "\""), ed.getString("EventBannerImagePath"), ed.getDouble("EventPrice"), ed.getDouble("EventUpfrontRate"), ed.getString("UserLevelCode"), ed.getString("UserLevelCodeVisibility")
                                     , String.valueOf(ed.getInt("MaxParticipant")), ed.getString("EventStartDate"), ed.getString("EventEndDate"), ed.getString("RegistrationStartDate"), ed.getString("RegistrationEndDate"), ed.getBoolean("Active"), ed.getString("CreatedBy"), ed.getString("CreatedDate"), String.valueOf(ed.getInt("ReservedSeat")), ed.getString("BookingNumber"));
                             mded.save();
                         }
@@ -511,10 +526,10 @@ public class MemberDashboardActivity extends Fragment {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
 
                         }
 
@@ -526,7 +541,7 @@ public class MemberDashboardActivity extends Fragment {
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
-        } else if (command == Api_Constants.API_REFRESH_TOKEN) {
+        } else if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
             boolean isSuccess = false;
             try {
@@ -580,10 +595,10 @@ public class MemberDashboardActivity extends Fragment {
                         new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
                     } else {
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode,errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
 
                         }
                     }

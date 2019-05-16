@@ -43,8 +43,6 @@ public class Api_Constants {
     public static final int API_MEMBER_LOGIN = 1;
     public static final int API_FORGOT_PASSWORD = 2;
     public static final int API_MEMBER_DASHBOARD = 3;
-    public static final int API_REFRESH_TOKEN = 4;
-    public static final int API_REFRESH_TOKEN_EDIT_PROFILE = 44;
     public static final int API_EVENT_DETAILS = 5;
     public static final int API_EVENT_DETAILS_MAKE_BOOKING = 6;
     public static final int API_MEMBER_ACCOUNT_SETTING = 7;
@@ -61,7 +59,7 @@ public class Api_Constants {
 
     private static Context context;
 
-    public static Bundle processRequest(final Bundle b, Context currentContext) {
+    public static Bundle processRequest(final Bundle b, final Context currentContext) {
 
         context = currentContext;
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -193,76 +191,7 @@ public class Api_Constants {
 
                     break;
                 }
-                case API_REFRESH_TOKEN: {
 
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_authentication + "RefreshToken",
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
-
-                                }
-                            }
-                    ) {
-
-                        @Override
-                        protected Map<String, String> getParams() {
-
-
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("RefreshToken", b.getString("refresh_token"));
-                            params.put("IPAddress", "");
-
-                            return params;
-                        }
-
-                    };
-                    queue.add(postRequest);
-
-                    break;
-                }
-                case API_REFRESH_TOKEN_EDIT_PROFILE: {
-
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_authentication + "RefreshToken",
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
-
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
-
-                                }
-                            }
-                    ) {
-
-                        @Override
-                        protected Map<String, String> getParams() {
-
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("RefreshToken", b.getString("refresh_token"));
-                            params.put("IPAddress", "");
-
-                            return params;
-                        }
-
-                    };
-                    queue.add(postRequest);
-
-                    break;
-                }
                 case API_EVENT_DETAILS: {
 
                     String get_url = url_event + "EventDetails?" + "eventGUID=" + b.getString("eventGUID");

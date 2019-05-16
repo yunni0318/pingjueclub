@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">品爵俱乐部</string>
+    <string name="app_name">品爵</string>
 
     <!-- Login Activity-->
     <string name="login_activity_login">登入</string>
@@ -135,6 +135,7 @@
     <string name="cancel">取消</string>
     <string name="join_trip">加入行程</string>
     <!-- Others -->
+    <string name="loading_please_wait">加载中。。。</string>
     <string name="userrank_bronze">青铜级</string>
     <string name="userrank_gold">金级</string>
     <string name="userrank_platinum">铂级</string>

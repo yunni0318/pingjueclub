@@ -82,6 +82,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 import static com.wedoops.pingjueclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private SwipeRefreshLayout swipeRefreshLayout;
     boolean doubleBackToExitPressedOnce = false;
     private String currentPhotoPath = "";
-    private static ProgressDialog progress;
+    private static ACProgressFlower progress;
 
     public static int navItemIndex = 0;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         loadLanguage();
 
         setContentView(R.layout.activity_main);
@@ -122,7 +126,14 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
 
-            progress = new ProgressDialog(this);
+            progress = new ACProgressFlower.Builder(this)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(Color.WHITE)
+                    .text(this.getResources().getString(R.string.loading_please_wait))
+                    .petalThickness(5)
+                    .textColor(Color.WHITE)
+                    .textSize(30)
+                    .fadeColor(Color.DKGRAY).build();
 
             setupViewByID();
             setupToolbar();
@@ -242,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     private void setupViewByID() {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setDistanceToTriggerSync(400);
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor("#FF0000"), Color.parseColor("#0000FF"), Color.parseColor("#FFFF00"));
 
         swipeRefreshLayout.setOnRefreshListener(
