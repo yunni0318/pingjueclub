@@ -17,6 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name="firebase.NotificationHandler"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -26,9 +34,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
-
-        <!-- Sugar ORM -->
+        </provider> <!-- Sugar ORM -->
         <meta-data
             android:name="DATABASE"
             android:value="pingjueclub.db" />
@@ -44,15 +50,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/splashScreenTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait" />
@@ -68,7 +73,6 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
-
     </application>
 
 </manifest>

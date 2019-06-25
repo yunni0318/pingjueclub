@@ -35,9 +35,9 @@
     <!-- Event Detail Activity -->
     <string name="event_detail_title">行程资料</string>
     <string name="event_detail_join_trip_bell">按"加入旅行"支付费用</string>
-    <string name="event_detail_trip_detail_title">旅行细节</string>
+    <string name="event_detail_trip_detail_title">行程细节</string>
     <string name="event_detail_join_trip">加入行程</string>
-    <string name="event_detail_joined_status_false">按“加入旅行”支付费用。</string>
+    <string name="event_detail_joined_status_false">加入行程后将自动支付费用。</string>
     <string name="event_detail_confirm_join_trip">确认加入此行程？</string>
     <string name="event_detail_trip_confirmed">行程确定加入！</string>
 

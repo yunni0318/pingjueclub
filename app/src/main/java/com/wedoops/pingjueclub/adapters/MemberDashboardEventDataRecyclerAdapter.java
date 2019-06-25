@@ -111,7 +111,22 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+                try {
+
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+                } catch (Exception ee) {
+
+                }
             }
         } else {
             try {
@@ -128,7 +143,24 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+
+                try {
+
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ee) {
+
+                }
             }
         }
 
