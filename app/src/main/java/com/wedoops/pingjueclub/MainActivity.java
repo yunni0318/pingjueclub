@@ -509,6 +509,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         invalidateOptionsMenu();
 
         swipeRefreshLayout.setRefreshing(false);
+        this.callQuickProfileWebService();
+
 
     }
 
@@ -641,6 +643,25 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     }
 
+    private void callQuickProfileWebService() {
+
+        new ApplicationClass().showProgressDialog(progress);
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("access_token", ud_list.get(0).getAccessToken());
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_QUICK_PROFILE);
+
+        new CallWebServices(Api_Constants.API_MEMBER_QUICK_PROFILE, MainActivity.this, true).execute(b);
+
+    }
+
     public void processWSData(JSONObject returnedObject, int command) {
         new ApplicationClass().closeProgressDialog(progress);
 
@@ -705,6 +726,54 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 //                        loadHomeFragment();
 
 //                        displayResult();
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);
+
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+        } else if (command == Api_Constants.API_MEMBER_QUICK_PROFILE) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+                    if (returnedObject.getInt("StatusCode") == 200) {
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        String Srno = String.valueOf(response_object.getInt("Srno"));
+                        String LoginID = response_object.getString("LoginID");
+                        String Name = response_object.getString("Name");
+                        String ProfilePictureImagePath = response_object.getString("ProfilePictureImagePath");
+                        String UserLevelCode = response_object.getString("UserLevelCode");
+                        String JoinedDate = response_object.getString("JoinedDate");
+                        String CashWallet = String.valueOf(response_object.getString("CashWallet"));
+
+                        List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud_listall.get(0).getLoginID());
+
+                        UserDetails ud = UserDetails.find(UserDetails.class, loginid_field + " = ?", ud_listall.get(0).getLoginID()).get(0);
+
+                        ud.setAccessToken(ud_list.get(0).getAccessToken());
+                        ud.setRefreshToken(ud_list.get(0).getRefreshToken());
+                        ud.setSrno(Srno);
+                        ud.setLoginID(LoginID);
+                        ud.setName(Name);
+                        ud.setProfilePictureImagePath(ProfilePictureImagePath);
+                        ud.setUserLevelCode(UserLevelCode);
+                        ud.setJoinedDate(JoinedDate);
+                        ud.setCashWallet(CashWallet);
+                        ud.save();
+
+                        setupNavigationDrawer();
 
                     } else {
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);

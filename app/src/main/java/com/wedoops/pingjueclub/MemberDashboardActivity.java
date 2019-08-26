@@ -144,7 +144,7 @@ public class MemberDashboardActivity extends Fragment {
         setupListener();
         setupCustomFont();
 
-        button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_CLASS);
+        button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
 
     }
 
@@ -241,8 +241,8 @@ public class MemberDashboardActivity extends Fragment {
         String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
         String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
 
-        List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_CLASS);
-        currentSelectedCategory = CONSTANTS_VALUE.EVENT_CATEGORY_CLASS;
+        List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
+        currentSelectedCategory = CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS;
         topBanner_adapter = new MemberDashboardTopBannerRecyclerAdapter(ud);
         eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
 
@@ -265,28 +265,6 @@ public class MemberDashboardActivity extends Fragment {
         };
 
         setupAutoScroll();
-
-////        Timer timer = new Timer();
-//        TimerTask tt = new TimerTask() {
-//
-//            @Override
-//            public void run() {
-//
-//                get_activity.runOnUiThread(new Runnable() {
-//                                               @Override
-//                                               public void run() {
-//                                                   if (position == 3) {
-//                                                       position = 0;
-//                                                   }
-//                                                   recyclerview_top_banner.smoothScrollToPosition(position);
-//                                                   position++;
-//
-//                                               }
-//                                           }
-//                );
-//            }
-//        };
-//        timer.scheduleAtFixedRate(tt, 4000, 4000);
 
         recyclerview_eventdata.setLayoutManager(eventdata_mLayoutManager);
         recyclerview_eventdata.setItemAnimator(new DefaultItemAnimator());
@@ -532,7 +510,6 @@ public class MemberDashboardActivity extends Fragment {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
 
                         }
-
 
                     }
 

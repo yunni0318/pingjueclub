@@ -56,7 +56,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class EventDetailActivity extends Activity {
 
-    private ImageView imageview_eventdetail, imageview_user_rank;
+    private ImageView imageview_eventdetail, imageview_user_rank_bronze, imageview_user_rank_gold, imageview_user_rank_platinum;
     private ListView listview_event_detail_timeline;
     private Button event_detail_button_jointrip;
     private WebView event_detail_webview;
@@ -145,7 +145,10 @@ public class EventDetailActivity extends Activity {
         );
 
         imageview_eventdetail = findViewById(R.id.imageview_eventdetail);
-        imageview_user_rank = findViewById(R.id.imageview_user_rank);
+
+        imageview_user_rank_bronze = findViewById(R.id.imageview_user_rank_bronze);
+        imageview_user_rank_gold = findViewById(R.id.imageview_user_rank_gold);
+        imageview_user_rank_platinum = findViewById(R.id.imageview_user_rank_platinum);
 
         textview_upfront_payment = findViewById(R.id.textview_upfront_payment);
         textview_event_date = findViewById(R.id.textview_event_date);
@@ -200,7 +203,26 @@ public class EventDetailActivity extends Activity {
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ex) {
+                    Log.e("Date", e.toString());
+
+                }
+
+
             }
         } else {
             try {
@@ -217,8 +239,25 @@ public class EventDetailActivity extends Activity {
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+                } catch (Exception ex) {
+                    Log.e("Date", ex.toString());
+
+                }
             }
+
         }
 
         String[] splited_startdate = new_startdate.split(" ");
@@ -234,17 +273,21 @@ public class EventDetailActivity extends Activity {
         textview_event_name.setText(eded_all.get(0).getEventName());
         textview_event_price.setText(String.format("RM %s", eventprice_value));
 
-        if (eded_all.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+        imageview_user_rank_bronze.setVisibility(View.GONE);
+        imageview_user_rank_gold.setVisibility(View.GONE);
+        imageview_user_rank_platinum.setVisibility(View.GONE);
 
-            imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
-
-        } else if (eded_all.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            imageview_user_rank.setImageResource(R.drawable.user_level_gold);
-
-        } else {
-            imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+            imageview_user_rank_bronze.setVisibility(View.VISIBLE);
         }
 
+        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+            imageview_user_rank_gold.setVisibility(View.VISIBLE);
+        }
+
+        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+            imageview_user_rank_platinum.setVisibility(View.VISIBLE);
+        }
 
         RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_eventdate_upfront_payment);
         textview_upfront_payment.setAnimation(rotate);

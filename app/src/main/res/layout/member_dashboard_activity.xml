@@ -75,6 +75,16 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:weightSum="3.0">
+                <ImageButton
+                    android:id="@+id/imagebutton_business"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:paddingRight="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/category_business" />
 
                 <ImageButton
                     android:id="@+id/imagebutton_class"
@@ -87,16 +97,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/category_class" />
 
-                <ImageButton
-                    android:id="@+id/imagebutton_business"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.0"
-                    android:adjustViewBounds="true"
-                    android:background="@android:color/transparent"
-                    android:paddingRight="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/category_business" />
 
                 <ImageButton
                     android:id="@+id/imagebutton_style"

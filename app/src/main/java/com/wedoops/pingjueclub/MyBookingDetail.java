@@ -54,7 +54,8 @@ import java.util.TimeZone;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MyBookingDetail extends Activity {
-    private ImageView imageview_eventdetail, imageview_user_rank;
+    private ImageView imageview_eventdetail;
+    private ImageView imageview_user_rank_bronze, imageview_user_rank_gold, imageview_user_rank_platinum;
     private ListView listview_event_detail_timeline;
     private Button event_detail_button_jointrip;
     private WebView event_detail_webview;
@@ -130,7 +131,10 @@ public class MyBookingDetail extends Activity {
         );
 
         imageview_eventdetail = findViewById(R.id.imageview_eventdetail);
-        imageview_user_rank = findViewById(R.id.imageview_user_rank);
+
+        imageview_user_rank_bronze = findViewById(R.id.imageview_user_rank_bronze);
+        imageview_user_rank_gold = findViewById(R.id.imageview_user_rank_gold);
+        imageview_user_rank_platinum = findViewById(R.id.imageview_user_rank_platinum);
 
         textview_upfront_payment = findViewById(R.id.textview_upfront_payment);
         textview_event_date = findViewById(R.id.textview_event_date);
@@ -250,15 +254,20 @@ public class MyBookingDetail extends Activity {
         textview_event_name.setText(mbed_all.get(0).getEventName());
         textview_event_price.setText(String.format("RM %s", eventprice_value));
 
-        if (mbed_all.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+        imageview_user_rank_bronze.setVisibility(View.GONE);
+        imageview_user_rank_gold.setVisibility(View.GONE);
+        imageview_user_rank_platinum.setVisibility(View.GONE);
 
-            imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+            imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+        }
 
-        } else if (mbed_all.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            imageview_user_rank.setImageResource(R.drawable.user_level_gold);
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+            imageview_user_rank_gold.setVisibility(View.VISIBLE);
+        }
 
-        } else {
-            imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+            imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
 
 

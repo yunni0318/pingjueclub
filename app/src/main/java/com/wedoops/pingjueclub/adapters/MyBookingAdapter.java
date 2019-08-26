@@ -38,7 +38,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         public TextView textview_upfront_payment;
         public TextView textview_event_date;
         public TextView textview_join_trip_amount;
-        public ImageView imageview_user_rank;
+        public ImageView imageview_user_rank_bronze, imageview_user_rank_gold, imageview_user_rank_platinum;
         public TextView textview_event_name;
         public TextView textview_event_price;
 
@@ -50,7 +50,9 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
             textview_upfront_payment = v.findViewById(R.id.textview_upfront_payment);
             textview_event_date = v.findViewById(R.id.textview_event_date);
             textview_join_trip_amount = v.findViewById(R.id.textview_join_trip_amount);
-            imageview_user_rank = v.findViewById(R.id.imageview_user_rank);
+            imageview_user_rank_bronze = v.findViewById(R.id.imageview_user_rank_bronze);
+            imageview_user_rank_gold = v.findViewById(R.id.imageview_user_rank_gold);
+            imageview_user_rank_platinum = v.findViewById(R.id.imageview_user_rank_platinum);
             textview_event_name = v.findViewById(R.id.textview_event_name);
             textview_event_price = v.findViewById(R.id.textview_event_price);
 
@@ -113,7 +115,24 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ex) {
+                    Log.e("Date", e.toString());
+
+                }
+
             }
         } else {
             try {
@@ -130,7 +149,24 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                 new_enddate = outFormat.format(new_date_endDate);
 
             } catch (Exception e) {
-                Log.e("Date", e.toString());
+
+                try {
+                    TimeZone tz = TimeZone.getTimeZone("SGT");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                    format.setTimeZone(tz);
+                    Date new_date_startDate = format.parse(startdate);
+                    Date new_date_endDate = format.parse(enddate);
+
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    outFormat.setTimeZone(tz);
+                    new_startdate = outFormat.format(new_date_startDate);
+                    new_enddate = outFormat.format(new_date_endDate);
+
+                } catch (Exception ex) {
+                    Log.e("Date", e.toString());
+
+                }
             }
         }
 
@@ -147,15 +183,20 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         myViewHolder.textview_event_name.setText(mbl.get(i).getEventName());
         myViewHolder.textview_event_price.setText(String.format("RM %s", eventprice_value));
 
-        if (mbl.get(i).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+        myViewHolder.imageview_user_rank_bronze.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_gold.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_platinum.setVisibility(View.GONE);
 
-            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+            myViewHolder.imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+        }
 
-        } else if (mbl.get(i).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_gold);
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+            myViewHolder.imageview_user_rank_gold.setVisibility(View.VISIBLE);
+        }
 
-        } else {
-            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+            myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
 
 
