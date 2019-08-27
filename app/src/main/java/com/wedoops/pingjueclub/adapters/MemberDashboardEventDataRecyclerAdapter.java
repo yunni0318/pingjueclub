@@ -1,12 +1,15 @@
 package com.wedoops.pingjueclub.adapters;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -84,7 +87,30 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
+
+        final ViewTreeObserver observer = myViewHolder.imageview_evenetdata_detail.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    myViewHolder.imageview_evenetdata_detail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    myViewHolder.imageview_evenetdata_detail.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
+                int containerWidth = myViewHolder.imageview_evenetdata_detail.getWidth();
+
+                int imageViewHeight = containerWidth / 2;
+
+                // set fixed height to the imageView
+                ViewGroup.LayoutParams imgParams = myViewHolder.imageview_evenetdata_detail.getLayoutParams();
+                imgParams.height = imageViewHeight;
+                myViewHolder.imageview_evenetdata_detail.setLayoutParams(imgParams);
+
+            }
+        });
 
         Double d_upfrontrate = ed.get(i).getEventUpfrontRate();
         Double d_eventprice = ed.get(i).getEventPrice();
@@ -172,7 +198,19 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         String final_startDate = String.format(myViewHolder.textview_event_date.getContext().getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
         String final_endDate = String.format(myViewHolder.textview_event_date.getContext().getString(R.string.member_dashboard_eventenddate), splited_enddate[0], splited_enddate[1], splited_enddate[2]);
 
-        Glide.with(myViewHolder.imageview_evenetdata_detail.getContext()).load(ed.get(i).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).into(myViewHolder.imageview_evenetdata_detail);
+
+//        int imageViewHeight =
+//
+//        // set fixed height to the imageView
+//        ViewGroup.LayoutParams imgParams = myViewHolder.imageview_evenetdata_detail.getLayoutParams();
+//        imgParams.height = imageViewHeight;
+//        myViewHolder.imageview_evenetdata_detail.setLayoutParams(imgParams);
+
+
+        Glide.with(myViewHolder.imageview_evenetdata_detail.getContext())
+                .load(ed.get(i).getEventBannerImagePath())
+                .apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP)))
+                .into(myViewHolder.imageview_evenetdata_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
         myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
         myViewHolder.textview_join_trip_amount.setText(String.format("%s/%s", ed.get(i).getReservedSeat(), ed.get(i).getMaxParticipant()));

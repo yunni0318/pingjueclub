@@ -623,6 +623,15 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(progress != null){
+            new ApplicationClass().closeProgressDialog(progress);
+
+        }
+    }
+
     private void callChangeProfilePictureWebService(String base64_string) {
 
         new ApplicationClass().showProgressDialog(progress);
@@ -649,16 +658,18 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+        if (ud.size() > 0) {
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        Bundle b = new Bundle();
-        b.putString("access_token", ud_list.get(0).getAccessToken());
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_QUICK_PROFILE);
+            Bundle b = new Bundle();
+            b.putString("access_token", ud_list.get(0).getAccessToken());
+            b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_QUICK_PROFILE);
 
-        new CallWebServices(Api_Constants.API_MEMBER_QUICK_PROFILE, MainActivity.this, true).execute(b);
+            new CallWebServices(Api_Constants.API_MEMBER_QUICK_PROFILE, MainActivity.this, true).execute(b);
+        }
 
     }
 

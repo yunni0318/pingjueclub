@@ -1,12 +1,14 @@
 package com.wedoops.pingjueclub.adapters;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -86,7 +88,30 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyBookingAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyBookingAdapter.MyViewHolder myViewHolder, int i) {
+
+        final ViewTreeObserver observer = myViewHolder.imageview_my_booking_detail.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    myViewHolder.imageview_my_booking_detail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    myViewHolder.imageview_my_booking_detail.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
+                int containerWidth = myViewHolder.imageview_my_booking_detail.getWidth();
+
+                int imageViewHeight = containerWidth / 2;
+
+                // set fixed height to the imageView
+                ViewGroup.LayoutParams imgParams = myViewHolder.imageview_my_booking_detail.getLayoutParams();
+                imgParams.height = imageViewHeight;
+                myViewHolder.imageview_my_booking_detail.setLayoutParams(imgParams);
+
+            }
+        });
 
         Double d_upfrontrate = mbl.get(i).getEventUpfrontRate();
         Double d_eventprice = mbl.get(i).getEventPrice();
@@ -176,7 +201,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         String final_startDate = String.format(myViewHolder.textview_event_date.getContext().getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
         String final_endDate = String.format(myViewHolder.textview_event_date.getContext().getString(R.string.member_dashboard_eventenddate), splited_enddate[0], splited_enddate[1], splited_enddate[2]);
 
-        Glide.with(myViewHolder.imageview_my_booking_detail.getContext()).load(mbl.get(i).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).into(myViewHolder.imageview_my_booking_detail);
+        Glide.with(myViewHolder.imageview_my_booking_detail.getContext()).load(mbl.get(i).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP))).into(myViewHolder.imageview_my_booking_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
         myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
         myViewHolder.textview_join_trip_amount.setText(String.format("%s/%s", mbl.get(i).getReservedSeat(), mbl.get(i).getMaxParticipant()));
