@@ -35,13 +35,8 @@
     <!-- Edit Profile Activity -->
     <string name="edit_profile_profile_title">PROFILE</string>
     <string name="edit_profile_fullname_title">Full Name</string>
-    <string name="edit_profile_username_title">Username</string>
-    <string name="edit_profile_dob_title">Date of Birth</string>
-    <string name="edit_profile_email_title">Email</string>
-    <string name="edit_profile_country_title">Country</string>
-    <string name="edit_profile_state_title">State/Province</string>
-    <string name="edit_profile_address_title">Mailing Address</string>
-    <string name="edit_profile_phone_title">Phone</string>
+    <string name="edit_profile_nickname_title">Nickname</string>
+
     <string name="edit_profile_save_profile">SAVE PROFILE</string>
     <string name="edit_profile_save_profile_success">ACCOUNT UPDATED!</string>
     <string name="edit_profile_change_password_current_password_title">Current Password</string>
@@ -84,8 +79,7 @@
 
     <string name="logout_confirmation">Are you sure to logout?</string>
 
-    <string name="edit_profile_email_empty_error">Please Enter your email!</string>
-    <string name="edit_profile_email_invalid_format_error">Invalid Email Format !</string>
+    <string name="edittext_nickname_empty_error">Please Enter your Nickname!</string>
 
     <string name="edit_profile_change_password_empty_error">Please enter your password.</string>
     <string name="edit_profile_change_password_invalid_error">The password should contain alphabetic and numeric characters. Min length (6) - Max Length (50)</string>

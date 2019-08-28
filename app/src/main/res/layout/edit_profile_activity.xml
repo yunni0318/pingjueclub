@@ -76,7 +76,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/textview_user_full_name"
+                android:id="@+id/textview_user_nickname"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -84,14 +84,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/textview_sidebar"
                 android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/textview_user_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="\@SPIDERMAN"
-                android:textAlignment="center"
-                android:textColor="#ffffff" />
 
         </LinearLayout>
 
@@ -131,6 +123,36 @@
                 android:paddingBottom="10dp">
 
                 <TextView
+                    android:id="@+id/textview_nickname_title"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/edit_profile_nickname_title"
+                    android:textColor="#ffd35c"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edittext_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:inputType="textMultiLine"
+                    android:isScrollContainer="true"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_bottom_line"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
                     android:id="@+id/textview_fullname_title"
                     android:layout_width="130dp"
                     android:layout_height="match_parent"
@@ -153,217 +175,6 @@
                     android:textSize="14sp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_username_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_username_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_dob_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_dob_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_dob"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:maxLines="4"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_email_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_email_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textEmailAddress|textMultiLine"
-                    android:isScrollContainer="true"
-                    android:maxLines="4"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_country_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_country_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_state_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_state_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_state"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_address_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_address_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:textSize="14sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tablerow_bottom_line"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textview_phone_title"
-                    android:layout_width="130dp"
-                    android:layout_height="match_parent"
-                    android:layout_column="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/edit_profile_phone_title"
-                    android:textColor="#ffd35c"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/edittext_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="2"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:inputType="textMultiLine"
-                    android:isScrollContainer="true"
-                    android:textSize="14sp" />
-            </TableRow>
         </TableLayout>
 
         <LinearLayout

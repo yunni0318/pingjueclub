@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
-    private TextView textview_user_rank, textview_user_full_name, textview_username, textview_user_wallet;
+    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet;
     private ImageView imageview_user_rank;
     private Handler mHandler;
     private RoundedImageView imageview_user_profile;
@@ -279,8 +279,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         imageview_user_profile = navHeader.findViewById(R.id.imageview_user_profile);
 
         textview_user_rank = navHeader.findViewById(R.id.textview_user_rank);
-        textview_user_full_name = navHeader.findViewById(R.id.textview_user_full_name);
-        textview_username = navHeader.findViewById(R.id.textview_username);
+        textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
 
     }
@@ -429,8 +428,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 textview_user_rank.setText(getResources().getString(R.string.userrank_platinum));
             }
 
-            textview_user_full_name.setText(ud.get(0).getName());
-            textview_username.setText(String.format("@%s", ud.get(0).getLoginID().toUpperCase(Locale.getDefault())));
+            textview_user_nickname.setText(ud.get(0).getNickName());
 
 
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
@@ -441,10 +439,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).into(imageview_user_profile);
 
             Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
-            textview_user_full_name.setTypeface(typeface);
+            textview_user_nickname.setTypeface(typeface);
 
             Typeface typeface_crimson_700 = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-700.ttf");
-            textview_username.setTypeface(typeface_crimson_700);
             textview_user_wallet.setTypeface(typeface_crimson_700);
             textview_user_rank.setTypeface(typeface_crimson_700);
 
@@ -626,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     @Override
     protected void onResume() {
         super.onResume();
-        if(progress != null){
+        if (progress != null) {
             new ApplicationClass().closeProgressDialog(progress);
 
         }
@@ -759,6 +756,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         String Srno = String.valueOf(response_object.getInt("Srno"));
                         String LoginID = response_object.getString("LoginID");
                         String Name = response_object.getString("Name");
+                        String NickName = response_object.getString("NickName");
                         String ProfilePictureImagePath = response_object.getString("ProfilePictureImagePath");
                         String UserLevelCode = response_object.getString("UserLevelCode");
                         String JoinedDate = response_object.getString("JoinedDate");
@@ -778,6 +776,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         ud.setSrno(Srno);
                         ud.setLoginID(LoginID);
                         ud.setName(Name);
+                        ud.setNickName(NickName);
                         ud.setProfilePictureImagePath(ProfilePictureImagePath);
                         ud.setUserLevelCode(UserLevelCode);
                         ud.setJoinedDate(JoinedDate);

@@ -48,6 +48,7 @@ public class Api_Constants {
     public static final int API_MEMBER_ACCOUNT_SETTING = 7;
     public static final int API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST = 8;
     public static final int API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION = 9;
+    public static final int API_MEMBER_UPDATE_ACCOUNT_NICKNAME = 99;
     public static final int API_MEMBER_UPDATE_ACCOUNT_SECURITY = 10;
     public static final int API_EVENT_BOOKING_LIST = 11;
     public static final int API_EVENT_BOOKING_DETAIL = 12;
@@ -395,6 +396,51 @@ public class Api_Constants {
 
                     break;
                 }
+                case API_MEMBER_UPDATE_ACCOUNT_NICKNAME: {
+
+
+                    String get_url = url_member + "UpdateAccountNickname?" + "nickname=" + b.getString("NickName");
+
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, get_url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+//                        @Override
+//                        protected Map<String, String> getParams() throws AuthFailureError {
+//
+//                            Map<String, String> params = new HashMap<String, String>();
+//                            params.put("nickname", b.getString("NickName"));
+//
+//                            return params;
+//                        }
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
                 case API_MEMBER_UPDATE_ACCOUNT_SECURITY: {
 
                     StringRequest postRequest = new StringRequest(Request.Method.POST, url_member + "UpdateAccountSecurity",
@@ -593,7 +639,7 @@ public class Api_Constants {
                     break;
                 }
 
-                case API_MEMBER_QUICK_PROFILE:{
+                case API_MEMBER_QUICK_PROFILE: {
                     StringRequest postRequest = new StringRequest(Request.Method.GET, url_member + "QuickProfile",
                             new Response.Listener<String>() {
                                 @Override

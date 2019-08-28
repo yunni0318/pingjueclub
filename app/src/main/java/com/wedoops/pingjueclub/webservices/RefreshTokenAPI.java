@@ -43,6 +43,7 @@ public class RefreshTokenAPI {
     public static final int ORIGIN_MEMBER_ACCOUNT_SETTING = 77;
     public static final int ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST = 88;
     public static final int ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION = 99;
+    public static final int ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME = 99;
     public static final int ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY = 1010;
     public static final int ORIGIN_EVENT_BOOKING_LIST = 1111;
     public static final int ORIGIN_EVENT_BOOKING_DETAIL = 1212;
@@ -83,8 +84,12 @@ public class RefreshTokenAPI {
 
                                     }
 
-                                    if (origin == ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION) {
-                                        EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
+//                                    if (origin == ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION) {
+//                                        EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
+//
+//                                    }
+                                    if (origin == ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME) {
+                                        EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME);
 
                                     }
 

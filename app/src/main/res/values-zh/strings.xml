@@ -44,13 +44,8 @@
     <!-- Edit Profile Activity -->
     <string name="edit_profile_profile_title">用户资料</string>
     <string name="edit_profile_fullname_title">全名</string>
-    <string name="edit_profile_username_title">用户名</string>
-    <string name="edit_profile_dob_title">生日日期</string>
-    <string name="edit_profile_email_title">电子邮件</string>
-    <string name="edit_profile_country_title">国家</string>
-    <string name="edit_profile_state_title">州/省</string>
-    <string name="edit_profile_address_title">邮寄地址</string>
-    <string name="edit_profile_phone_title">手机号码</string>
+    <string name="edit_profile_nickname_title">昵称</string>
+
     <string name="edit_profile_save_profile">保存用户配置文件</string>
     <string name="edit_profile_save_profile_success">用户资料更新成功!</string>
     <string name="edit_profile_change_password_current_password_title">当前密码</string>
@@ -79,8 +74,7 @@
 
     <string name="logout_confirmation">确定登出？</string>
 
-    <string name="edit_profile_email_empty_error">请输入您的邮件！ </string>
-    <string name="edit_profile_email_invalid_format_error">邮件格式无效！</string>
+    <string name="edittext_nickname_empty_error">请输入您的昵称！ </string>
 
     <string name="edit_profile_change_password_empty_error">请输入您的密码。 </string>
     <string name="edit_profile_change_password_invalid_error">密码应包含字母和数字字符。 最小长度（6） - 最大长度（50）</string>

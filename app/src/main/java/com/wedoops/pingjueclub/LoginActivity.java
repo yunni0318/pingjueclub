@@ -208,6 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                     String Srno = String.valueOf(user_profile_object.getInt("Srno"));
                     String LoginID = user_profile_object.getString("LoginID");
                     String Name = user_profile_object.getString("Name");
+                    String NickName = user_profile_object.getString("NickName");
                     String DOB = user_profile_object.getString("DOB");
                     String Email = user_profile_object.getString("Email");
                     String Phone = user_profile_object.getString("Phone");
@@ -221,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                     String CashWallet = String.valueOf(user_profile_object.getString("CashWallet"));
 
 
-                    UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet);
+                    UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet);
                     ud.save();
 
                     new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());

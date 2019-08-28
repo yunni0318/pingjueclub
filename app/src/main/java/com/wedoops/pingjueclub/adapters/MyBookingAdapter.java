@@ -183,7 +183,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);

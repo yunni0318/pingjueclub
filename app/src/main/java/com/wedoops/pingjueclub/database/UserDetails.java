@@ -8,6 +8,7 @@ public class UserDetails extends SugarRecord {
     private String Srno;
     private String LoginID;
     private String Name;
+    private String NickName;
     private String DOB;
     private String Email;
     private String Phone;
@@ -24,12 +25,13 @@ public class UserDetails extends SugarRecord {
 
     }
 
-    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String name, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet) {
+    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String name, String nickname, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         Srno = srno;
         LoginID = loginID;
         Name = name;
+        this.NickName = nickname;
         this.DOB = DOB;
         Email = email;
         Phone = phone;
@@ -61,6 +63,10 @@ public class UserDetails extends SugarRecord {
 
     public String getName() {
         return Name;
+    }
+
+    public String getNickName() {
+        return NickName;
     }
 
     public String getDOB() {
@@ -125,6 +131,10 @@ public class UserDetails extends SugarRecord {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public void setNickName(String nickName) {
+        NickName = nickName;
     }
 
     public void setDOB(String DOB) {
