@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,8 +33,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -138,6 +141,20 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             setupViewByID();
             setupToolbar();
             setupNavigationDrawer();
+
+//            navigationView.setItemTextColor(new ColorStateList(
+//                   new int[][]{
+//                          new int [] {android.R.attr.state_pressed},
+//                           new int [] {android.R.attr.state_focused},
+//                           new int [] {}
+//                   } ,
+//                    new int[] {
+//                            Color.rgb (255, 128, 192),
+//                            Color.rgb (100, 200, 192),
+//                            Color.WHITE
+//
+//                    }
+//            ));
 
             navigationView.getMenu().getItem(0).setChecked(true);
             navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
@@ -543,6 +560,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
         SpannableString mNewTitle = new SpannableString(mi.getTitle());
         mNewTitle.setSpan(new CustomTypefaceSpan("", font), 0, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        //mNewTitle.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),0,mNewTitle.length(),0);
         mi.setTitle(mNewTitle);
     }
 
