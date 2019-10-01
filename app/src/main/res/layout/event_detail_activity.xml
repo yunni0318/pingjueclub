@@ -4,13 +4,13 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#333333"
+    android:background="@android:color/black"
     android:fitsSystemWindows="true">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#333333">
+        android:background="@android:color/black">
 
         <LinearLayout
             android:layout_width="match_parent"

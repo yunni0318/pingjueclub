@@ -32,6 +32,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.Spannable;
@@ -54,6 +55,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.orm.StringUtil;
+import com.wedoops.pingjueclub.adapters.NavigationItemAdapter;
 import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
@@ -286,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                     }
                 }
         );
+
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigationview);
         drawer = findViewById(R.id.drawer_layout);
@@ -409,6 +412,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 super.onDrawerOpened(drawerView);
             }
         };
+
+        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.textview_sidebar));
 
         //Setting the actionbarToggle to drawer layout
         drawer.setDrawerListener(actionBarDrawerToggle);

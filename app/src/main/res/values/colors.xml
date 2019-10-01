@@ -14,7 +14,7 @@
 
 
     <!-- Navigation Bar -->
-    <color name="textview_sidebar">#ffd35c</color>
+    <color name="textview_sidebar">#e2ac7f</color>
     <color name="sidebar_selected_background_color">#B3000000</color>
     <color name="sidebar_default_background_color">#B3000000</color>
 

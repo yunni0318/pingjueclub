@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -49,6 +50,7 @@
                 </android.support.design.widget.AppBarLayout>
 
                 <FrameLayout
+                    android:paddingBottom="30dp"
                     android:layout_marginBottom="50dp"
                     android:id="@+id/framelayout_fragment_container"
                     android:layout_width="match_parent"
@@ -58,24 +60,115 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/skin_color_gradient"
+        app:fabSize="normal"
+        app:elevation="10dp"
+        />
+
     <RelativeLayout
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="20dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bottom_bar_background"
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="bottom">
 
-        <android.support.design.widget.BottomNavigationView
+        <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foregroundGravity="bottom"
-            android:background="@android:color/holo_red_dark"
-            app:itemTextColor="@color/textview_sidebar"
-            android:id="@+id/bottomnav"
-            app:menu="@menu/menu">
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:orientation="vertical">
 
-        </android.support.design.widget.BottomNavigationView>
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/right_arrow" />
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:text="Home"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:orientation="vertical"
+                android:gravity="bottom" >
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    android:text="Transaction"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/right_arrow" />
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:text="Records"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+<!--        <android.support.design.widget.BottomNavigationView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:foregroundGravity="bottom"-->
+<!--            android:background="@android:color/holo_red_dark"-->
+<!--            app:itemTextColor="@color/textview_sidebar"-->
+<!--            android:id="@+id/bottomnav"-->
+<!--            app:menu="@menu/menu">-->
+
+<!--        </android.support.design.widget.BottomNavigationView>-->
 
     </RelativeLayout>
 

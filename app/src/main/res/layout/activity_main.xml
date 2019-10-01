@@ -15,8 +15,9 @@
         android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
+        android:theme="@style/NavigationTheme"
         android:id="@+id/navigationview"
-        app:itemIconPadding="15dp"
+        app:itemIconPadding="20dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
