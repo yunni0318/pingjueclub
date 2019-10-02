@@ -60,22 +60,11 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/skin_color_gradient"
-        app:fabSize="normal"
-        app:elevation="10dp"
-        />
 
     <RelativeLayout
         android:clickable="true"
         android:focusable="true"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
@@ -93,6 +82,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/bottom_nav_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
@@ -112,7 +102,7 @@
                     android:textColor="@android:color/white"
                     android:layout_gravity="center_horizontal"
                     android:textSize="15sp"
-                    android:text="Home"/>
+                    android:text="Home" />
 
             </LinearLayout>
 
@@ -121,7 +111,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:orientation="vertical"
-                android:gravity="bottom" >
+                android:gravity="bottom">
 
                 <TextView
                     android:layout_gravity="center_horizontal"
@@ -129,11 +119,12 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textSize="15sp"
-                    android:text="Transaction"/>
+                    android:text="Transaction" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/bottom_nav_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.35"
@@ -153,23 +144,22 @@
                     android:textColor="@android:color/white"
                     android:layout_gravity="center_horizontal"
                     android:textSize="15sp"
-                    android:text="Records"/>
+                    android:text="Records" />
 
             </LinearLayout>
-
         </LinearLayout>
-
-<!--        <android.support.design.widget.BottomNavigationView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:foregroundGravity="bottom"-->
-<!--            android:background="@android:color/holo_red_dark"-->
-<!--            app:itemTextColor="@color/textview_sidebar"-->
-<!--            android:id="@+id/bottomnav"-->
-<!--            app:menu="@menu/menu">-->
-
-<!--        </android.support.design.widget.BottomNavigationView>-->
-
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bottom_nav_transaction"
+        app:fabCustomSize="80dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/bottom_nav"
+        android:src="@drawable/skin_color_gradient"
+        app:layout_anchorGravity="center_horizontal"
+        app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>

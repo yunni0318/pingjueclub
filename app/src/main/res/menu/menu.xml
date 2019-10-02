@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:layout_gravity="end"  android:checkableBehavior="single">
         <item
             android:id="@+id/menu_dashboard"
             android:icon="@drawable/sidebar_dashboard"
@@ -19,9 +19,21 @@
             android:icon="@drawable/sidebar_my_booking"
             android:title="@string/nav_menu_transactions_report" />
         <item
-            android:id="@+id/menu_logout"
+            android:id="@+id/menu_services"
             android:icon="@drawable/sidebar_logout"
-            android:title="@string/nav_menu_logout" />
+            android:title="Services" />
+        <item
+            android:id="@+id/menu_guide"
+            android:icon="@drawable/sidebar_logout"
+            android:title="Guide" />
+        <item
+            android:id="@+id/menu_benefit"
+            android:icon="@drawable/sidebar_logout"
+            android:title="Benefit" />
+        <item
+            android:id="@+id/menu_termNCond"
+            android:icon="@drawable/sidebar_logout"
+            android:title="Term &amp; Conditions" />
     </group>
 
 </menu>

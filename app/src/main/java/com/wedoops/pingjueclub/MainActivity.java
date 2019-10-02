@@ -1,12 +1,9 @@
 package com.wedoops.pingjueclub;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -19,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -32,12 +30,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.AlignmentSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -48,6 +43,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +51,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.orm.StringUtil;
-import com.wedoops.pingjueclub.adapters.NavigationItemAdapter;
-import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
@@ -65,14 +59,10 @@ import com.wedoops.pingjueclub.helper.CustomTypefaceSpan;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.helper.IImagePickerLister;
 import com.wedoops.pingjueclub.helper.ImagePickerEnum;
-import com.wedoops.pingjueclub.helper.LocaleHelper;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.model.AspectRatio;
-import com.yalantis.ucrop.util.FileUtils;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -99,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
+    private LinearLayout navFooter, homeBottomNav, recordBottomNav;
+    private FloatingActionButton floatingActionButton;
     private TextView textview_user_rank, textview_user_nickname, textview_user_wallet;
     private ImageView imageview_user_rank;
     private Handler mHandler;
@@ -115,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private static final String TAG_ACCOUNT = "ACCOUNT";
     private static final String TAG_MY_BOOKING = "MYBOOKING";
     private static final String TAG_TRANSACTION_REPORT = "TRANSACTIONREPORT";
+    private static final String TAG_SERVICE = "SERVICE";
+    private static final String TAG_GUIDE = "GUIDE";
+    private static final String TAG_BENEFIT = "BENEFIT";
+    private static final String TAG_TERMNCOND = "TERMCONDITIONS";
     private static final String TAG_LOGOUT = "LOGOUT";
     public static String CURRENT_TAG = TAG_DASHBOARD;
     private static final String FILE_NAME = "file_lang"; // preference file name
@@ -143,20 +139,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             setupViewByID();
             setupToolbar();
             setupNavigationDrawer();
-
-//            navigationView.setItemTextColor(new ColorStateList(
-//                   new int[][]{
-//                          new int [] {android.R.attr.state_pressed},
-//                           new int [] {android.R.attr.state_focused},
-//                           new int [] {}
-//                   } ,
-//                    new int[] {
-//                            Color.rgb (255, 128, 192),
-//                            Color.rgb (100, 200, 192),
-//                            Color.WHITE
-//
-//                    }
-//            ));
 
             navigationView.getMenu().getItem(0).setChecked(true);
             navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
@@ -292,7 +274,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigationview);
         drawer = findViewById(R.id.drawer_layout);
-        navHeader = navigationView.getHeaderView(0);
+        navHeader = findViewById(R.id.headerrr);
+        navFooter = findViewById(R.id.navFooter);
+        homeBottomNav = findViewById(R.id.bottom_nav_home);
+        recordBottomNav=findViewById(R.id.bottom_nav_record);
+        floatingActionButton=findViewById(R.id.bottom_nav_transaction);
 
         imagebutton_language = navHeader.findViewById(R.id.imagebutton_language);
         imageview_user_rank = navHeader.findViewById(R.id.imageview_user_rank);
@@ -301,6 +287,76 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         textview_user_rank = navHeader.findViewById(R.id.textview_user_rank);
         textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
+
+        navFooter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawers();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(MainActivity.this.getString(R.string.warning_title));
+                builder.setMessage(MainActivity.this.getString(R.string.logout_confirmation));
+                builder.setCancelable(false);
+                builder.setPositiveButton(MainActivity.this.getString(R.string.Ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+
+                                dialog.dismiss();
+
+                                UserDetails.deleteAll(UserDetails.class);
+                                MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
+                                MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
+
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                        Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                startActivity(intent);
+
+                            }
+                        });
+
+                builder.setNegativeButton(MainActivity.this.getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        });
+                builder.show();
+
+            }
+        });
+
+        homeBottomNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(0).setChecked(true);
+                navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+            }
+        });
+
+        recordBottomNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(3).setChecked(true);
+                navigationView.getMenu().performIdentifierAction(R.id.menu_my_transactions_report, 0);
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(2).setChecked(true);
+                navigationView.getMenu().performIdentifierAction(R.id.menu_my_booking, 0);
+            }
+        });
 
     }
 
@@ -335,62 +391,42 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         CURRENT_TAG = TAG_TRANSACTION_REPORT;
 
                         break;
-                    case R.id.menu_logout:
+                    case R.id.menu_services:
 
                         navItemIndex = 4;
+                        CURRENT_TAG = TAG_SERVICE;
+                        break;
 
-                        drawer.closeDrawers();
+                    case R.id.menu_guide:
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_GUIDE;
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(MainActivity.this.getString(R.string.warning_title));
-                        builder.setMessage(MainActivity.this.getString(R.string.logout_confirmation));
-                        builder.setCancelable(false);
-                        builder.setPositiveButton(MainActivity.this.getString(R.string.Ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
+                        break;
 
-                                        dialog.dismiss();
+                    case R.id.menu_benefit:
+                        navItemIndex = 6;
+                        CURRENT_TAG = TAG_BENEFIT;
 
-                                        UserDetails.deleteAll(UserDetails.class);
-                                        MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
-                                        MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
+                        break;
 
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                    case R.id.menu_termNCond:
+                        navItemIndex = 7;
+                        CURRENT_TAG = TAG_TERMNCOND;
 
-                                        startActivity(intent);
-
-                                    }
-                                });
-
-                        builder.setNegativeButton(MainActivity.this.getString(R.string.cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-
-                                        dialog.dismiss();
-
-                                    }
-                                });
-                        builder.show();
-
-                        return false;
+                        break;
                     default:
                         navItemIndex = 0;
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state
 
-                if (menuItem.getItemId() != R.id.menu_logout) {
-                    if (menuItem.isChecked()) {
-                        menuItem.setChecked(false);
-                    } else {
-                        menuItem.setChecked(true);
-                    }
-                }
+//                if (menuItem.getItemId() != R.id.menu_logout) {
+//                    if (menuItem.isChecked()) {
+//                        menuItem.setChecked(false);
+//                    } else {
+//                        menuItem.setChecked(true);
+//                    }
+//                }
                 loadHomeFragment();
 
                 return true;
@@ -416,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.textview_sidebar));
 
         //Setting the actionbarToggle to drawer layout
-        drawer.setDrawerListener(actionBarDrawerToggle);
+        //drawer.setDrawerListener(actionBarDrawerToggle);
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
@@ -547,6 +583,18 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 3:
                 MyTransactionsReport transactionsReportFragment = new MyTransactionsReport();
                 return transactionsReportFragment;
+            case 4:
+                ServicesFragment servicesFragment = new ServicesFragment();
+                return servicesFragment;
+            case 5:
+                GuideFragment guideFragment = new GuideFragment();
+                return guideFragment;
+            case 6:
+                BenefitFragment benefitFragment = new BenefitFragment();
+                return benefitFragment;
+            case 7:
+                TermNCondFragment termNCondFragment = new TermNCondFragment();
+                return termNCondFragment;
 
             default:
                 return new MemberDashboardActivity();
@@ -554,11 +602,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void selectNavMenu() {
-        if (navItemIndex != 4) {
-            navigationView.getMenu().getItem(navItemIndex).setChecked(true);
-        } else {
-            navigationView.getMenu().getItem(navItemIndex).setChecked(false);
-        }
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
     private void applyFontToMenuItem(MenuItem mi) {
