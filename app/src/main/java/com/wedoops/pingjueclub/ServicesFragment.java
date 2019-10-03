@@ -33,11 +33,11 @@ import java.util.List;
 
 public class ServicesFragment extends Fragment {
 
-    private static View view;
-    private static RecyclerView recyclerView,recyclerViewServices,recyclerViewNews;
-    private static Runnable runnable;
-    public static int position = 0;
     private static final Handler handler = new Handler();
+    public static int position = 0;
+    private static View view;
+    private static RecyclerView recyclerView, recyclerViewServices, recyclerViewNews;
+    private static Runnable runnable;
     private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
     private List<Services> services;
     private ServiceItemAdapter serviceItemAdapter;
@@ -48,15 +48,12 @@ public class ServicesFragment extends Fragment {
 
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-
             List<MemberDashboardTopBanner> ed = MemberDashboardTopBanner.listAll(MemberDashboardTopBanner.class);
 
             if (ed.get(position).getAnnouncementType().equals(CONSTANTS_VALUE.EVENT_TOP_BANNER_NEWTRIP)) {
-
                 Intent intent = new Intent(view.getContext(), EventDetailActivity.class);
                 intent.putExtra("eventGUID", ed.get(position).getRedirectURL());
                 view.getContext().startActivity(intent);
-
             } else {
                 String url = ed.get(position).getRedirectURL();
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -65,48 +62,8 @@ public class ServicesFragment extends Fragment {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 view.getContext().startActivity(browserIntent);
             }
-
-
         }
     };
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.services_fragment, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_service_top_banner);
-
-        services=new ArrayList<>();
-        services.add(new Services("Entertainment Bar","fsfs"));
-        services.add(new Services("Luxury Transport","fsfs"));
-        services.add(new Services("Luxury Travel","fsfs"));
-        services.add(new Services("Luxury Brand","fsfs"));
-        services.add(new Services("Property Services","fsfs"));
-        services.add(new Services("Award Services","fsfs"));
-        services.add(new Services("Personal Services","fsfs"));
-        services.add(new Services("Sport Services","fsfs"));
-        services.add(new Services("Premium Lounge","fsfs"));
-
-        setupRecyclerView();
-        recyclerViewServices=(RecyclerView)view.findViewById(R.id.recyclerview_service_list);
-        recyclerViewNews=(RecyclerView)view.findViewById(R.id.recyclerview_service_new);
-        serviceItemAdapter=new ServiceItemAdapter(getContext(),services);
-        recyclerViewServices.setLayoutManager(new GridLayoutManager(getContext(),3));
-        recyclerViewServices.setAdapter(serviceItemAdapter);
-
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerViewNews.setLayoutManager(layoutManager);
-        recyclerViewNews.setAdapter(serviceItemAdapter);
-
-
-
-    }
 
     public static void setupRecyclerView() {
         String tablename_tb = StringUtil.toSQLName("MemberDashboardTopBanner");
@@ -117,7 +74,6 @@ public class ServicesFragment extends Fragment {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
                 LinearSmoothScroller smoothScroller = new LinearSmoothScroller(view.getContext()) {
                     private static final float SPEED = 100f;// Change this value (default=25f)
-
                     @Override
                     protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                         return SPEED / displayMetrics.densityDpi;
@@ -126,7 +82,6 @@ public class ServicesFragment extends Fragment {
                 smoothScroller.setTargetPosition(position);
                 startSmoothScroll(smoothScroller);
             }
-
         };
         setupAutoScroll();
         recyclerView.setLayoutManager(top_banner_mLayoutManager);
@@ -144,7 +99,6 @@ public class ServicesFragment extends Fragment {
                     } catch (Exception e) {
                         position = 0;
                     }
-
                 }
             }
         });
@@ -155,23 +109,9 @@ public class ServicesFragment extends Fragment {
             helper.attachToRecyclerView(recyclerView);
         }
 
-
         //Indicator
         recyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
         topBanner_adapter.setOnTopBannerItemClickListener(onTopBannerItemClickListener);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        handler.removeCallbacks(runnable);
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        handler.removeCallbacks(runnable);
     }
 
     private static void setupAutoScroll() {
@@ -187,5 +127,53 @@ public class ServicesFragment extends Fragment {
             }
         };
         handler.postDelayed(runnable, 2000);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.services_fragment, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_service_top_banner);
+
+        services = new ArrayList<>();
+        services.add(new Services("Entertainment Bar", "fsfs",R.drawable.entertainment));
+        services.add(new Services("Luxury Transport", "fsfs",R.drawable.transport));
+        services.add(new Services("Luxury Travel", "fsfs",R.drawable.travel));
+        services.add(new Services("Luxury Brand", "fsfs",R.drawable.brand));
+        services.add(new Services("Property Services", "fsfs",R.drawable.properties));
+        services.add(new Services("Award Services", "fsfs",R.drawable.award));
+        services.add(new Services("Personal Services", "fsfs",R.drawable.personal));
+        services.add(new Services("Sport Services", "fsfs",R.drawable.sporrt));
+        services.add(new Services("Premium Lounge", "fsfs",R.drawable.premium));
+
+        setupRecyclerView();
+        recyclerViewServices = (RecyclerView) view.findViewById(R.id.recyclerview_service_list);
+        recyclerViewNews = (RecyclerView) view.findViewById(R.id.recyclerview_service_new);
+        serviceItemAdapter = new ServiceItemAdapter(getContext(), services);
+        recyclerViewServices.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerViewServices.setAdapter(serviceItemAdapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewNews.setLayoutManager(layoutManager);
+        recyclerViewNews.setAdapter(serviceItemAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
     }
 }

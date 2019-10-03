@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#191919"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -82,6 +82,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:layout_gravity="center_vertical"
                 android:id="@+id/bottom_nav_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -90,10 +91,10 @@
 
                 <ImageView
                     android:layout_gravity="center_horizontal"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/right_arrow" />
+                    android:src="@drawable/home" />
 
                 <TextView
                     android:layout_marginTop="5dp"
@@ -107,6 +108,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
@@ -124,6 +126,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_gravity="center_vertical"
                 android:id="@+id/bottom_nav_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -132,10 +135,10 @@
 
                 <ImageView
                     android:layout_gravity="center_horizontal"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/right_arrow" />
+                    android:src="@drawable/records" />
 
                 <TextView
                     android:layout_marginTop="5dp"

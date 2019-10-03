@@ -461,8 +461,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private void setupNavigationDrawer() {
         //Navigation Header
 
-        navigationView.setItemIconTintList(null);
-
         if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {

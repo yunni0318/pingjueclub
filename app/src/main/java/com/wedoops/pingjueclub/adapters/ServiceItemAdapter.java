@@ -38,12 +38,14 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         myViewHolder.title.setText(mData.get(i).getTitle());
+        myViewHolder.imageView.setImageResource(mData.get(i).getThumbnail());
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(mContext, ServiceDetails.class);
                 intent.putExtra("Title",mData.get(i).getTitle());
                 intent.putExtra("Image",mData.get(i).getImage());
+                intent.putExtra("Thumbnail",mData.get(i).getThumbnail());
                 mContext.startActivity(intent);
             }
         });

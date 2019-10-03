@@ -4,13 +4,23 @@ public class Services {
 
     private String title;
     private String image;
+    private int Thumbnail;
 
     public Services() {
     }
 
-    public Services(String title, String image) {
+    public Services(String title, String image, int thumbnail) {
         this.title = title;
         this.image = image;
+        Thumbnail = thumbnail;
+    }
+
+    public int getThumbnail() {
+        return Thumbnail;
+    }
+
+    public void setThumbnail(int thumbnail) {
+        Thumbnail = thumbnail;
     }
 
     public String getTitle() {

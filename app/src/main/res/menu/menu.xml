@@ -4,35 +4,35 @@
     <group android:layout_gravity="end"  android:checkableBehavior="single">
         <item
             android:id="@+id/menu_dashboard"
-            android:icon="@drawable/sidebar_dashboard"
+            android:icon="@drawable/home"
             android:title="@string/nav_menu_dashboard" />
         <item
             android:id="@+id/menu_account"
-            android:icon="@drawable/sidebar_account"
+            android:icon="@drawable/account"
             android:title="@string/nav_menu_account" />
         <item
             android:id="@+id/menu_my_booking"
-            android:icon="@drawable/sidebar_my_booking"
+            android:icon="@drawable/booking"
             android:title="@string/nav_menu_my_booking" />
         <item
             android:id="@+id/menu_my_transactions_report"
-            android:icon="@drawable/sidebar_my_booking"
+            android:icon="@drawable/records"
             android:title="@string/nav_menu_transactions_report" />
         <item
             android:id="@+id/menu_services"
-            android:icon="@drawable/sidebar_logout"
+            android:icon="@drawable/services"
             android:title="Services" />
         <item
             android:id="@+id/menu_guide"
-            android:icon="@drawable/sidebar_logout"
+            android:icon="@drawable/guide"
             android:title="Guide" />
         <item
             android:id="@+id/menu_benefit"
-            android:icon="@drawable/sidebar_logout"
+            android:icon="@drawable/benefit"
             android:title="Benefit" />
         <item
             android:id="@+id/menu_termNCond"
-            android:icon="@drawable/sidebar_logout"
+            android:icon="@drawable/termcond"
             android:title="Term &amp; Conditions" />
     </group>
 

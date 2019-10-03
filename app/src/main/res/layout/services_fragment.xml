@@ -4,71 +4,63 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="start">
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_service_top_banner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?android:actionBarSize" />
+        android:layout_gravity="start">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Services"
-                android:textSize="15sp"
-                android:textColor="@android:color/white"/>
-            
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_service_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Other News"
-                android:textSize="15sp"
-                android:textColor="@android:color/white"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_service_new"
+                android:id="@+id/recyclerview_service_top_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:layout_marginTop="?android:actionBarSize" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_marginLeft="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Services"
+                    android:textSize="15sp"
+                    android:textColor="@color/textview_sidebar" />
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview_service_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_marginLeft="6dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other News"
+                    android:textSize="15sp"
+                    android:textColor="@color/textview_sidebar" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview_service_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </LinearLayout>
         </LinearLayout>
-
-
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

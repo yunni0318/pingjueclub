@@ -6,7 +6,7 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="120dp"
-    android:layout_height="190dp"
+    android:layout_height="140dp"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
     cardview:cardCornerRadius="4dp">
@@ -14,14 +14,22 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:background="@android:color/black"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/service_image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            android:background="@android:color/white"/>
+            android:layout_height="110dp">
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:id="@+id/service_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/premium"
+                android:scaleType="centerCrop"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/service_title"
@@ -29,7 +37,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="13sp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/textview_sidebar"
             android:text="Title"/>
 
     </LinearLayout>
