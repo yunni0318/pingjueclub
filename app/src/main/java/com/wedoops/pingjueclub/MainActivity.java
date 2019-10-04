@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private View navHeader;
     private LinearLayout navFooter, homeBottomNav, recordBottomNav;
     private FloatingActionButton floatingActionButton;
-    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet;
-    private ImageView imageview_user_rank;
+    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, toolbar_title ;
+    private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
     private Handler mHandler;
     private RoundedImageView imageview_user_profile;
     private ImageButton imagebutton_language;
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     boolean doubleBackToExitPressedOnce = false;
     private String currentPhotoPath = "";
     private static ACProgressFlower progress;
+    private CoordinatorLayout toolbar_heart;
 
     public static int navItemIndex = 0;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
@@ -288,6 +290,12 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
 
+        toolbar_title=findViewById(R.id.toolbar_title);
+        toolbar_logo=findViewById(R.id.toolbar_logo);
+        toolbar_heart=findViewById(R.id.toolbar_heart);
+        toolbar_camera=findViewById(R.id.toolbar_camera);
+
+
         navFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -472,15 +480,15 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         if (ud.size() > 0) {
 
             if (ud.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-                imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
+                imageview_user_rank.setImageResource(R.drawable.bronze_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_bronze));
 
             } else if (ud.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-                imageview_user_rank.setImageResource(R.drawable.user_level_gold);
+                imageview_user_rank.setImageResource(R.drawable.gold_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_gold));
 
             } else {
-                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                imageview_user_rank.setImageResource(R.drawable.platinum_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_platinum));
             }
 
@@ -570,31 +578,74 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
+                toolbar_title.setVisibility(View.GONE);
+                toolbar_logo.setVisibility(View.VISIBLE);
+                toolbar_heart.setVisibility(View.VISIBLE);
+                toolbar_camera.setVisibility(View.GONE);
                 MemberDashboardActivity dashboardFragment = new MemberDashboardActivity();
                 return dashboardFragment;
             case 1:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Account");
                 EditProfileActivity accountFragment = new EditProfileActivity();
                 return accountFragment;
             case 2:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("My Booking");
                 MyBookingActivity bookingFragment = new MyBookingActivity();
                 return bookingFragment;
             case 3:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("My Transaction Report");
                 MyTransactionsReport transactionsReportFragment = new MyTransactionsReport();
                 return transactionsReportFragment;
             case 4:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Services");
                 ServicesFragment servicesFragment = new ServicesFragment();
                 return servicesFragment;
             case 5:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Guide");
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
             case 6:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Benefit");
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
             case 7:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_heart.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Term & Conditions");
                 TermNCondFragment termNCondFragment = new TermNCondFragment();
                 return termNCondFragment;
 
             default:
+                toolbar_title.setVisibility(View.GONE);
+                toolbar_logo.setVisibility(View.VISIBLE);
+                toolbar_heart.setVisibility(View.VISIBLE);
+                toolbar_camera.setVisibility(View.GONE);
                 return new MemberDashboardActivity();
         }
     }

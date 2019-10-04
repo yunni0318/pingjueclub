@@ -1,65 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="#B3000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#B3000000"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     android:padding="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
 
-            <TextView
-                android:id="@+id/textview_user_rank"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/tetetetet"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center"
-                android:background="@drawable/radius_all"
-                android:gravity="center"
-                android:paddingStart="30dp"
-                android:paddingLeft="30dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:text="Loading..."
-                android:textColor="#000000"
-                android:textSize="10sp" />
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textview_user_rank"
+                    android:layout_width="75dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/radius_all"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:text="Platinum"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <ImageView
+                android:backgroundTint="@android:color/black"
                 android:id="@+id/imageview_user_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:adjustViewBounds="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
-                android:gravity="left|center"
-                android:scaleType="fitCenter"
-                android:src="@drawable/user_level_bronze" />
+                android:src="@drawable/platinum_medal"
+                app:layout_anchor="@id/tetetetet"
+                app:layout_anchorGravity="center_vertical" />
 
-        </FrameLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
 
         <ImageButton
             android:id="@+id/imagebutton_language"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:adjustViewBounds="true"
-            android:onClick="button_change_language"
             android:background="@android:color/transparent"
+            android:onClick="button_change_language"
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/language_china" />
@@ -70,10 +77,10 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:onClick="button_change_profile_image"
         android:layout_marginTop="15dp"
-        android:adjustViewBounds="true"
         android:layout_marginBottom="15dp"
+        android:adjustViewBounds="true"
+        android:onClick="button_change_profile_image"
         android:scaleType="fitCenter"
         android:src="@drawable/default_profile"
         app:riv_border_color="#ffffff"

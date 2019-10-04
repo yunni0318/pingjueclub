@@ -87,6 +87,7 @@ public class ServicesFragment extends Fragment {
         recyclerView.setLayoutManager(top_banner_mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(topBanner_adapter);
+        recyclerView.setNestedScrollingEnabled(false);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -158,10 +159,12 @@ public class ServicesFragment extends Fragment {
         serviceItemAdapter = new ServiceItemAdapter(getContext(), services);
         recyclerViewServices.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerViewServices.setAdapter(serviceItemAdapter);
+        recyclerViewServices.setNestedScrollingEnabled(false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewNews.setLayoutManager(layoutManager);
         recyclerViewNews.setAdapter(serviceItemAdapter);
+        recyclerViewNews.setNestedScrollingEnabled(false);
     }
 
     @Override
