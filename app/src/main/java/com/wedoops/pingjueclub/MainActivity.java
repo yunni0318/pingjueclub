@@ -366,6 +366,13 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             }
         });
 
+        toolbar_heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cameraScan();
+            }
+        });
+
     }
 
     private void setupToolbar() {
@@ -536,6 +543,25 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
 
 
+    }
+
+    private void cameraScan(){
+        Runnable mPendingRunnable=new Runnable() {
+            @Override
+            public void run() {
+                ScanFragment scanFragment=new ScanFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.framelayout_fragment_container, scanFragment, "SCAN");
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
+
+        if (mPendingRunnable != null) {
+            mHandler.post(mPendingRunnable);
+
+        }
     }
 
 

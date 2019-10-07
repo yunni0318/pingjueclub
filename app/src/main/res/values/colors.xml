@@ -17,6 +17,9 @@
     <color name="textview_sidebar">#e2ac7f</color>
     <color name="sidebar_selected_background_color">#B3000000</color>
     <color name="sidebar_default_background_color">#B3000000</color>
+    <color name="viewfinder_mask">#191919</color>
+    <color name="viewfinder_laser">#e2ac7f</color>
+    <color name="viewfinder_border">#e2ac7f</color>
 
 
 </resources>

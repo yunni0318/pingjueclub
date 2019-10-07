@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,8 +23,10 @@ import android.widget.LinearLayout;
 
 import com.orm.StringUtil;
 import com.wedoops.pingjueclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
+import com.wedoops.pingjueclub.adapters.NewsItemAdapter;
 import com.wedoops.pingjueclub.adapters.ServiceItemAdapter;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
+import com.wedoops.pingjueclub.database.News;
 import com.wedoops.pingjueclub.database.Services;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.LinePagerIndicatorDecoration;
@@ -39,9 +42,6 @@ public class ServicesFragment extends Fragment {
     private static RecyclerView recyclerView, recyclerViewServices, recyclerViewNews;
     private static Runnable runnable;
     private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
-    private List<Services> services;
-    private ServiceItemAdapter serviceItemAdapter;
-
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -64,6 +64,10 @@ public class ServicesFragment extends Fragment {
             }
         }
     };
+    private List<Services> services;
+    private List<News> news;
+    private ServiceItemAdapter serviceItemAdapter;
+    private NewsItemAdapter newsItemAdapter;
 
     public static void setupRecyclerView() {
         String tablename_tb = StringUtil.toSQLName("MemberDashboardTopBanner");
@@ -74,6 +78,7 @@ public class ServicesFragment extends Fragment {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
                 LinearSmoothScroller smoothScroller = new LinearSmoothScroller(view.getContext()) {
                     private static final float SPEED = 100f;// Change this value (default=25f)
+
                     @Override
                     protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                         return SPEED / displayMetrics.densityDpi;
@@ -82,12 +87,17 @@ public class ServicesFragment extends Fragment {
                 smoothScroller.setTargetPosition(position);
                 startSmoothScroll(smoothScroller);
             }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
         };
         setupAutoScroll();
         recyclerView.setLayoutManager(top_banner_mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(topBanner_adapter);
         recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(topBanner_adapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -141,30 +151,64 @@ public class ServicesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_service_top_banner);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         services = new ArrayList<>();
-        services.add(new Services("Entertainment Bar", "fsfs",R.drawable.entertainment));
-        services.add(new Services("Luxury Transport", "fsfs",R.drawable.transport));
-        services.add(new Services("Luxury Travel", "fsfs",R.drawable.travel));
-        services.add(new Services("Luxury Brand", "fsfs",R.drawable.brand));
-        services.add(new Services("Property Services", "fsfs",R.drawable.properties));
-        services.add(new Services("Award Services", "fsfs",R.drawable.award));
-        services.add(new Services("Personal Services", "fsfs",R.drawable.personal));
-        services.add(new Services("Sport Services", "fsfs",R.drawable.sporrt));
-        services.add(new Services("Premium Lounge", "fsfs",R.drawable.premium));
+        services.add(new Services("Entertainment Bar", "fsfs", R.drawable.entertainment));
+        services.add(new Services("Luxury Transport", "fsfs", R.drawable.transport));
+        services.add(new Services("Luxury Travel", "fsfs", R.drawable.travel));
+        services.add(new Services("Luxury Brand", "fsfs", R.drawable.brand));
+        services.add(new Services("Property Services", "fsfs", R.drawable.properties));
+        services.add(new Services("Award Services", "fsfs", R.drawable.award));
+        services.add(new Services("Personal Services", "fsfs", R.drawable.personal));
+        services.add(new Services("Sport Services", "fsfs", R.drawable.sporrt));
+        services.add(new Services("Premium Lounge", "fsfs", R.drawable.premium));
+
+        news = new ArrayList<>();
+        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 11, "image1", R.drawable.entertainment));
+        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 12, "image2", R.drawable.entertainment));
+        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 13, "image3", R.drawable.entertainment));
+        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 14, "image4", R.drawable.entertainment));
+        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 15, "image5", R.drawable.entertainment));
 
         setupRecyclerView();
         recyclerViewServices = (RecyclerView) view.findViewById(R.id.recyclerview_service_list);
         recyclerViewNews = (RecyclerView) view.findViewById(R.id.recyclerview_service_new);
+        ViewCompat.setNestedScrollingEnabled(recyclerViewServices, false);
+        ViewCompat.setNestedScrollingEnabled(recyclerViewNews, false);
         serviceItemAdapter = new ServiceItemAdapter(getContext(), services);
-        recyclerViewServices.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerViewServices.setAdapter(serviceItemAdapter);
-        recyclerViewServices.setNestedScrollingEnabled(false);
+        newsItemAdapter = new NewsItemAdapter(getContext(), news);
+        RecyclerView.LayoutManager lll = new GridLayoutManager(getContext(), 3) {
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
+
+        recyclerViewServices.setLayoutManager(lll);
+        recyclerViewServices.setNestedScrollingEnabled(false);
+        recyclerViewServices.setAdapter(serviceItemAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return true;
+            }
+        };
         recyclerViewNews.setLayoutManager(layoutManager);
-        recyclerViewNews.setAdapter(serviceItemAdapter);
         recyclerViewNews.setNestedScrollingEnabled(false);
+        recyclerViewNews.setAdapter(newsItemAdapter);
     }
 
     @Override
