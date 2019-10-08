@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.orm.StringUtil;
@@ -178,7 +179,7 @@ public class ServicesFragment extends Fragment {
         ViewCompat.setNestedScrollingEnabled(recyclerViewNews, false);
         serviceItemAdapter = new ServiceItemAdapter(getContext(), services);
         newsItemAdapter = new NewsItemAdapter(getContext(), news);
-        RecyclerView.LayoutManager lll = new GridLayoutManager(getContext(), 3) {
+        final GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3){
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -190,8 +191,18 @@ public class ServicesFragment extends Fragment {
             }
         };
 
-
-        recyclerViewServices.setLayoutManager(lll);
+        recyclerViewServices.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int viewWidth=recyclerViewServices.getMeasuredWidth();
+                float cardViewWidth=getActivity().getResources().getDimension(R.dimen.card_width);
+                int newSpanCount=(int)Math.floor(viewWidth/cardViewWidth);
+                gridLayoutManager.setSpanCount(newSpanCount);
+                gridLayoutManager.requestLayout();
+            }
+        });
+        recyclerViewServices.setLayoutManager(gridLayoutManager);
         recyclerViewServices.setNestedScrollingEnabled(false);
         recyclerViewServices.setAdapter(serviceItemAdapter);
 

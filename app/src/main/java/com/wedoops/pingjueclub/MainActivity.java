@@ -565,7 +565,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
 
-    private void loadHomeFragment() {
+    public void loadHomeFragment() {
 
         // selecting appropriate nav menu item
         selectNavMenu();

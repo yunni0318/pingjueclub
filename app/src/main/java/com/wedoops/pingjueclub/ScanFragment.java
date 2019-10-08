@@ -26,14 +26,14 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ScanFragment extends Fragment implements ZXingScannerView.ResultHandler{
+public class ScanFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView zXingScannerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView=(ViewGroup)inflater.inflate(R.layout.scan_fragment,container,false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.scan_fragment, container, false);
         return rootView;
 
     }
@@ -42,10 +42,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        zXingScannerView=(ZXingScannerView)view.findViewById(R.id.zxscan);
-//        if(getActivity()!=null){
-//            ((MainActivity)getActivity()).camerePermission();
-//        }
+        zXingScannerView = (ZXingScannerView) view.findViewById(R.id.zxscan);
 
 
         Dexter.withActivity(getActivity()).withPermission(Manifest.permission.CAMERA)
@@ -76,7 +73,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         Toast.makeText(getContext(), "dsds", Toast.LENGTH_SHORT).show();
     }
 
-    private void startCamera(){
+    private void startCamera() {
         zXingScannerView.setResultHandler(this);
         zXingScannerView.startCamera();
     }
@@ -94,7 +91,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         zXingScannerView.stopCamera();
     }
 
-        private void showSettingsDialog() {
+    private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Need Permissions");
         builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
@@ -109,6 +106,9 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                if (getActivity() != null) {
+                    ((MainActivity) getActivity()).loadHomeFragment();
+                }
             }
         });
         builder.show();
@@ -120,7 +120,6 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
-
 
 
 }
