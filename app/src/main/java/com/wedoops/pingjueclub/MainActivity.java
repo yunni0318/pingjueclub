@@ -533,7 +533,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     public void button_change_profile_image(View v) {
-        Toast.makeText(this, "SomethingSomething", Toast.LENGTH_SHORT).show();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (new ApplicationClass().checkSelfPermissions(this)) {
@@ -792,7 +791,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callQuickProfileWebService() {
-
         new ApplicationClass().showProgressDialog(progress);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
@@ -802,6 +800,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             String loginid_field = StringUtil.toSQLName("LoginID");
 
             List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
 
             Bundle b = new Bundle();
             b.putString("access_token", ud_list.get(0).getAccessToken());

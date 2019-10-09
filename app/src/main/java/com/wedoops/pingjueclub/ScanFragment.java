@@ -4,16 +4,20 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -29,6 +33,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class ScanFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView zXingScannerView;
+    private TextView amount;
 
     @Nullable
     @Override
@@ -43,6 +48,10 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         super.onViewCreated(view, savedInstanceState);
 
         zXingScannerView = (ZXingScannerView) view.findViewById(R.id.zxscan);
+        amount=(TextView)view.findViewById(R.id.amount);
+        amount.setText("1234");
+
+        //nestedScrollView.setScrollbarFadingEnabled(false);
 
 
         Dexter.withActivity(getActivity()).withPermission(Manifest.permission.CAMERA)
@@ -56,6 +65,11 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                     public void onPermissionDenied(PermissionDeniedResponse response) {
                         if (response.isPermanentlyDenied()) {
                             showSettingsDialog();
+                        }
+                        else{
+                            if (getActivity() != null) {
+                                ((MainActivity) getActivity()).loadHomeFragment();
+                            }
                         }
                     }
 
@@ -81,8 +95,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     @Override
     public void onResume() {
         super.onResume();
-        zXingScannerView.setResultHandler(this);
-        zXingScannerView.startCamera();
+        startCamera();
     }
 
     @Override
@@ -121,5 +134,17 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         startActivityForResult(intent, 101);
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            if ((ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                if (getActivity() != null) {
+                    ((MainActivity) getActivity()).loadHomeFragment();
+                }
+            } else {
+                startCamera();
+            }
+        }
+    }
 }

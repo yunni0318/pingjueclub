@@ -27,4 +27,9 @@
         <item name="android:scrollbarThumbVertical">@color/textview_sidebar</item>
     </style>
 
+    <style name="NestedScrollBarStyle" parent="AppTheme">
+        <item name="android:scrollbarThumbVertical">@color/textview_sidebar</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+
 </resources>

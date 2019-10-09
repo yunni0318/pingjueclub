@@ -49,13 +49,6 @@ public class ApplicationClass extends com.orm.SugarApp {
     private static String prefs_name = "PJC";
     private ACProgressFlower progress;
 
-    @Override
-    public void onCreate() {
-
-        super.onCreate();
-
-    }
-
     public ApplicationClass(Context context) {
         this.mContext = context;
     }
@@ -63,12 +56,18 @@ public class ApplicationClass extends com.orm.SugarApp {
     public ApplicationClass() {
     }
 
-
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    @Override
+    public void onCreate() {
+
+        super.onCreate();
+
     }
 
     public void writeIntoSharedPreferences(Context context, String value_name, String value) {
@@ -95,7 +94,7 @@ public class ApplicationClass extends com.orm.SugarApp {
         return value;
     }
 
-    public void showProgressDialog(ACProgressFlower  mProgress) {
+    public void showProgressDialog(ACProgressFlower mProgress) {
 
         progress = mProgress;
         progress.setCancelable(false);
@@ -108,6 +107,7 @@ public class ApplicationClass extends com.orm.SugarApp {
         if (progress != null && progress.isShowing()) {
             try {
 //                progress.dismiss();
+
                 progress.hide();
             } catch (Exception e) {
                 e.printStackTrace();
