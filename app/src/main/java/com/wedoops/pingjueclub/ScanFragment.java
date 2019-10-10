@@ -84,7 +84,9 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(getContext(), "dsds", Toast.LENGTH_SHORT).show();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).payScreen();
+        }
     }
 
     private void startCamera() {

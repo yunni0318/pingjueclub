@@ -2,6 +2,7 @@ package com.wedoops.pingjueclub;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,13 +52,13 @@ public class MyTransactionsReport extends Fragment {
     private static View view;
     private static Activity get_activity;
 
-    private static ACProgressFlower progress;
+    private static Context get_context;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_transactions_report, container, false);
-
+        get_context=getContext();
         return view;
     }
 
@@ -66,16 +67,6 @@ public class MyTransactionsReport extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         get_activity = getActivity();
-
-        progress = new ACProgressFlower.Builder(getActivity())
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text(this.getResources().getString(R.string.loading_please_wait))
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(30)
-                .fadeColor(Color.DKGRAY).build();
-
         setupFindViewById();
         callCashWalletTransactionWebService();
     }
@@ -89,7 +80,7 @@ public class MyTransactionsReport extends Fragment {
 
     private static void callCashWalletTransactionWebService() {
 
-        new ApplicationClass().showProgressDialog(progress);
+        CustomProgressDialog.showProgressDialog(get_context);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -166,7 +157,7 @@ public class MyTransactionsReport extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        new ApplicationClass().closeProgressDialog(progress);
+        CustomProgressDialog.closeProgressDialog();
 
         if (command == Api_Constants.API_CASH_WALLET_TRANSACTION) {
             boolean isSuccess = false;

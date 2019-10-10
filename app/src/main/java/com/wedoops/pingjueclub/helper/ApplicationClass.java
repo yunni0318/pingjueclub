@@ -94,28 +94,6 @@ public class ApplicationClass extends com.orm.SugarApp {
         return value;
     }
 
-    public void showProgressDialog(ACProgressFlower mProgress) {
-
-        progress = mProgress;
-        progress.setCancelable(false);
-        progress.show();
-    }
-
-    public void closeProgressDialog(ACProgressFlower mProgress) {
-        progress = mProgress;
-
-        if (progress != null && progress.isShowing()) {
-            try {
-//                progress.dismiss();
-
-                progress.hide();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
     public void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(

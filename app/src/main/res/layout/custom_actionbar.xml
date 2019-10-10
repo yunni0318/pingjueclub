@@ -44,7 +44,8 @@
                             android:layout_gravity="center"
                             android:text="品.爵"
                             android:textColor="@color/textview_sidebar"
-                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textSize="17sp"
                             android:visibility="gone" />
 
                         <ImageView
@@ -230,7 +231,8 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/skin_color_gradient"
-        app:fabCustomSize="80dp"
+        android:theme="@style/Theme.AppCompat"
+        app:fabCustomSize="65dp"
         app:fabSize="normal"
         app:layout_anchor="@id/bottom_nav"
         app:layout_anchorGravity="center_horizontal" />

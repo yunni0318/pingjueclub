@@ -2,6 +2,7 @@ package com.wedoops.pingjueclub;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -50,8 +51,6 @@ import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class MemberDashboardActivity extends Fragment {
 
-    private static ACProgressFlower progress;
-
     private static View view;
     private static RecyclerView recyclerview_top_banner, recyclerview_eventdata;
     private static TextView textview_popular_trip;
@@ -60,6 +59,7 @@ public class MemberDashboardActivity extends Fragment {
     private static final Handler handler = new Handler();
     private static Runnable runnable;
     public static Activity get_activity;
+    public static Context get_context;
 
     private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
     private static MemberDashboardEventDataRecyclerAdapter eventData_adapter;
@@ -68,7 +68,6 @@ public class MemberDashboardActivity extends Fragment {
     public static int position = 0;
 
     private static String currentSelectedCategory;
-
 
     private static View.OnClickListener onEventDataItemClickListener = new View.OnClickListener() {
         @Override
@@ -121,7 +120,7 @@ public class MemberDashboardActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.member_dashboard_activity, container, false);
-
+        get_context=getContext();
         return view;
     }
 
@@ -129,15 +128,6 @@ public class MemberDashboardActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
-
-        progress = new ACProgressFlower.Builder(getActivity())
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text(this.getResources().getString(R.string.loading_please_wait))
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(30)
-                .fadeColor(Color.DKGRAY).build();
 
         checkLoginStatus();
         setupViewByID();
@@ -344,7 +334,7 @@ public class MemberDashboardActivity extends Fragment {
     }
 
     private static void callMemberDashboardWebService() {
-        new ApplicationClass().showProgressDialog(progress);
+        CustomProgressDialog.showProgressDialog(get_context);
 
         if (counter < 4) {
             counter++;
@@ -428,8 +418,7 @@ public class MemberDashboardActivity extends Fragment {
 
 
     public static void processWSData(JSONObject returnedObject, int command) {
-
-        new ApplicationClass().closeProgressDialog(progress);
+        CustomProgressDialog.closeProgressDialog();
 
         if (command == Api_Constants.API_MEMBER_DASHBOARD) {
             boolean isSuccess = false;
@@ -481,7 +470,7 @@ public class MemberDashboardActivity extends Fragment {
                 } else {
 
                     if (returnedObject.getInt("StatusCode") == 401) {
-                        new ApplicationClass().showProgressDialog(progress);
+                        CustomProgressDialog.showProgressDialog(get_context);
 
                         callRefreshTokenWebService();
 

@@ -2,6 +2,7 @@ package com.wedoops.pingjueclub;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class MyBookingActivity extends Fragment {
 
-    private static ACProgressFlower progress;
+    private static Context get_context;
 
     private static MyBookingAdapter bookinglist_adapter;
 
@@ -69,7 +70,7 @@ public class MyBookingActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_booking_activity, container, false);
-
+        get_context=getContext();
         return view;
     }
 
@@ -78,14 +79,6 @@ public class MyBookingActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         get_activity = getActivity();
-        progress = new ACProgressFlower.Builder(getActivity())
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text(this.getResources().getString(R.string.loading_please_wait))
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(30)
-                .fadeColor(Color.DKGRAY).build();
         setupViewByID();
         callBookingListWebService();
 
@@ -98,7 +91,7 @@ public class MyBookingActivity extends Fragment {
 
     private static void callBookingListWebService() {
 
-        new ApplicationClass().showProgressDialog(progress);
+        CustomProgressDialog.showProgressDialog(get_context);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -154,7 +147,7 @@ public class MyBookingActivity extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        new ApplicationClass().closeProgressDialog(progress);
+        CustomProgressDialog.closeProgressDialog();
 
         if (command == Api_Constants.API_EVENT_BOOKING_LIST) {
 
@@ -192,7 +185,7 @@ public class MyBookingActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        new ApplicationClass().showProgressDialog(progress);
+                        CustomProgressDialog.showProgressDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
 
@@ -235,7 +228,7 @@ public class MyBookingActivity extends Fragment {
     public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
         if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
-            new ApplicationClass().closeProgressDialog(progress);
+            CustomProgressDialog.closeProgressDialog();
 
             boolean isSuccess = false;
             try {

@@ -174,9 +174,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void callMemberLoginWebService(String username, String password) {
-
-
-        new ApplicationClass().showProgressDialog(progress);
+        progress.show();
 
         Bundle b = new Bundle();
         b.putString("USERNAME", username);
@@ -189,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void processWSData(JSONObject returnedObject) {
 
-        new ApplicationClass().closeProgressDialog(progress);
+        progress.dismiss();
         boolean isSuccess = false;
         try {
             isSuccess = returnedObject.getBoolean("Success");

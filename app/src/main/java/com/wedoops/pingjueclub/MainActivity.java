@@ -42,6 +42,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
-    private LinearLayout navFooter, homeBottomNav, recordBottomNav;
+    private LinearLayout navFooter, homeBottomNav, recordBottomNav,navigationLayout;
     private FloatingActionButton floatingActionButton;
     private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, toolbar_title ;
     private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private SwipeRefreshLayout swipeRefreshLayout;
     boolean doubleBackToExitPressedOnce = false;
     private String currentPhotoPath = "";
-    private static ACProgressFlower progress;
+    private ACProgressFlower progress;
     private CoordinatorLayout toolbar_heart;
 
     public static int navItemIndex = 0;
@@ -126,27 +127,24 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         setContentView(R.layout.activity_main);
 
+        progress = new ACProgressFlower.Builder(this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text(this.getResources().getString(R.string.loading_please_wait))
+                .petalThickness(5)
+                .textColor(Color.WHITE)
+                .textSize(30)
+                .fadeColor(Color.DKGRAY).build();
+
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
-
-            progress = new ACProgressFlower.Builder(this)
-                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                    .themeColor(Color.WHITE)
-                    .text(this.getResources().getString(R.string.loading_please_wait))
-                    .petalThickness(5)
-                    .textColor(Color.WHITE)
-                    .textSize(30)
-                    .fadeColor(Color.DKGRAY).build();
-
             setupViewByID();
             setupToolbar();
             setupNavigationDrawer();
 
             navigationView.getMenu().getItem(0).setChecked(true);
             navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
-
         }
-
     }
 
     private boolean checkAndRequestPermissions() {
@@ -281,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         homeBottomNav = findViewById(R.id.bottom_nav_home);
         recordBottomNav=findViewById(R.id.bottom_nav_record);
         floatingActionButton=findViewById(R.id.bottom_nav_transaction);
+        navigationLayout=findViewById(R.id.navigationLayout);
 
         imagebutton_language = navHeader.findViewById(R.id.imagebutton_language);
         imageview_user_rank = navHeader.findViewById(R.id.imageview_user_rank);
@@ -295,6 +294,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         toolbar_heart=findViewById(R.id.toolbar_heart);
         toolbar_camera=findViewById(R.id.toolbar_camera);
 
+        int width=(getResources().getDisplayMetrics().widthPixels*2)/3;
+        DrawerLayout.LayoutParams params=(android.support.v4.widget.DrawerLayout.LayoutParams)navigationLayout.getLayoutParams();
+        params.width=width;
+        navigationLayout.setLayoutParams(params);
 
         navFooter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,6 +370,13 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         });
 
         toolbar_heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        toolbar_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cameraScan();
@@ -544,6 +554,29 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     }
 
+    public void payScreen(){
+        Runnable mPendingRunnable=new Runnable() {
+            @Override
+            public void run() {
+                PayFragment payFragment=new PayFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString("title","Swimming");
+                bundle.putInt("point",200);
+                bundle.putInt("currency",1);
+                payFragment.setArguments(bundle);
+                FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.framelayout_fragment_container,payFragment,"PAY");
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
+
+        if (mPendingRunnable != null) {
+            toolbar_title.setText("Pay");
+            mHandler.post(mPendingRunnable);
+        }
+    }
+
     private void cameraScan(){
         Runnable mPendingRunnable=new Runnable() {
             @Override
@@ -558,6 +591,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         };
 
         if (mPendingRunnable != null) {
+            toolbar_title.setText("I Scan Them");
             mHandler.post(mPendingRunnable);
 
         }
@@ -761,21 +795,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (progress != null) {
-            new ApplicationClass().closeProgressDialog(progress);
-
-        }
-    }
-
     private void callChangeProfilePictureWebService(String base64_string) {
-
-        new ApplicationClass().showProgressDialog(progress);
+        progress.show();
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-
         String table_name = UserDetails.getTableName(UserDetails.class);
         String loginid_field = StringUtil.toSQLName("LoginID");
 
@@ -791,7 +814,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callQuickProfileWebService() {
-        new ApplicationClass().showProgressDialog(progress);
+        progress.show();
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -812,7 +835,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     public void processWSData(JSONObject returnedObject, int command) {
-        new ApplicationClass().closeProgressDialog(progress);
+        progress.dismiss();
 
         if (command == Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE) {
             boolean isSuccess = false;

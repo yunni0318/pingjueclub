@@ -137,4 +137,7 @@
         <item>From Gallery</item>
         <item>From Camera</item>
     </string-array>
+    <string name="pay_confirmation_msg">Pay to %1$s Package</string>
+    <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
+
 </resources>

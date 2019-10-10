@@ -22,7 +22,7 @@
     </style>
 
     <style name="NavigationTheme" parent="AppTheme">
-        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingLeft">3dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:scrollbarThumbVertical">@color/textview_sidebar</item>
     </style>

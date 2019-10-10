@@ -133,5 +133,7 @@
     <string name="userrank_bronze">青铜级</string>
     <string name="userrank_gold">金级</string>
     <string name="userrank_platinum">铂级</string>
+    <string name="pay_confirmation_msg">Pay to %1$s Package</string>
+    <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
 
 </resources>

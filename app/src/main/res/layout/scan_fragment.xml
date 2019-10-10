@@ -42,8 +42,6 @@
                     android:id="@+id/amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
                     android:text="5,000"
                     android:textColor="@color/textview_sidebar"
                     android:textSize="25sp"

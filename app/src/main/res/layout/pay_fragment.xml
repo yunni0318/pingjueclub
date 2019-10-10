@@ -1,196 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="?android:actionBarSize"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp">
-
-        <LinearLayout
-            android:background="@android:color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pay to GYM Package"
-                android:textSize="17sp"
-                android:textColor="@android:color/white"/>
-
-            <LinearLayout
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="500"
-                        android:textSize="25sp"
-                        android:textColor="@color/textview_sidebar"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="."
-                        android:textSize="25sp"
-                        android:textColor="@color/textview_sidebar"/>
-
-                    <TextView
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00"
-                        android:textSize="22sp"
-                        android:textColor="@color/textview_sidebar"/>
-
-                    <TextView
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PTS"
-                        android:textSize="22sp"
-                        android:textColor="@color/textview_sidebar"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="="
-                        android:textSize="22sp"
-                        android:textColor="@android:color/white"/>
-
-                    <TextView
-                        android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="MYR"
-                        android:textSize="22sp"
-                        android:textColor="@android:color/white"/>
-
-                    <TextView
-                        android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="500"
-                        android:textSize="22sp"
-                        android:textColor="@android:color/white"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+    android:paddingTop="?android:actionBarSize"
+    android:paddingRight="15dp">
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:visibility="visible"
+        android:id="@+id/payConfirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="0.45"
-            android:layout_height="40dp"
-            app:cardCornerRadius="5dp"
-            android:background="@color/textview_sidebar">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/black"
+            app:cardCornerRadius="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@android:color/black"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <TextView
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
+                    android:id="@+id/payTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cancel"
-                    android:textColor="@color/textview_sidebar"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="Pay to GYM Package"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/payPointFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="500"
+                            android:textColor="@color/textview_sidebar"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="."
+                            android:textColor="@color/textview_sidebar"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/payPointEnd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:text="00"
+                            android:textColor="@color/textview_sidebar"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="PTS"
+                            android:textColor="@color/textview_sidebar"
+                            android:textSize="25sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="="
+                            android:textColor="@android:color/white"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:id="@+id/payCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:text="MYR"
+                            android:textColor="@android:color/white"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:id="@+id/payAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:text="500"
+                            android:textColor="@android:color/white"
+                            android:textSize="25sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
-
 
         </android.support.v7.widget.CardView>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.1"
-            android:layout_height="40dp"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/payCancelBtn"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.45"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@android:color/black"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:text="Cancel"
+                        android:textColor="@color/textview_sidebar"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.03"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/payConfirmBtn"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.45"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/textview_sidebar"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:text="Confirm"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/paySuccess"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/service_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/tick_icon" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Success, Thank You!"
+            android:textColor="@color/textview_sidebar"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/paySuccessMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500 PTS Have Been Transfer To Gym Sdn Bhd Wallet."
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="( id: "
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/paySuccessID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PJ 190008"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" )"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
 
         </LinearLayout>
 
 
 
-        <android.support.v7.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="0.45"
-            android:layout_height="40dp"
-            app:cardCornerRadius="5dp"
-            android:background="@color/textview_sidebar">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:background="@android:color/black"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Confirm"
-                    android:textColor="@color/textview_sidebar"/>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
 
 
     </LinearLayout>
+
 
 </LinearLayout>

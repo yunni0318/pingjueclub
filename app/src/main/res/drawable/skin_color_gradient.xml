@@ -11,10 +11,10 @@
 
     </item>
     <item
-        android:top="140dp"
-        android:left="410dp"
-        android:right="410dp"
-        android:bottom="140dp"
+        android:top="200dp"
+        android:left="470dp"
+        android:right="470dp"
+        android:bottom="200dp"
         android:gravity="center">
         <bitmap
             android:src="@drawable/pjlogo"

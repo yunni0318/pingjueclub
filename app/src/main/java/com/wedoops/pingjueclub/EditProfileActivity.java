@@ -61,8 +61,7 @@ public class EditProfileActivity extends Fragment {
     private static EditText edittext_fullname, edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
 
     private static Button button_save_profile, button_change_password;
-
-    private static ACProgressFlower progress;
+    private static Context get_context;
     private static final String KEY_LANG = "key_lang"; // preference key
 
     @Nullable
@@ -70,7 +69,7 @@ public class EditProfileActivity extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.edit_profile_activity, container, false);
-
+        get_context=getContext();
         return view;
     }
 
@@ -79,15 +78,6 @@ public class EditProfileActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         get_activity = getActivity();
-
-        progress = new ACProgressFlower.Builder(get_activity)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(20)
-                .text(get_activity.getResources().getString(R.string.loading_please_wait))
-                .fadeColor(Color.parseColor("#50000000")).build();
 
         loadLanguage();
         setupViewById();
@@ -176,7 +166,7 @@ public class EditProfileActivity extends Fragment {
 
     private static void callMemberAccountSettingWebService() {
 
-        new ApplicationClass().showProgressDialog(progress);
+        CustomProgressDialog.showProgressDialog(get_context);
 
         List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -275,7 +265,7 @@ public class EditProfileActivity extends Fragment {
 
         if (isValid) {
 
-            new ApplicationClass().showProgressDialog(progress);
+            CustomProgressDialog.showProgressDialog(get_context);
 
             List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -306,7 +296,7 @@ public class EditProfileActivity extends Fragment {
 
         if (isValid) {
 
-            new ApplicationClass().showProgressDialog(progress);
+            CustomProgressDialog.showProgressDialog(get_context);
 
             List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -439,7 +429,7 @@ public class EditProfileActivity extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        new ApplicationClass().closeProgressDialog(progress);
+        CustomProgressDialog.closeProgressDialog();
 
         if (command == Api_Constants.API_MEMBER_ACCOUNT_SETTING) {
             boolean isSuccess = false;
@@ -478,7 +468,7 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
                         if (returnedObject.getInt("StatusCode") == 401) {
-                            new ApplicationClass().showProgressDialog(progress);
+                            CustomProgressDialog.showProgressDialog(get_context);
 
                             callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
@@ -493,7 +483,7 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        new ApplicationClass().showProgressDialog(progress);
+                        CustomProgressDialog.showProgressDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
@@ -549,7 +539,7 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        new ApplicationClass().showProgressDialog(progress);
+                        CustomProgressDialog.showProgressDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
@@ -669,7 +659,7 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        new ApplicationClass().showProgressDialog(progress);
+                        CustomProgressDialog.showProgressDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
@@ -689,7 +679,7 @@ public class EditProfileActivity extends Fragment {
     public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
         if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
-            new ApplicationClass().closeProgressDialog(progress);
+            CustomProgressDialog.closeProgressDialog();
 
             boolean isSuccess = false;
             try {
