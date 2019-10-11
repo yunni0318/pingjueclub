@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="?android:actionBarSize"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start">
-
-        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+        <com.ortiz.touchview.TouchImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?android:actionBarSize"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:src="@drawable/benefit_view" />
-
-    </RelativeLayout>
+            android:scaleType="fitCenter"
+            android:src="@drawable/benefit_view" />
 
 
-</android.support.v4.widget.NestedScrollView>
+
+
+
+
+<!--        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:adjustViewBounds="true"-->
+<!--            android:scaleType="fitXY"-->
+<!--            app:src="@drawable/benefit_view" />-->
+
+
+</RelativeLayout>

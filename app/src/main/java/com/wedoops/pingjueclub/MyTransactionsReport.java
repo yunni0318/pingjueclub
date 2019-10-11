@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orm.StringUtil;
 import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
@@ -51,32 +54,9 @@ public class MyTransactionsReport extends Fragment {
     private static RecyclerView recyclerview_transaction;
     private static View view;
     private static Activity get_activity;
-
     private static Context get_context;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.my_transactions_report, container, false);
-        get_context=getContext();
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        get_activity = getActivity();
-        setupFindViewById();
-        callCashWalletTransactionWebService();
-    }
-
-
-    private void setupFindViewById() {
-
-        recyclerview_transaction = view.findViewById(R.id.recyclerview_transaction);
-
-    }
+    private LinearLayout dateSelection, dateChoices;
+    private TextView weekly,monthly,yearly;
 
     private static void callCashWalletTransactionWebService() {
 
@@ -287,6 +267,70 @@ public class MyTransactionsReport extends Fragment {
                 Log.e("Error", e.toString());
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.my_transactions_report, container, false);
+        get_context = getContext();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        dateSelection = (LinearLayout) view.findViewById(R.id.dateSelection);
+        dateChoices = (LinearLayout) view.findViewById(R.id.dateChoices);
+        weekly=(TextView)view.findViewById(R.id.dateWeekly);
+        monthly=(TextView)view.findViewById(R.id.dateMonthly);
+        yearly=(TextView)view.findViewById(R.id.dateYearly);
+        dateSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dateChoices.getVisibility() == View.VISIBLE) {
+                    dateChoices.setVisibility(View.GONE);
+                } else {
+                    dateChoices.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        weekly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Weekly Selected", Toast.LENGTH_SHORT).show();
+                dateChoices.setVisibility(View.GONE);
+            }
+        });
+
+        monthly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Monthly Selected", Toast.LENGTH_SHORT).show();
+                dateChoices.setVisibility(View.GONE);
+            }
+        });
+
+        yearly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Yearly Selected", Toast.LENGTH_SHORT).show();
+                dateChoices.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        get_activity = getActivity();
+        setupFindViewById();
+        callCashWalletTransactionWebService();
+    }
+
+    private void setupFindViewById() {
+        recyclerview_transaction = view.findViewById(R.id.recyclerview_transaction);
     }
 
 }
