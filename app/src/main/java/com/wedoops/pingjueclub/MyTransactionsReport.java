@@ -56,7 +56,7 @@ public class MyTransactionsReport extends Fragment {
     private static Activity get_activity;
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
-    private TextView weekly,monthly,yearly;
+    private TextView dateType,weekly,monthly,yearly;
 
     private static void callCashWalletTransactionWebService() {
 
@@ -280,6 +280,7 @@ public class MyTransactionsReport extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dateType=(TextView)view.findViewById(R.id.dateType);
         dateSelection = (LinearLayout) view.findViewById(R.id.dateSelection);
         dateChoices = (LinearLayout) view.findViewById(R.id.dateChoices);
         weekly=(TextView)view.findViewById(R.id.dateWeekly);
@@ -299,6 +300,7 @@ public class MyTransactionsReport extends Fragment {
         weekly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dateType.setText("Weekly");
                 Toast.makeText(getContext(), "Weekly Selected", Toast.LENGTH_SHORT).show();
                 dateChoices.setVisibility(View.GONE);
             }
@@ -307,6 +309,7 @@ public class MyTransactionsReport extends Fragment {
         monthly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dateType.setText("Monthly");
                 Toast.makeText(getContext(), "Monthly Selected", Toast.LENGTH_SHORT).show();
                 dateChoices.setVisibility(View.GONE);
             }
@@ -315,6 +318,7 @@ public class MyTransactionsReport extends Fragment {
         yearly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dateType.setText("Yearly");
                 Toast.makeText(getContext(), "Yearly Selected", Toast.LENGTH_SHORT).show();
                 dateChoices.setVisibility(View.GONE);
             }

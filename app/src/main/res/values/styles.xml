@@ -25,11 +25,13 @@
         <item name="android:paddingLeft">3dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:scrollbarThumbVertical">@color/textview_sidebar</item>
+        <item name="android:scrollbarFadeDuration">10000</item>
     </style>
 
     <style name="NestedScrollBarStyle" parent="AppTheme">
         <item name="android:scrollbarThumbVertical">@color/textview_sidebar</item>
         <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarFadeDuration">10000</item>
     </style>
 
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">

@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="?android:actionBarSize"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="?android:actionBarSize">
 
-        <com.ortiz.touchview.TouchImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/benefit_view" />
-
-
-
-
-
-
-<!--        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:adjustViewBounds="true"-->
-<!--            android:scaleType="fitXY"-->
-<!--            app:src="@drawable/benefit_view" />-->
+    <com.ortiz.touchview.TouchImageView
+        android:id="@+id/imageViewBenefit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
 
 
 </RelativeLayout>
