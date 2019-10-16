@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,7 +37,7 @@ import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button button_forgot_password;
+    private TextView button_forgot_password;
     private EditText edittext_username;
     private EditText edittext_password;
     private ImageButton imagebutton_language;
@@ -64,14 +66,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupViewByID() {
         button_forgot_password = findViewById(R.id.login_acitivity_button_forgotpassword);
-        button_forgot_password.setText(Html.fromHtml("<font color='#AAAAAA'>" + getString(R.string.login_activity_button_forgot_password) + "</font>" + " <font color='#F5CB5A'>" + getString(R.string.login_activity_button_forgot_password_clickhere) + "</font>"));
+        //button_forgot_password.setText(Html.fromHtml("<font color='#AAAAAA'>" + getString(R.string.login_activity_button_forgot_password) + "</font>" + " <font color='#F5CB5A'>" + getString(R.string.login_activity_button_forgot_password_clickhere) + "</font>"));
 
         edittext_username = findViewById(R.id.edittext_username);
         edittext_username.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
                     edittext_password.requestFocus();
                     handled = true;
                 }
@@ -84,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
                     button_login_onclick(v);
                     handled = true;
                 }
@@ -93,6 +95,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         imagebutton_language = findViewById(R.id.imagebutton_language);
+
+        button_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -154,14 +164,19 @@ public class LoginActivity extends AppCompatActivity {
         String password = edittext_password.getText().toString();
 
         boolean isValid = true;
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textview_sidebar));
 
         if (username.length() < 1) {
-            edittext_username.setError(getString(R.string.login_username_error));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.login_username_error));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.login_username_error).length(), 0);
+            edittext_username.setError(spannableStringBuilder);
             isValid = false;
         }
 
         if (password.length() < 1) {
-            edittext_password.setError(getString(R.string.login_password_error));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.login_password_error));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.login_password_error).length(), 0);
+            edittext_password.setError(spannableStringBuilder);
             isValid = false;
         }
 

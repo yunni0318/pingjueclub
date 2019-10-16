@@ -2,10 +2,12 @@
     <string name="app_name">品爵</string>
 
     <!-- Login Activity-->
-    <string name="login_activity_login">登入</string>
+    <string name="login_activity_login">用户登入</string>
+    <string name="login_activity_login_btn">登入</string>
     <string name="login_activity_edittext_hint_username">用户名</string>
     <string name="login_activity_edittext_hint_password">密码</string>
-    <string name="login_activity_button_forgot_password">忘记密码？</string>
+    <string name="forgot_password_title">忘记密码</string>
+    <string name="login_activity_button_forgot_password"><u>忘记密码？</u></string>
     <string name="login_activity_button_forgot_password_clickhere">点击这里</string>
 
     <!-- Forgot Password Activity-->

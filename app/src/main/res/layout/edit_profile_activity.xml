@@ -189,7 +189,8 @@
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:background="@drawable/button_login_style"
-                android:text="@string/edit_profile_save_profile" />
+                android:text="@string/edit_profile_save_profile"
+                android:textColor="@color/textview_sidebar"/>
 
         </LinearLayout>
 
@@ -334,7 +335,8 @@
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:background="@drawable/button_login_style"
-                android:text="@string/edit_profile_change_password_button" />
+                android:text="@string/edit_profile_change_password_button"
+                android:textColor="@color/textview_sidebar"/>
 
         </LinearLayout>
 

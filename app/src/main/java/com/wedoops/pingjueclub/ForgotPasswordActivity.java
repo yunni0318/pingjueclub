@@ -2,6 +2,8 @@ package com.wedoops.pingjueclub;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -35,14 +37,19 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         String email = edittext_email.getText().toString();
 
         boolean isValid = true;
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.textview_sidebar));
 
         if (email.length() < 1) {
-            edittext_email.setError(getString(R.string.forgotpassword_email_error));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.forgotpassword_email_error));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.forgotpassword_email_error).length(), 0);
+            edittext_email.setError(spannableStringBuilder);
             isValid = false;
         }
 
         if (!ApplicationClass.isEmailValid(email)) {
-            edittext_email.setError(getString(R.string.forgotpassword_email_invalid_error));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.forgotpassword_email_invalid_error));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.forgotpassword_email_invalid_error).length(), 0);
+            edittext_email.setError(spannableStringBuilder);
             isValid = false;
         }
 

@@ -80,6 +80,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressCustom;
 import cc.cloudist.acplibrary.ACProgressFlower;
 
 import static com.wedoops.pingjueclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
@@ -87,24 +88,6 @@ import static com.wedoops.pingjueclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_
 
 public class MainActivity extends AppCompatActivity implements IImagePickerLister {
 
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
-    private View navHeader;
-    private LinearLayout navFooter, homeBottomNav, recordBottomNav,navigationLayout;
-    private FloatingActionButton floatingActionButton;
-    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, toolbar_title ;
-    private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
-    private Handler mHandler;
-    private RoundedImageView imageview_user_profile;
-    private ImageButton imagebutton_language;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    boolean doubleBackToExitPressedOnce = false;
-    private String currentPhotoPath = "";
-    private ACProgressFlower progress;
-    private CoordinatorLayout toolbar_heart;
-
-    public static int navItemIndex = 0;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
     private static final String TAG_DASHBOARD = "DASHBOARD";
     private static final String TAG_ACCOUNT = "ACCOUNT";
@@ -115,9 +98,27 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private static final String TAG_BENEFIT = "BENEFIT";
     private static final String TAG_TERMNCOND = "TERMCONDITIONS";
     private static final String TAG_LOGOUT = "LOGOUT";
-    public static String CURRENT_TAG = TAG_DASHBOARD;
     private static final String FILE_NAME = "file_lang"; // preference file name
     private static final String KEY_LANG = "key_lang"; // preference key
+    public static int navItemIndex = 0;
+    public static String CURRENT_TAG = TAG_DASHBOARD;
+    boolean doubleBackToExitPressedOnce = false;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private View navHeader;
+    private LinearLayout navFooter, homeBottomNav, recordBottomNav, navigationLayout;
+    private FloatingActionButton floatingActionButton;
+    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, toolbar_title;
+    private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
+    private Handler mHandler;
+    private RoundedImageView imageview_user_profile;
+    private ImageButton imagebutton_language;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private String currentPhotoPath = "";
+    private ACProgressFlower progress;
+    private ACProgressCustom customProgress;
+    private CoordinatorLayout toolbar_heart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,12 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         loadLanguage();
 
         setContentView(R.layout.activity_main);
+
+//        customProgress=new ACProgressCustom.Builder(this)
+//                .useImages(R.drawable.entertainment,R.drawable.transport,R.drawable.travel,R.drawable.brand)
+//                .build();
+//
+//        customProgress.show();
 
         progress = new ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
@@ -277,9 +284,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         navHeader = findViewById(R.id.headerrr);
         navFooter = findViewById(R.id.navFooter);
         homeBottomNav = findViewById(R.id.bottom_nav_home);
-        recordBottomNav=findViewById(R.id.bottom_nav_record);
-        floatingActionButton=findViewById(R.id.bottom_nav_transaction);
-        navigationLayout=findViewById(R.id.navigationLayout);
+        recordBottomNav = findViewById(R.id.bottom_nav_record);
+        floatingActionButton = findViewById(R.id.bottom_nav_transaction);
+        navigationLayout = findViewById(R.id.navigationLayout);
 
         imagebutton_language = navHeader.findViewById(R.id.imagebutton_language);
         imageview_user_rank = navHeader.findViewById(R.id.imageview_user_rank);
@@ -289,14 +296,14 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
 
-        toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_logo=findViewById(R.id.toolbar_logo);
-        toolbar_heart=findViewById(R.id.toolbar_heart);
-        toolbar_camera=findViewById(R.id.toolbar_camera);
+        toolbar_title = findViewById(R.id.toolbar_title);
+        toolbar_logo = findViewById(R.id.toolbar_logo);
+        toolbar_heart = findViewById(R.id.toolbar_heart);
+        toolbar_camera = findViewById(R.id.toolbar_camera);
 
-        int width=(getResources().getDisplayMetrics().widthPixels*2)/3;
-        DrawerLayout.LayoutParams params=(android.support.v4.widget.DrawerLayout.LayoutParams)navigationLayout.getLayoutParams();
-        params.width=width;
+        int width = (getResources().getDisplayMetrics().widthPixels * 2) / 3;
+        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) navigationLayout.getLayoutParams();
+        params.width = width;
         navigationLayout.setLayoutParams(params);
 
         navFooter.setOnClickListener(new View.OnClickListener() {
@@ -554,19 +561,19 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     }
 
-    public void payScreen(){
-        Runnable mPendingRunnable=new Runnable() {
+    public void payScreen() {
+        Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                PayFragment payFragment=new PayFragment();
-                Bundle bundle=new Bundle();
-                bundle.putString("title","Swimming");
-                bundle.putInt("point",200);
-                bundle.putInt("currency",1);
+                PayFragment payFragment = new PayFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("title", "Swimming");
+                bundle.putInt("point", 200);
+                bundle.putInt("currency", 1);
                 payFragment.setArguments(bundle);
-                FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.framelayout_fragment_container,payFragment,"PAY");
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.framelayout_fragment_container, payFragment, "PAY");
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -577,11 +584,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
     }
 
-    private void cameraScan(){
-        Runnable mPendingRunnable=new Runnable() {
+    private void cameraScan() {
+        Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                ScanFragment scanFragment=new ScanFragment();
+                ScanFragment scanFragment = new ScanFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);

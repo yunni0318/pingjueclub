@@ -6,52 +6,79 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:background="#333333"
-        android:scaleType="fitXY"
-        android:src="@drawable/login_background" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/newloginbackground"
+        android:tint="#40000000" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="50dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pingjue_logo_vertical" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="25dp"
+            android:paddingTop="15dp"
+            android:paddingRight="25dp"
+            android:paddingBottom="20dp">
 
-        <EditText
-            android:id="@+id/edittext_email"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/edittext_forgotpassword_style"
-            android:drawableLeft="@mipmap/email"
-            android:drawablePadding="15dp"
-            android:hint="@string/forgotpassword_activity_edittext_email"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textColor="#ffffff"
-            android:textColorHint="@color/edittext_hint_email" />
+            <ImageView
+                android:layout_width="230dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/newpingjuelogo" />
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/button_submit_style"
-            android:onClick="button_forgot_password_onclick"
-            android:text="@string/forgotpassword_activity_button_submit" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="35dp"
+                android:text="@string/forgot_password_title"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email Address"
+                android:textColor="@color/textview_sidebar"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edittext_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_activity_edittext_hint_username"
+                android:imeOptions="actionSend"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingBottom="20dp"
+                android:textColor="#ffffff"
+                android:textColorHint="@color/edittext_hint_username"
+                android:theme="@style/CustomEditText" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/button_login_style"
+                android:onClick="button_forgot_password_onclick"
+                android:text="@string/forgotpassword_activity_button_submit"
+                android:textColor="@color/textview_sidebar"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
 </FrameLayout>
