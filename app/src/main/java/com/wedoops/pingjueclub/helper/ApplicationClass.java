@@ -47,7 +47,6 @@ public class ApplicationClass extends com.orm.SugarApp {
 
     private static Context mContext;
     private static String prefs_name = "PJC";
-    private ACProgressFlower progress;
 
     public ApplicationClass(Context context) {
         this.mContext = context;

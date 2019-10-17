@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.Locale;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressCustom;
 import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edittext_username;
     private EditText edittext_password;
     private ImageButton imagebutton_language;
-    private ACProgressFlower progress;
+    private ACProgressCustom progress;
     private static final String KEY_LANG = "key_lang"; // preference key
 
 
@@ -50,14 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_activity);
-        progress = new ACProgressFlower.Builder(this)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text(this.getResources().getString(R.string.loading_please_wait))
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(30)
-                .fadeColor(Color.DKGRAY).build();
+        progress = new ACProgressCustom.Builder(this)
+                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
+                .speed(4)
+                .build();
         loadLanguage();
         setupViewByID();
         setupLanguage();

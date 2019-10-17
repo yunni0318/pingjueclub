@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private ImageButton imagebutton_language;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String currentPhotoPath = "";
-    private ACProgressFlower progress;
     private ACProgressCustom customProgress;
     private CoordinatorLayout toolbar_heart;
 
@@ -128,20 +127,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         setContentView(R.layout.activity_main);
 
-//        customProgress=new ACProgressCustom.Builder(this)
-//                .useImages(R.drawable.entertainment,R.drawable.transport,R.drawable.travel,R.drawable.brand)
-//                .build();
-//
-//        customProgress.show();
-
-        progress = new ACProgressFlower.Builder(this)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text(this.getResources().getString(R.string.loading_please_wait))
-                .petalThickness(5)
-                .textColor(Color.WHITE)
-                .textSize(30)
-                .fadeColor(Color.DKGRAY).build();
+        customProgress = new ACProgressCustom.Builder(this)
+                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
+                .speed(4)
+                .build();
 
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
@@ -803,7 +792,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callChangeProfilePictureWebService(String base64_string) {
-        progress.show();
+        customProgress.show();
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
         String table_name = UserDetails.getTableName(UserDetails.class);
@@ -821,7 +810,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callQuickProfileWebService() {
-        progress.show();
+        customProgress.show();
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -842,7 +831,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     public void processWSData(JSONObject returnedObject, int command) {
-        progress.dismiss();
+        customProgress.dismiss();
 
         if (command == Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE) {
             boolean isSuccess = false;
