@@ -2,8 +2,8 @@ package com.wedoops.pingjueclub.adapters;
 
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.wedoops.pingjueclub.R;
-import com.wedoops.pingjueclub.database.MemberDashboardEventData;
-import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.MyBookingList;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 

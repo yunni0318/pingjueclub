@@ -2,46 +2,21 @@ package com.wedoops.pingjueclub.helper;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.orm.StringUtil;
-import com.orm.SugarApp;
-import com.orm.SugarDb;
-import com.wedoops.pingjueclub.MemberDashboardActivity;
-import com.wedoops.pingjueclub.R;
-import com.wedoops.pingjueclub.database.UserDetails;
-import com.wedoops.pingjueclub.webservices.Api_Constants;
-import com.wedoops.pingjueclub.webservices.CallWebServices;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class ApplicationClass extends com.orm.SugarApp {
 

@@ -1,13 +1,13 @@
 package com.wedoops.pingjueclub;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -15,11 +15,15 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
@@ -32,9 +36,7 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
-import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressCustom;
-import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton imagebutton_language;
     private ACProgressCustom progress;
     private static final String KEY_LANG = "key_lang"; // preference key
+    private String token = "";
 
 
     @Override
@@ -96,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         button_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
@@ -188,13 +191,30 @@ public class LoginActivity extends AppCompatActivity {
     private void callMemberLoginWebService(String username, String password) {
         progress.show();
 
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        token = task.getResult().getToken();
+
+                    }
+                });
+
+
         Bundle b = new Bundle();
         b.putString("USERNAME", username);
         b.putString("PASSWORD", password);
-        b.putString("IP_ADDRESS", "");
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_LOGIN);
+        b.putString("DEVICEID", token);
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_LOGIN_V2);
 
-        new CallWebServices(Api_Constants.API_MEMBER_LOGIN, LoginActivity.this, true).execute(b);
+        new CallWebServices(Api_Constants.API_MEMBER_LOGIN_V2, LoginActivity.this, true).execute(b);
     }
 
     public void processWSData(JSONObject returnedObject) {

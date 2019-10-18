@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ServiceDetails"></activity>
+        <activity android:name=".ServiceDetails"/>
 
         <activity
             android:name=".MainActivity"
@@ -53,7 +53,7 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.wedoops.pingjueclub" />
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never">
@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:layout_gravity="start">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_service_top_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/textview_sidebar" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_service_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -48,7 +48,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/textview_sidebar" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_service_new"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,4 +56,4 @@
             </LinearLayout>
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

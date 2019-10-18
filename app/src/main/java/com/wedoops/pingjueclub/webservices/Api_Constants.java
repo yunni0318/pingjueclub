@@ -2,7 +2,6 @@ package com.wedoops.pingjueclub.webservices;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -31,16 +30,18 @@ import java.util.Map;
 
 public class Api_Constants {
 
-    private static String url_authentication = "http://103.244.0.237:54126/api/Authentication/";
-    private static String url_dashboard = "http://103.244.0.237:54126/api/Dashboard/";
-    private static String url_event = "http://103.244.0.237:54126/api/Event/";
-    private static String url_eventbooking = "http://103.244.0.237:54126/api/EventBooking/";
-    private static String url_member = "http://103.244.0.237:54126/api/Member/";
-    private static String url_userwallet = "http://103.244.0.237:54126/api/UserWallet/";
+    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
+    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
+    private static String url_event = "http://103.198.194.228:54126/api/Event/";
+    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
+    private static String url_member = "http://103.198.194.228:54126/api/Member/";
+    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
 
     private static String access_token_prefix = "bearer ";
+    private static String device_type_static = "android";
 
     public static final int API_MEMBER_LOGIN = 1;
+    public static final int API_MEMBER_LOGIN_V2 = 111;
     public static final int API_FORGOT_PASSWORD = 2;
     public static final int API_MEMBER_DASHBOARD = 3;
     public static final int API_EVENT_DETAILS = 5;
@@ -94,6 +95,44 @@ public class Api_Constants {
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("LoginID", b.getString("USERNAME"));
                             params.put("Password", b.getString("PASSWORD"));
+                            params.put("IPAddress", "");
+
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+                case API_MEMBER_LOGIN_V2: {
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_authentication + "MemberLoginV2",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(response));
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.toString());
+                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(""));
+
+//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("LoginID", b.getString("USERNAME"));
+                            params.put("Password", b.getString("PASSWORD"));
+                            params.put("DeviceID", b.getString("DEVICEID"));
+                            params.put("DeviceType", device_type_static);
                             params.put("IPAddress", "");
 
                             return params;
@@ -286,7 +325,7 @@ public class Api_Constants {
                 }
                 case API_MEMBER_ACCOUNT_SETTING: {
 
-                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_member + "AccountSetting",
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, "http://103.198.194.228:54126/" + "AccountSetting",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -640,7 +679,7 @@ public class Api_Constants {
                 }
 
                 case API_MEMBER_QUICK_PROFILE: {
-                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_member + "QuickProfile",
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, "http://103.198.194.228:54126/" + "QuickProfile",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
