@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -13,19 +12,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wedoops.pingjueclub.EditProfileActivity;
 import com.wedoops.pingjueclub.EventDetailActivity;
-import com.wedoops.pingjueclub.ForgotPasswordActivity;
-import com.wedoops.pingjueclub.LoginActivity;
-import com.wedoops.pingjueclub.MainActivity;
 import com.wedoops.pingjueclub.MemberDashboardActivity;
 import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
-import com.wedoops.pingjueclub.MyTransactionsReport;
+import com.wedoops.pingjueclub.RecordsList;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class RefreshTokenAPI {
@@ -106,7 +101,7 @@ public class RefreshTokenAPI {
                                         ((MyBookingDetail) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_BOOKING_DETAIL);
                                     }
                                     if (origin == ORIGIN_CASH_WALLET_TRANSACTION) {
-                                        MyTransactionsReport.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
+                                        RecordsList.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
                                     }
                                     if (origin == ORIGIN_EVENT_DETAILS) {
                                         ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS);

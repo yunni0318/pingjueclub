@@ -8,8 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.orm.StringUtil;
+import com.wedoops.pingjueclub.adapters.RecordsListAdapter;
 import com.wedoops.pingjueclub.adapters.TransactionsReportAdapter;
 import com.wedoops.pingjueclub.adapters.TransactionsReportTopExpandableGroup;
 import com.wedoops.pingjueclub.database.TransactionReportExpandableParcable;
@@ -37,14 +44,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTransactionsReport extends Fragment {
+public class RecordsList extends Fragment {
 
     private static RecyclerView recyclerview_transaction;
     private static View view;
     private static Activity get_activity;
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
-    private TextView dateType,weekly,monthly,yearly;
+    private TextView dateType, weekly, monthly, yearly;
+
+    private static RecordsListAdapter adapter;
 
     private static void callCashWalletTransactionWebService() {
 
@@ -89,32 +98,34 @@ public class MyTransactionsReport extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
-        RecyclerView.ItemAnimator animator = recyclerview_transaction.getItemAnimator();
-        if (animator instanceof DefaultItemAnimator) {
-            ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
-        }
+//        RecyclerView.ItemAnimator animator = recyclerview_transaction.getItemAnimator();
+//        if (animator instanceof DefaultItemAnimator) {
+//            ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
+//        }
         List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
 
-        ArrayList<TransactionsReportTopExpandableGroup> trep = new ArrayList<>();
-        trep.clear();
+//        ArrayList<TransactionsReportTopExpandableGroup> trep = new ArrayList<>();
+//        trep.clear();
+//
+//        ArrayList<TransactionReportExpandableParcable> topView = new ArrayList<>();
+//        for (int i = 0; i < trd_list_all.size(); i++) {
+//            String cashIn_or_out = "";
+//            topView.clear();
+//
+//            if (trd_list_all.get(i).getTType().equals("true")) {
+//                cashIn_or_out = trd_list_all.get(i).getTCashInAmount();
+//            } else {
+//                cashIn_or_out = trd_list_all.get(i).getTCashOutAmount();
+//            }
+//
+//            topView.add(new TransactionReportExpandableParcable(trd_list_all.get(i).getTDate(), cashIn_or_out, trd_list_all.get(i).getTDescription()));
+//            TransactionsReportTopExpandableGroup teg = new TransactionsReportTopExpandableGroup(trd_list_all.get(i).getTRederenceCode(), topView);
+//            trep.add(teg);
+//        }
+//
+//        final TransactionsReportAdapter adapter = new TransactionsReportAdapter(trep);
 
-        ArrayList<TransactionReportExpandableParcable> topView = new ArrayList<>();
-        for (int i = 0; i < trd_list_all.size(); i++) {
-            String cashIn_or_out = "";
-            topView.clear();
-
-            if (trd_list_all.get(i).getTType().equals("true")) {
-                cashIn_or_out = trd_list_all.get(i).getTCashInAmount();
-            } else {
-                cashIn_or_out = trd_list_all.get(i).getTCashOutAmount();
-            }
-
-            topView.add(new TransactionReportExpandableParcable(trd_list_all.get(i).getTDate(), cashIn_or_out, trd_list_all.get(i).getTDescription()));
-            TransactionsReportTopExpandableGroup teg = new TransactionsReportTopExpandableGroup(trd_list_all.get(i).getTRederenceCode(), topView);
-            trep.add(teg);
-        }
-
-        final TransactionsReportAdapter adapter = new TransactionsReportAdapter(trep);
+        adapter = new RecordsListAdapter(trd_list_all);
 
 
 //        reports_adapter = new GenreAdapter(makeGenres());
@@ -268,12 +279,15 @@ public class MyTransactionsReport extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dateType=(TextView)view.findViewById(R.id.dateType);
-        dateSelection = (LinearLayout) view.findViewById(R.id.dateSelection);
-        dateChoices = (LinearLayout) view.findViewById(R.id.dateChoices);
-        weekly=(TextView)view.findViewById(R.id.dateWeekly);
-        monthly=(TextView)view.findViewById(R.id.dateMonthly);
-        yearly=(TextView)view.findViewById(R.id.dateYearly);
+
+        final TextInputEditText textinputedittext_filter = view.findViewById(R.id.textinputedittext_filter);
+
+        dateType = view.findViewById(R.id.dateType);
+        dateSelection = view.findViewById(R.id.dateSelection);
+        dateChoices = view.findViewById(R.id.dateChoices);
+        weekly = view.findViewById(R.id.dateWeekly);
+        monthly = view.findViewById(R.id.dateMonthly);
+        yearly = view.findViewById(R.id.dateYearly);
         dateSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -282,6 +296,31 @@ public class MyTransactionsReport extends Fragment {
                 } else {
                     dateChoices.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+
+        textinputedittext_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+                String adminremarks_field = StringUtil.toSQLName("AdminRemarks");
+                String cashout_field = StringUtil.toSQLName("TCashOutAmount");
+
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + cashout_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+
+                adapter = new RecordsListAdapter(trd_list_all);
+                recyclerview_transaction.setAdapter(adapter);
             }
         });
 

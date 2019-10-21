@@ -547,15 +547,17 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     }
 
-    public void payScreen() {
+    public void payScreen(final String trasactionid) {
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
                 PayFragment payFragment = new PayFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("title", "Swimming");
-                bundle.putInt("point", 200);
-                bundle.putInt("currency", 1);
+                bundle.putString("TRANSACTION_ID", trasactionid);
+//                bundle.putString("REMARKS", trasactionid);
+//                bundle.putString("PAY_AMOUNT", trasactionid);
+//                bundle.putString("CURRENCY", trasactionid);
+
                 payFragment.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -658,7 +660,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("My Transaction Report");
-                MyTransactionsReport transactionsReportFragment = new MyTransactionsReport();
+                RecordsList transactionsReportFragment = new RecordsList();
                 return transactionsReportFragment;
             case 4:
                 toolbar_title.setVisibility(View.VISIBLE);

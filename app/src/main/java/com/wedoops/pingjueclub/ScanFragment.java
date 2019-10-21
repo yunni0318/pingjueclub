@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -45,7 +46,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        zXingScannerView = (ZXingScannerView) view.findViewById(R.id.zxscan);
+        zXingScannerView = view.findViewById(R.id.zxscan);
         amount=(TextView)view.findViewById(R.id.amount);
         amount.setText("1234");
 
@@ -83,7 +84,16 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     @Override
     public void handleResult(Result rawResult) {
         if (getActivity() != null) {
-            ((MainActivity) getActivity()).payScreen();
+
+            if(rawResult.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)){
+                if(rawResult.getText().length() > 0){
+
+//                    ((MainActivity) getActivity()).payScreen(rawResult.getText());
+                    ((MainActivity) getActivity()).payScreen("22764751");
+
+                }
+            }
+
         }
     }
 

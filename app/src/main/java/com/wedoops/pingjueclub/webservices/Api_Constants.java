@@ -19,7 +19,8 @@ import com.wedoops.pingjueclub.MainActivity;
 import com.wedoops.pingjueclub.MemberDashboardActivity;
 import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
-import com.wedoops.pingjueclub.MyTransactionsReport;
+import com.wedoops.pingjueclub.RecordsList;
+import com.wedoops.pingjueclub.ServicesFragment;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 
 import org.json.JSONObject;
@@ -56,6 +57,7 @@ public class Api_Constants {
     public static final int API_CASH_WALLET_TRANSACTION = 13;
     public static final int API_MEMBER_CHANGE_PROFILE_PICTURE = 14;
     public static final int API_MEMBER_QUICK_PROFILE = 15;
+    public static final int API_SERVICE_PAGE_DETAILS = 16;
 
 
     public static final String COMMAND = "command";
@@ -609,7 +611,7 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    MyTransactionsReport.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION);
+                                    RecordsList.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION);
                                 }
                             },
                             new Response.ErrorListener() {
@@ -728,6 +730,48 @@ public class Api_Constants {
 
                     break;
                 }
+                case API_SERVICE_PAGE_DETAILS: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_event + "ServicePageDetails",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+//                                    MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_QUICK_PROFILE);
+                                    ServicesFragment.processWSData(convertResponseToJsonObject(response), API_SERVICE_PAGE_DETAILS);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+
+                                    if (error.networkResponse.statusCode == 401) {
+//                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_QUICK_PROFILE);
+                                    } else {
+                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+                                    }
+
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+
                 default: {
                     break;
                 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,7 +16,9 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +28,23 @@ import com.orm.StringUtil;
 import com.wedoops.pingjueclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
 import com.wedoops.pingjueclub.adapters.NewsItemAdapter;
 import com.wedoops.pingjueclub.adapters.ServiceItemAdapter;
+import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.News;
 import com.wedoops.pingjueclub.database.Services;
+import com.wedoops.pingjueclub.database.ServicesListData;
+import com.wedoops.pingjueclub.database.ServicesOtherNewsData;
+import com.wedoops.pingjueclub.database.ServicesTopBannerData;
+import com.wedoops.pingjueclub.database.UserDetails;
+import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
+import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.helper.LinePagerIndicatorDecoration;
+import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +79,51 @@ public class ServicesFragment extends Fragment {
             }
         }
     };
-    private List<Services> services;
-    private List<News> news;
-    private ServiceItemAdapter serviceItemAdapter;
-    private NewsItemAdapter newsItemAdapter;
 
-    public static void setupRecyclerView() {
-        String tablename_tb = StringUtil.toSQLName("MemberDashboardTopBanner");
-        List<MemberDashboardTopBanner> ud = MemberDashboardTopBanner.findWithQuery(MemberDashboardTopBanner.class, "Select * from " + tablename_tb);
-        topBanner_adapter = new MemberDashboardTopBannerRecyclerAdapter(ud);
+    private static void setupAutoScroll() {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (position == 3) {
+                    position = 0;
+                }
+                recyclerView.smoothScrollToPosition(position);
+                position++;
+                handler.postDelayed(this, 2000);
+            }
+        };
+        handler.postDelayed(runnable, 2000);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.services_fragment, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+
+
+        setupDeclaration(view);
+
+    }
+
+
+    private void setupDeclaration(View view) {
+        recyclerView = view.findViewById(R.id.recyclerview_service_top_banner);
+        recyclerViewServices = view.findViewById(R.id.recyclerview_service_list);
+        recyclerViewNews = view.findViewById(R.id.recyclerview_service_new);
+    }
+
+    private static void setupRecyclerView() {
+        List<ServicesTopBannerData> stbd_all = ServicesTopBannerData.listAll(ServicesTopBannerData.class);
+
+        topBanner_adapter = new MemberDashboardTopBannerRecyclerAdapter(stbd_all);
         RecyclerView.LayoutManager top_banner_mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
             @Override
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
@@ -125,60 +176,38 @@ public class ServicesFragment extends Fragment {
         topBanner_adapter.setOnTopBannerItemClickListener(onTopBannerItemClickListener);
     }
 
-    private static void setupAutoScroll() {
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (position == 3) {
-                    position = 0;
-                }
-                recyclerView.smoothScrollToPosition(position);
-                position++;
-                handler.postDelayed(this, 2000);
-            }
-        };
-        handler.postDelayed(runnable, 2000);
-    }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.services_fragment, container, false);
-        return view;
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_service_top_banner);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
 
-        services = new ArrayList<>();
-        services.add(new Services("Entertainment Bar", "fsfs", R.drawable.entertainment));
-        services.add(new Services("Luxury Transport", "fsfs", R.drawable.transport));
-        services.add(new Services("Luxury Travel", "fsfs", R.drawable.travel));
-        services.add(new Services("Luxury Brand", "fsfs", R.drawable.brand));
-        services.add(new Services("Property Services", "fsfs", R.drawable.properties));
-        services.add(new Services("Award Services", "fsfs", R.drawable.award));
-        services.add(new Services("Personal Services", "fsfs", R.drawable.personal));
-        services.add(new Services("Sport Services", "fsfs", R.drawable.sporrt));
-        services.add(new Services("Premium Lounge", "fsfs", R.drawable.premium));
 
-        news = new ArrayList<>();
-        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 11, "image1", R.drawable.entertainment));
-        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 12, "image2", R.drawable.entertainment));
-        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 13, "image3", R.drawable.entertainment));
-        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 14, "image4", R.drawable.entertainment));
-        news.add(new News("Self Image Design Course", "You will learn how to improve your self image. Make yourself more confidence!", 15, "image5", R.drawable.entertainment));
+    private static void displayResult() {
 
         setupRecyclerView();
-        recyclerViewServices = (RecyclerView) view.findViewById(R.id.recyclerview_service_list);
-        recyclerViewNews = (RecyclerView) view.findViewById(R.id.recyclerview_service_new);
+
+
         ViewCompat.setNestedScrollingEnabled(recyclerViewServices, false);
         ViewCompat.setNestedScrollingEnabled(recyclerViewNews, false);
-        serviceItemAdapter = new ServiceItemAdapter(getContext(), services);
-        newsItemAdapter = new NewsItemAdapter(getContext(), news);
-        final GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),3){
+
+        List<ServicesListData> sld_all = ServicesListData.listAll(ServicesListData.class);
+        List<ServicesOtherNewsData> son_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
+
+        ServiceItemAdapter serviceItemAdapter = new ServiceItemAdapter(view.getContext(), sld_all);
+        NewsItemAdapter newsItemAdapter = new NewsItemAdapter(view.getContext(), son_all);
+
+
+
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -194,9 +223,9 @@ public class ServicesFragment extends Fragment {
             @Override
             public void onGlobalLayout() {
                 recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int viewWidth=recyclerViewServices.getMeasuredWidth();
-                float cardViewWidth=getActivity().getResources().getDimension(R.dimen.card_width);
-                int newSpanCount=(int)Math.floor(viewWidth/cardViewWidth);
+                int viewWidth = recyclerViewServices.getMeasuredWidth();
+                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
+                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
                 gridLayoutManager.setSpanCount(newSpanCount);
                 gridLayoutManager.requestLayout();
             }
@@ -221,16 +250,109 @@ public class ServicesFragment extends Fragment {
         recyclerViewNews.setAdapter(newsItemAdapter);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        handler.removeCallbacks(runnable);
 
-    }
+    public static void processWSData(JSONObject returnedObject, int command) {
+        CustomProgressDialog.closeProgressDialog();
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        handler.removeCallbacks(runnable);
+        if (command == Api_Constants.API_SERVICE_PAGE_DETAILS) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+                        JSONArray service_list_array = response_object.getJSONArray("ServiceList");
+                        JSONArray banner_data_array = response_object.getJSONArray("BannerData");
+                        JSONArray other_news_array_data = response_object.getJSONArray("OtherNewsData");
+
+                        List<ServicesTopBannerData> stbd_all = ServicesTopBannerData.listAll(ServicesTopBannerData.class);
+                        if (stbd_all.size() > 0) {
+                            ServicesTopBannerData.deleteAll(ServicesTopBannerData.class);
+                        }
+
+                        List<MemberDashboardEventData> mded_all = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
+                        if (mded_all.size() > 0) {
+                            MemberDashboardEventData.deleteAll(MemberDashboardEventData.class);
+                        }
+
+                        for (int i = 0; i < banner_data_array.length(); i++) {
+
+                            JSONObject bd = banner_data_array.getJSONObject(i);
+
+                            ServicesTopBannerData stbd = new ServicesTopBannerData(String.valueOf(bd.getInt("Srno")), bd.getString("ImagePath"), bd.getString("RedirectURL"), bd.getString("AnnouncementType"), bd.getString("AdminRemarks"), bd.getString("PublishDate"), bd.getBoolean("Active"), bd.getString("CreatedBy"), bd.getString("CreatedDate"));
+                            stbd.save();
+                        }
+
+                        for (int i = 0; i < service_list_array.length(); i++) {
+
+                            JSONObject sl = service_list_array.getJSONObject(i);
+
+                            ServicesListData sld = new ServicesListData(String.valueOf(sl.getInt("Srno")), String.valueOf(sl.getString("ServiceName")), String.valueOf(sl.getString("ServiceDescription")), String.valueOf(sl.getString("ServiceImagePath")), String.valueOf(sl.getString("Status")), String.valueOf(sl.getString("CreatedDate")));
+                            sld.save();
+                        }
+
+                        for (int i = 0; i < other_news_array_data.length(); i++) {
+
+                            JSONObject ona = other_news_array_data.getJSONObject(i);
+
+                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getInt("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
+                            sond.save();
+                        }
+
+
+                        displayResult();
+
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                    }
+
+                } else {
+
+                    if (returnedObject.getInt("StatusCode") == 401) {
+//                        CustomProgressDialog.showProgressDialog(get_context);
+//
+//                        callRefreshTokenWebService();
+
+                    } else {
+//                        JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
+//                        new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), view.getContext());
+
+                        JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                        int errorCode = 0;
+                        String errorMessageEN = "";
+                        String errorMessageCN = "";
+
+                        for (int i = 0; i < errorCode_array.length(); i++) {
+                            JSONObject error_object = errorCode_array.getJSONObject(i);
+                            errorCode = error_object.getInt("Code");
+                            errorMessageEN = error_object.getString("MessageEN");
+                            errorMessageCN = error_object.getString("MessageCN");
+
+                        }
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
+
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        }
+
+                    }
+
+                }
+
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+        }
     }
 }
