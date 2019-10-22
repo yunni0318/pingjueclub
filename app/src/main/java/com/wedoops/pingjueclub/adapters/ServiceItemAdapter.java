@@ -17,14 +17,15 @@ import com.bumptech.glide.Glide;
 import com.wedoops.pingjueclub.R;
 import com.wedoops.pingjueclub.ServiceDetails;
 import com.wedoops.pingjueclub.database.Services;
+import com.wedoops.pingjueclub.database.ServicesListData;
 
 import java.util.List;
 
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Services> mData;
+    private List<ServicesListData> mData;
 
-    public ServiceItemAdapter(Context context, List<Services> mData) {
+    public ServiceItemAdapter(Context context, List<ServicesListData> mData) {
         this.mContext = context;
         this.mData = mData;
     }
@@ -40,10 +41,8 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-//        myViewHolder.title.setText(mData.get(i).getTitle());
-        myViewHolder.imageView.setImageResource(mData.get(i).getThumbnail());
 
-        Glide.with(myViewHolder.imageView.getContext()).load("").into(myViewHolder.imageView);
+        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getServiceImagePath()).into(myViewHolder.imageView);
 //        myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

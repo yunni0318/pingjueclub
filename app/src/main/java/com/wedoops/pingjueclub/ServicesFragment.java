@@ -25,13 +25,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.orm.StringUtil;
-import com.wedoops.pingjueclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
 import com.wedoops.pingjueclub.adapters.NewsItemAdapter;
 import com.wedoops.pingjueclub.adapters.ServiceItemAdapter;
+import com.wedoops.pingjueclub.adapters.ServicesTopBannerRecyclerAdapter;
 import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
-import com.wedoops.pingjueclub.database.News;
-import com.wedoops.pingjueclub.database.Services;
 import com.wedoops.pingjueclub.database.ServicesListData;
 import com.wedoops.pingjueclub.database.ServicesOtherNewsData;
 import com.wedoops.pingjueclub.database.ServicesTopBannerData;
@@ -41,22 +39,22 @@ import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.helper.LinePagerIndicatorDecoration;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
-import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
+import com.wedoops.pingjueclub.webservices.CallWebServices;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServicesFragment extends Fragment {
 
     private static final Handler handler = new Handler();
+    private int counter = 0;
     public static int position = 0;
     private static View view;
     private static RecyclerView recyclerView, recyclerViewServices, recyclerViewNews;
     private static Runnable runnable;
-    private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
+    private static ServicesTopBannerRecyclerAdapter topBanner_adapter;
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -106,11 +104,34 @@ public class ServicesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-
-
+        callWebService();
         setupDeclaration(view);
 
+    }
+
+    private void callWebService() {
+        CustomProgressDialog.showProgressDialog(view.getContext());
+
+        if (counter < 4) {
+            counter++;
+
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
+
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+
+            Bundle b = new Bundle();
+            b.putString("access_token", ud_list.get(0).getAccessToken());
+            b.putInt(Api_Constants.COMMAND, Api_Constants.API_SERVICE_PAGE_DETAILS);
+
+            new CallWebServices(Api_Constants.API_SERVICE_PAGE_DETAILS, view.getContext(), true).execute(b);
+
+        } else {
+            displayResult();
+        }
     }
 
 
@@ -121,9 +142,12 @@ public class ServicesFragment extends Fragment {
     }
 
     private static void setupRecyclerView() {
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+
         List<ServicesTopBannerData> stbd_all = ServicesTopBannerData.listAll(ServicesTopBannerData.class);
 
-        topBanner_adapter = new MemberDashboardTopBannerRecyclerAdapter(stbd_all);
+        topBanner_adapter = new ServicesTopBannerRecyclerAdapter(stbd_all);
         RecyclerView.LayoutManager top_banner_mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
             @Override
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
@@ -203,51 +227,57 @@ public class ServicesFragment extends Fragment {
         List<ServicesOtherNewsData> son_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
 
         ServiceItemAdapter serviceItemAdapter = new ServiceItemAdapter(view.getContext(), sld_all);
-        NewsItemAdapter newsItemAdapter = new NewsItemAdapter(view.getContext(), son_all);
+        final NewsItemAdapter newsItemAdapter = new NewsItemAdapter(view.getContext(), son_all);
 
 
+//        final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3) {
+//            @Override
+//            public boolean canScrollHorizontally() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//        };
 
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-
-        recyclerViewServices.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int viewWidth = recyclerViewServices.getMeasuredWidth();
-                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
-                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
-                gridLayoutManager.setSpanCount(newSpanCount);
-                gridLayoutManager.requestLayout();
-            }
-        });
-        recyclerViewServices.setLayoutManager(gridLayoutManager);
+//        recyclerViewServices.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                int viewWidth = recyclerViewServices.getMeasuredWidth();
+//                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
+//                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+//                gridLayoutManager.setSpanCount(newSpanCount);
+//                gridLayoutManager.requestLayout();
+//            }
+//        });
+        recyclerViewServices.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         recyclerViewServices.setNestedScrollingEnabled(false);
         recyclerViewServices.setAdapter(serviceItemAdapter);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false) {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
+            public void run() {
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
 
-            @Override
-            public boolean canScrollHorizontally() {
-                return true;
+                    @Override
+                    public boolean canScrollHorizontally() {
+                        return true;
+                    }
+                };
+                recyclerViewNews.setLayoutManager(layoutManager);
+                recyclerViewNews.setNestedScrollingEnabled(false);
+                recyclerViewNews.setAdapter(newsItemAdapter);
             }
-        };
-        recyclerViewNews.setLayoutManager(layoutManager);
-        recyclerViewNews.setNestedScrollingEnabled(false);
-        recyclerViewNews.setAdapter(newsItemAdapter);
+        }, 200);
+
+
     }
 
 
@@ -273,9 +303,14 @@ public class ServicesFragment extends Fragment {
                             ServicesTopBannerData.deleteAll(ServicesTopBannerData.class);
                         }
 
-                        List<MemberDashboardEventData> mded_all = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
+                        List<ServicesListData> mded_all = ServicesListData.listAll(ServicesListData.class);
                         if (mded_all.size() > 0) {
-                            MemberDashboardEventData.deleteAll(MemberDashboardEventData.class);
+                            ServicesListData.deleteAll(ServicesListData.class);
+                        }
+
+                        List<ServicesOtherNewsData> sond_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
+                        if (sond_all.size() > 0) {
+                            ServicesOtherNewsData.deleteAll(ServicesOtherNewsData.class);
                         }
 
                         for (int i = 0; i < banner_data_array.length(); i++) {
@@ -298,7 +333,7 @@ public class ServicesFragment extends Fragment {
 
                             JSONObject ona = other_news_array_data.getJSONObject(i);
 
-                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getInt("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
+                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getString("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
                             sond.save();
                         }
 

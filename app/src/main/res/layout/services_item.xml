@@ -2,9 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview_id"
-    android:layout_width="@dimen/card_width"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -13,44 +12,12 @@
 
     <ImageView
         android:id="@+id/service_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/premium" />
+        android:scaleType="fitCenter"/>
 
-    <!--    <LinearLayout-->
-    <!--        android:padding="8dp"-->
-    <!--        android:orientation="vertical"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:background="@android:color/transparent"-->
-    <!--        android:layout_height="match_parent">-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="110dp">-->
-
-    <!--            <ImageView-->
-    <!--                android:layout_centerInParent="true"-->
-    <!--                android:id="@+id/service_image"-->
-    <!--                android:layout_width="60dp"-->
-    <!--                android:layout_height="60dp"-->
-    <!--                android:src="@drawable/premium"-->
-    <!--                android:scaleType="centerCrop"/>-->
-
-    <!--        </RelativeLayout>-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/service_title"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:gravity="center"-->
-    <!--            android:textSize="13sp"-->
-    <!--            android:textColor="@color/textview_sidebar"-->
-    <!--            android:text="Title"/>-->
-
-    <!--    </LinearLayout>-->
 
 
 </androidx.cardview.widget.CardView>
