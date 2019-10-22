@@ -52,6 +52,9 @@ public class RecordsList extends Fragment {
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
     private TextView dateType, weekly, monthly, yearly;
+    private static String DATA_TYPE_MERCHANT_PAYMENT = "MERCHANT-PAYMENT";
+    private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
+    private static String DATA_TYPE_PAYMENT = "PAYMENT-";
 
     private static RecordsListAdapter adapter;
 
@@ -68,9 +71,9 @@ public class RecordsList extends Fragment {
 
         Bundle b = new Bundle();
         b.putString("access_token", ud_list.get(0).getAccessToken());
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION);
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION_V2);
 
-        new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION, view.getContext(), true).execute(b);
+        new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION_V2, view.getContext(), true).execute(b);
 
     }
 
@@ -98,37 +101,10 @@ public class RecordsList extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
-//        RecyclerView.ItemAnimator animator = recyclerview_transaction.getItemAnimator();
-//        if (animator instanceof DefaultItemAnimator) {
-//            ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
-//        }
         List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
-
-//        ArrayList<TransactionsReportTopExpandableGroup> trep = new ArrayList<>();
-//        trep.clear();
-//
-//        ArrayList<TransactionReportExpandableParcable> topView = new ArrayList<>();
-//        for (int i = 0; i < trd_list_all.size(); i++) {
-//            String cashIn_or_out = "";
-//            topView.clear();
-//
-//            if (trd_list_all.get(i).getTType().equals("true")) {
-//                cashIn_or_out = trd_list_all.get(i).getTCashInAmount();
-//            } else {
-//                cashIn_or_out = trd_list_all.get(i).getTCashOutAmount();
-//            }
-//
-//            topView.add(new TransactionReportExpandableParcable(trd_list_all.get(i).getTDate(), cashIn_or_out, trd_list_all.get(i).getTDescription()));
-//            TransactionsReportTopExpandableGroup teg = new TransactionsReportTopExpandableGroup(trd_list_all.get(i).getTRederenceCode(), topView);
-//            trep.add(teg);
-//        }
-//
-//        final TransactionsReportAdapter adapter = new TransactionsReportAdapter(trep);
 
         adapter = new RecordsListAdapter(trd_list_all);
 
-
-//        reports_adapter = new GenreAdapter(makeGenres());
         recyclerview_transaction.setLayoutManager(layoutManager);
         recyclerview_transaction.setAdapter(adapter);
 
@@ -138,7 +114,7 @@ public class RecordsList extends Fragment {
 
         CustomProgressDialog.closeProgressDialog();
 
-        if (command == Api_Constants.API_CASH_WALLET_TRANSACTION) {
+        if (command == Api_Constants.API_CASH_WALLET_TRANSACTION_V2) {
             boolean isSuccess = false;
             try {
                 isSuccess = returnedObject.getBoolean("Success");
@@ -157,9 +133,48 @@ public class RecordsList extends Fragment {
                         for (int i = 0; i < response_object.length(); i++) {
 
                             JSONObject bd = response_object.getJSONObject(i);
+                            JSONObject bd_type = bd.getJSONObject("TType");
 
-                            TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd.getString("LoginID"), bd.getString("TCashInAmount"), bd.getString("TCashOutAmount"), bd.getString("TCashIn"), bd.getString("TType"), bd.getString("TDescription"), bd.getString("ActionBy"), bd.getString("AdminRemarks"), bd.getString("Status"), bd.getString("TDate"));
-                            trd.save();
+                            String TStatus;
+
+
+                            //Merchant Payment
+                            int actualamount = 0;
+                            int discountrate = 0;
+                            int discountamount = 0;
+
+                            //Payment-
+                            int pointamount;
+                            boolean iscashin;
+
+                            String remarks;
+
+                            if (bd_type.getString("Type").equals(DATA_TYPE_MERCHANT_PAYMENT)) {
+
+                                actualamount = bd_type.getInt("ActualAmount");
+                                discountrate = bd_type.getInt("DiscountRate");
+                                discountamount = bd_type.getInt("DiscountAmount");
+                                remarks = bd_type.getString("Remarks");
+                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), actualamount, discountrate, discountamount, remarks, bd.getString("TDate"), null, 0, false,null);
+                                trd.save();
+
+
+                            } else if (bd_type.getString("Type").equals(DATA_TYPE_ADMIN_TOPUP)) {
+                                TStatus = bd_type.getString("TStatus");
+                                pointamount = bd_type.getInt("PointAmount");
+                                iscashin = bd_type.getBoolean("IsCashIn");
+                                remarks = bd_type.getString("Remarks");
+                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin,null);
+                                trd.save();
+
+                            } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT)) {
+                                TStatus = bd_type.getString("TStatus");
+                                pointamount = bd_type.getInt("PointAmount");
+                                iscashin = bd_type.getBoolean("IsCashIn");
+                                remarks = bd_type.getString("Remarks");
+                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin,bd_type.getString("EventTitle"));
+                                trd.save();
+                            }
 
                         }
 

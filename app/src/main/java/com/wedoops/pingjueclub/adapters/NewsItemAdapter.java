@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +48,16 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
         myViewHolder.title.setText(mData.get(i).getEventName());
 
         int endIndex = 0;
-
-        if (mData.get(i).getEventDescription().length() > 40) {
-            endIndex = 40;
+        String html_striped_text = stripHtml(mData.get(i).getEventDescription());
+        if (html_striped_text.length() > 120) {
+            endIndex = 120;
         } else {
-            if (mData.get(i).getEventDescription().length() > 20) {
-                endIndex = 20;
-            } else {
-                endIndex = 10;
+            if (html_striped_text.length() > 60) {
+                endIndex = 60;
             }
         }
 
-        String description_sub = mData.get(i).getEventDescription().substring(0, endIndex) + "...";
+        String description_sub = html_striped_text.substring(0, endIndex) + "...";
 
         myViewHolder.desc.setText(description_sub);
         int minRandom = 1;
@@ -70,6 +69,14 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
 //            public void onClick(View view) {
 //            }
 //        });
+    }
+
+    private String stripHtml(String html) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(html).toString();
+        }
     }
 
     @Override

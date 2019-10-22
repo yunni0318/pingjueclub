@@ -55,6 +55,7 @@ public class Api_Constants {
     public static final int API_EVENT_BOOKING_LIST = 11;
     public static final int API_EVENT_BOOKING_DETAIL = 12;
     public static final int API_CASH_WALLET_TRANSACTION = 13;
+    public static final int API_CASH_WALLET_TRANSACTION_V2 = 1313;
     public static final int API_MEMBER_CHANGE_PROFILE_PICTURE = 14;
     public static final int API_MEMBER_QUICK_PROFILE = 15;
     public static final int API_SERVICE_PAGE_DETAILS = 16;
@@ -606,8 +607,40 @@ public class Api_Constants {
                 }
                 case API_CASH_WALLET_TRANSACTION: {
 
-
                     StringRequest postRequest = new StringRequest(Request.Method.GET, url_userwallet + "CashWalletTransaction",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    RecordsList.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_CASH_WALLET_TRANSACTION_V2: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_userwallet + "CashWalletTransactionV2",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {

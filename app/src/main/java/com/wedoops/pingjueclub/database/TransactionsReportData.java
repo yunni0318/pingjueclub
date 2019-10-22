@@ -3,122 +3,121 @@ package com.wedoops.pingjueclub.database;
 import com.orm.SugarRecord;
 
 public class TransactionsReportData extends SugarRecord {
-
     private String TRederenceCode;
-    private String LoginID;
-    private String TCashInAmount;
-    private String TCashOutAmount;
-    private String TCashIn;
-    private String TType;
-    private String TDescription;
-    private String ActionBy;
-    private String AdminRemarks;
-    private String Status;
+    private String Type;
+    private int ActualAmount;
+    private int DiscountRate;
+    private int DiscountAmount;
+    private String Remarks;
     private String TDate;
+    private String TStatus;
+    private int PointAmount;
+    private boolean IsCashIn;
+    private String AdminTitle;
 
     public TransactionsReportData() {
 
     }
 
-    public TransactionsReportData(String TRederenceCode, String loginID, String TCashInAmount, String TCashOutAmount, String TCashIn, String TType, String TDescription, String actionBy, String adminRemarks, String status, String TDate) {
+    public TransactionsReportData(String TRederenceCode, String Type, int ActualAmount, int DiscountRate, int DiscountAmount, String Remarks, String TDate, String TStatus, int PointAmount, boolean IsCashIn, String AdminTitle) {
         this.TRederenceCode = TRederenceCode;
-        LoginID = loginID;
-        this.TCashInAmount = TCashInAmount;
-        this.TCashOutAmount = TCashOutAmount;
-        this.TCashIn = TCashIn;
-        this.TType = TType;
-        this.TDescription = TDescription;
-        ActionBy = actionBy;
-        AdminRemarks = adminRemarks;
-        Status = status;
+        this.Type = Type;
+        this.ActualAmount = ActualAmount;
+        this.DiscountRate = DiscountRate;
+        this.DiscountAmount = DiscountAmount;
+        this.Remarks = Remarks;
         this.TDate = TDate;
+        this.TStatus = TStatus;
+        this.PointAmount = PointAmount;
+        this.IsCashIn = IsCashIn;
+        this.AdminTitle = AdminTitle;
     }
 
     public String getTRederenceCode() {
         return TRederenceCode;
     }
 
-    public String getLoginID() {
-        return LoginID;
+    public String getType() {
+        return Type;
     }
 
-    public String getTCashInAmount() {
-        return TCashInAmount;
+    public int getActualAmount() {
+        return ActualAmount;
     }
 
-    public String getTCashOutAmount() {
-        return TCashOutAmount;
+    public int getDiscountRate() {
+        return DiscountRate;
     }
 
-    public String getTCashIn() {
-        return TCashIn;
+    public int getDiscountAmount() {
+        return DiscountAmount;
     }
 
-    public String getTType() {
-        return TType;
-    }
-
-    public String getTDescription() {
-        return TDescription;
-    }
-
-    public String getActionBy() {
-        return ActionBy;
-    }
-
-    public String getAdminRemarks() {
-        return AdminRemarks;
-    }
-
-    public String getStatus() {
-        return Status;
+    public String getRemarks() {
+        return Remarks;
     }
 
     public String getTDate() {
         return TDate;
     }
 
+    public String getTStatus() {
+        return TStatus;
+    }
+
+    public int getPointAmount() {
+        return PointAmount;
+    }
+
+    public boolean isCashIn() {
+        return IsCashIn;
+    }
+
+    public String getAdminTitle() {
+        return AdminTitle;
+    }
+
     public void setTRederenceCode(String TRederenceCode) {
         this.TRederenceCode = TRederenceCode;
     }
 
-    public void setLoginID(String loginID) {
-        LoginID = loginID;
+    public void setType(String type) {
+        Type = type;
     }
 
-    public void setTCashInAmount(String TCashInAmount) {
-        this.TCashInAmount = TCashInAmount;
+    public void setActualAmount(int actualAmount) {
+        ActualAmount = actualAmount;
     }
 
-    public void setTCashOutAmount(String TCashOutAmount) {
-        this.TCashOutAmount = TCashOutAmount;
+    public void setDiscountRate(int discountRate) {
+        DiscountRate = discountRate;
     }
 
-    public void setTCashIn(String TCashIn) {
-        this.TCashIn = TCashIn;
+    public void setDiscountAmount(int discountAmount) {
+        DiscountAmount = discountAmount;
     }
 
-    public void setTType(String TType) {
-        this.TType = TType;
-    }
-
-    public void setTDescription(String TDescription) {
-        this.TDescription = TDescription;
-    }
-
-    public void setActionBy(String actionBy) {
-        ActionBy = actionBy;
-    }
-
-    public void setAdminRemarks(String adminRemarks) {
-        AdminRemarks = adminRemarks;
-    }
-
-    public void setStatus(String status) {
-        Status = status;
+    public void setRemarks(String remarks) {
+        Remarks = remarks;
     }
 
     public void setTDate(String TDate) {
         this.TDate = TDate;
+    }
+
+    public void setTStatus(String TStatus) {
+        this.TStatus = TStatus;
+    }
+
+    public void setPointAmount(int pointAmount) {
+        PointAmount = pointAmount;
+    }
+
+    public void setCashIn(boolean cashIn) {
+        IsCashIn = cashIn;
+    }
+
+    public void setAdminTitle(String adminTitle) {
+        AdminTitle = adminTitle;
     }
 }

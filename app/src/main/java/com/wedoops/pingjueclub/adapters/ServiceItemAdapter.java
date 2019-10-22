@@ -36,6 +36,10 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         view = inflater.inflate(R.layout.services_item, viewGroup, false);
+
+        int height = viewGroup.getMeasuredWidth() / 3;
+        view.setMinimumHeight(height);
+
         return new MyViewHolder(view);
     }
 

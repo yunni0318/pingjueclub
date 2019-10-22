@@ -241,15 +241,15 @@ public class ServicesFragment extends Fragment {
 //                return false;
 //            }
 //        };
-
+//
 //        recyclerViewServices.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //            @Override
 //            public void onGlobalLayout() {
 //                recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                int viewWidth = recyclerViewServices.getMeasuredWidth();
-//                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
-//                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
-//                gridLayoutManager.setSpanCount(newSpanCount);
+////                int viewWidth = recyclerViewServices.getMeasuredWidth();
+////                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
+////                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+////                gridLayoutManager.setSpanCount(newSpanCount);
 //                gridLayoutManager.requestLayout();
 //            }
 //        });
@@ -275,7 +275,7 @@ public class ServicesFragment extends Fragment {
                 recyclerViewNews.setNestedScrollingEnabled(false);
                 recyclerViewNews.setAdapter(newsItemAdapter);
             }
-        }, 200);
+        }, 1000);
 
 
     }

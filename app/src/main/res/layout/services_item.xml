@@ -4,6 +4,7 @@
     android:id="@+id/cardview_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -16,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
-
+        android:scaleType="fitCenter" />
 
 
 </androidx.cardview.widget.CardView>
