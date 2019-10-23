@@ -45,6 +45,7 @@ public class Api_Constants {
     public static final int API_MEMBER_LOGIN_V2 = 111;
     public static final int API_FORGOT_PASSWORD = 2;
     public static final int API_MEMBER_DASHBOARD = 3;
+    public static final int API_MEMBER_DASHBOARDV2 = 3333;
     public static final int API_EVENT_DETAILS = 5;
     public static final int API_EVENT_DETAILS_MAKE_BOOKING = 6;
     public static final int API_MEMBER_ACCOUNT_SETTING = 7;
@@ -189,6 +190,55 @@ public class Api_Constants {
                 case API_MEMBER_DASHBOARD: {
 
                     StringRequest postRequest = new StringRequest(Request.Method.GET, url_dashboard + "MemberDashboard",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_DASHBOARD);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+
+                                    if (error.networkResponse.statusCode == 401) {
+                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARD);
+                                    } else {
+                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+                                    }
+
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+//                        @Override
+//                        protected Map<String, String> getParams() {
+//
+//                            String auth_token = access_token_prefix + b.getString("access_token");
+//                            Map<String, String> params = new HashMap<String, String>();
+//                            params.put("Authorization", auth_token);
+//
+//                            return params;
+//                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_MEMBER_DASHBOARDV2: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_dashboard + "MemberDashboardV2",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -644,7 +694,7 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    RecordsList.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION);
+                                    RecordsList.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
                                 }
                             },
                             new Response.ErrorListener() {

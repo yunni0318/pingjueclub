@@ -81,14 +81,14 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
         if (trd_list_all.get(position).getType().equals(DATA_TYPE_MERCHANT_PAYMENT)) {
             holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
-            holder.textview_transaction_id.setText(trd_list_all.get(position).getTRederenceCode());
-            holder.textview_points_amount.setText(String.format("%d pts", trd_list_all.get(position).getPointAmount()));
+            holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
+            holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getActualAmount()));
 
             holder.textview_currency_amount.setText("(MYR) XXX");
             holder.textview_transaction_type.setText("Discount");
-            holder.textview_transaction_type_amount.setText(String.format("- %d", trd_list_all.get(position).getDiscountRate()));
+            holder.textview_transaction_type_amount.setText(String.format("- %d%%", trd_list_all.get(position).getDiscountRate()));
 
-            holder.textview_currency_amount.setVisibility(View.VISIBLE);
+            holder.textview_currency_amount.setVisibility(View.INVISIBLE);
             holder.textview_transaction_type.setVisibility(View.VISIBLE);
             holder.textview_transaction_type_amount.setVisibility(View.VISIBLE);
 
@@ -96,12 +96,12 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
             holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
-            holder.textview_transaction_id.setText(trd_list_all.get(position).getTRederenceCode());
+            holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
-            if(trd_list_all.get(position).isCashIn()){
+            if (trd_list_all.get(position).isCashIn()) {
                 holder.textview_points_amount.setText(String.format("+ %d pts", trd_list_all.get(position).getPointAmount()));
 
-            }else{
+            } else {
                 holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
             }
 
@@ -113,21 +113,21 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
         } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT)) {
             holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
-            holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
-            holder.textview_transaction_id.setText(trd_list_all.get(position).getTRederenceCode());
+            holder.textview_remarks.setText(trd_list_all.get(position).getAdminTitle());
+            holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
-            if(trd_list_all.get(position).isCashIn()){
+            if (trd_list_all.get(position).isCashIn()) {
                 holder.textview_points_amount.setText(String.format("+ %d pts", trd_list_all.get(position).getPointAmount()));
 
-            }else{
+            } else {
                 holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
             }
 
             holder.textview_currency_amount.setText("(MYR) XXX");
             holder.textview_transaction_type.setText(trd_list_all.get(position).getType());
-            holder.textview_transaction_type_amount.setText(String.format("- %d", trd_list_all.get(position).getDiscountRate()));
+            holder.textview_transaction_type_amount.setText(trd_list_all.get(position).getRemarks());
 
-            holder.textview_currency_amount.setVisibility(View.VISIBLE);
+            holder.textview_currency_amount.setVisibility(View.INVISIBLE);
             holder.textview_transaction_type.setVisibility(View.VISIBLE);
             holder.textview_transaction_type_amount.setVisibility(View.VISIBLE);
 

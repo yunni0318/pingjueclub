@@ -86,15 +86,15 @@ public class TransactionsReportMainViewHolder extends GroupViewHolder {
 
         textview_event_date.setText(new_startdate);
 
-        if (trd.get(0).equals("true")) {
-            textview_transaction_amount.setTextColor(Color.parseColor("#8bc34a"));
-            textview_transaction_amount.setText(String.format("RM%s", trd.get(0).getTCashInAmount()));
-
-        } else {
-            textview_transaction_amount.setTextColor(Color.parseColor("#ff0000"));
-            textview_transaction_amount.setText(String.format("-RM%s", trd.get(0).getTCashOutAmount()));
-
-        }
+//        if (trd.get(0).equals("true")) {
+//            textview_transaction_amount.setTextColor(Color.parseColor("#8bc34a"));
+//            textview_transaction_amount.setText(String.format("RM%s", trd.get(0).getTCashInAmount()));
+//
+//        } else {
+//            textview_transaction_amount.setTextColor(Color.parseColor("#ff0000"));
+//            textview_transaction_amount.setText(String.format("-RM%s", trd.get(0).getTCashOutAmount()));
+//
+//        }
 
 //        textview_booking_number.setText(String.format("#%s", trd.getTRederenceCode()));
 //

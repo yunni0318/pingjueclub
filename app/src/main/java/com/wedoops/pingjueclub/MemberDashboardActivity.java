@@ -341,8 +341,6 @@ public class MemberDashboardActivity extends Fragment {
 
             List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-
-
             Bundle b = new Bundle();
             b.putString("access_token", ud_list.get(0).getAccessToken());
             b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_DASHBOARD);

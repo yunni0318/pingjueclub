@@ -61,17 +61,17 @@ public class TransactionsReportChildViewHolder extends ChildViewHolder {
         List<TransactionsReportData> trd = TransactionsReportData.findWithQuery(TransactionsReportData.class, "select * from " + table_name + " where " + rederence_field + " = ?", group.getTitle());
 
 
-        textview_transaction_type.setText(trd.get(0).getTType());
-
-        if (trd.get(0).getTCashIn().equals("true")) {
-            textview_transaction_amount.setText(String.format("RM%s", trd.get(0).getTCashInAmount()));
-
-        } else {
-            textview_transaction_amount.setText(String.format("-RM%s", trd.get(0).getTCashOutAmount()));
-
-        }
-
-        textview_transaction_description.setText(trd.get(0).getTDescription());
+//        textview_transaction_type.setText(trd.get(0).getTType());
+//
+//        if (trd.get(0).getTCashIn().equals("true")) {
+//            textview_transaction_amount.setText(String.format("RM%s", trd.get(0).getTCashInAmount()));
+//
+//        } else {
+//            textview_transaction_amount.setText(String.format("-RM%s", trd.get(0).getTCashOutAmount()));
+//
+//        }
+//
+//        textview_transaction_description.setText(trd.get(0).getTDescription());
 
 ////        linearlayout_adapter_transactions_report_child.setBackground(v.getResources().getDrawable(R.drawable.recycler_transaction_report_child_expanded_outerline));
 //

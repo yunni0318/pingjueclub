@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class RecordsList extends Fragment {
@@ -135,47 +137,49 @@ public class RecordsList extends Fragment {
                             JSONObject bd = response_object.getJSONObject(i);
                             JSONObject bd_type = bd.getJSONObject("TType");
 
-                            String TStatus;
+                            if (bd.getJSONObject("TType") != null) {
+                                String TStatus;
+
+                                //Merchant Payment
+                                int actualamount = 0;
+                                int discountrate = 0;
+                                int discountamount = 0;
+
+                                //Payment-
+                                int pointamount;
+                                boolean iscashin;
+
+                                String remarks;
+
+                                if (bd_type.getString("Type").equals(DATA_TYPE_MERCHANT_PAYMENT)) {
+
+                                    actualamount = bd_type.getInt("ActualAmount");
+                                    discountrate = bd_type.getInt("DiscountRate");
+                                    discountamount = bd_type.getInt("DiscountAmount");
+                                    remarks = bd_type.getString("Remarks");
+                                    TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), actualamount, discountrate, discountamount, remarks, bd.getString("TDate"), null, 0, false, null);
+                                    trd.save();
 
 
-                            //Merchant Payment
-                            int actualamount = 0;
-                            int discountrate = 0;
-                            int discountamount = 0;
+                                } else if (bd_type.getString("Type").equals(DATA_TYPE_ADMIN_TOPUP)) {
+                                    TStatus = bd_type.getString("TStatus");
+                                    pointamount = bd_type.getInt("PointAmount");
+                                    iscashin = bd_type.getBoolean("IsCashIn");
+                                    remarks = bd_type.getString("Remarks");
+                                    TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, null);
+                                    trd.save();
 
-                            //Payment-
-                            int pointamount;
-                            boolean iscashin;
-
-                            String remarks;
-
-                            if (bd_type.getString("Type").equals(DATA_TYPE_MERCHANT_PAYMENT)) {
-
-                                actualamount = bd_type.getInt("ActualAmount");
-                                discountrate = bd_type.getInt("DiscountRate");
-                                discountamount = bd_type.getInt("DiscountAmount");
-                                remarks = bd_type.getString("Remarks");
-                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), actualamount, discountrate, discountamount, remarks, bd.getString("TDate"), null, 0, false,null);
-                                trd.save();
-
-
-                            } else if (bd_type.getString("Type").equals(DATA_TYPE_ADMIN_TOPUP)) {
-                                TStatus = bd_type.getString("TStatus");
-                                pointamount = bd_type.getInt("PointAmount");
-                                iscashin = bd_type.getBoolean("IsCashIn");
-                                remarks = bd_type.getString("Remarks");
-                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin,null);
-                                trd.save();
-
-                            } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT)) {
-                                TStatus = bd_type.getString("TStatus");
-                                pointamount = bd_type.getInt("PointAmount");
-                                iscashin = bd_type.getBoolean("IsCashIn");
-                                remarks = bd_type.getString("Remarks");
-                                TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin,bd_type.getString("EventTitle"));
-                                trd.save();
+                                } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT)) {
+                                    TStatus = bd_type.getString("TStatus");
+                                    pointamount = bd_type.getInt("PointAmount");
+                                    iscashin = bd_type.getBoolean("IsCashIn");
+                                    remarks = bd_type.getString("Remarks");
+                                    TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, bd_type.getString("EventTitle"));
+                                    trd.save();
+                                }
+                            } else {
+                                Log.e("Error", "NULL from Type");
                             }
-
                         }
 
                         displayResult();
@@ -329,10 +333,9 @@ public class RecordsList extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
-                String adminremarks_field = StringUtil.toSQLName("AdminRemarks");
-                String cashout_field = StringUtil.toSQLName("TCashOutAmount");
+                String referencecode_field = StringUtil.toSQLName("TRederenceCode");
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + cashout_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
 
                 adapter = new RecordsListAdapter(trd_list_all);
                 recyclerview_transaction.setAdapter(adapter);
@@ -343,7 +346,28 @@ public class RecordsList extends Fragment {
             @Override
             public void onClick(View view) {
                 dateType.setText("Weekly");
-                Toast.makeText(getContext(), "Weekly Selected", Toast.LENGTH_SHORT).show();
+
+                Calendar cl = Calendar.getInstance();
+
+                //first day of week
+                cl.set(Calendar.DAY_OF_WEEK, 1);
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                //last day of week
+                cl.set(Calendar.DAY_OF_WEEK, 7);
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+                String tdate_field = StringUtil.toSQLName("TDate");
+
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+                adapter = new RecordsListAdapter(trd_list_all);
+                recyclerview_transaction.setAdapter(adapter);
+
+
                 dateChoices.setVisibility(View.GONE);
             }
         });
@@ -352,7 +376,27 @@ public class RecordsList extends Fragment {
             @Override
             public void onClick(View view) {
                 dateType.setText("Monthly");
-                Toast.makeText(getContext(), "Monthly Selected", Toast.LENGTH_SHORT).show();
+
+                Calendar cl = Calendar.getInstance();
+
+                //first day of month
+                cl.set(Calendar.DAY_OF_MONTH, cl.getActualMinimum(Calendar.DAY_OF_MONTH));
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                //last day of week
+                cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+                String tdate_field = StringUtil.toSQLName("TDate");
+
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+                adapter = new RecordsListAdapter(trd_list_all);
+                recyclerview_transaction.setAdapter(adapter);
+
                 dateChoices.setVisibility(View.GONE);
             }
         });
@@ -361,7 +405,26 @@ public class RecordsList extends Fragment {
             @Override
             public void onClick(View view) {
                 dateType.setText("Yearly");
-                Toast.makeText(getContext(), "Yearly Selected", Toast.LENGTH_SHORT).show();
+
+                Calendar cl = Calendar.getInstance();
+
+                //first day of year
+                cl.set(Calendar.DAY_OF_YEAR, cl.getActualMinimum(Calendar.DAY_OF_YEAR));
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                //last day of year
+                cl.set(Calendar.DAY_OF_YEAR, cl.getActualMaximum(Calendar.DAY_OF_YEAR));
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+                String tdate_field = StringUtil.toSQLName("TDate");
+
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+                adapter = new RecordsListAdapter(trd_list_all);
+                recyclerview_transaction.setAdapter(adapter);
+
                 dateChoices.setVisibility(View.GONE);
             }
         });
