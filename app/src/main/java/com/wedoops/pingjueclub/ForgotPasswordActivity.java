@@ -1,7 +1,9 @@
 package com.wedoops.pingjueclub;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -82,7 +84,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                     JSONObject response_object = returnedObject.getJSONObject("ResponseData");
 
-                    new DisplayAlertDialog().displayAlertDialogSuccess(response_object.getInt("Code"),this);
+//                    new DisplayAlertDialog().displayAlertDialogSuccess(response_object.getInt("Code"),this);
+                    new DisplayAlertDialog().displayAlertDialogString(0, response_object.getString("MessageEN"), true, this);
 
                 } else {
                     new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);

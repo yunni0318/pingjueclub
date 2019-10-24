@@ -64,8 +64,6 @@ public class Api_Constants {
     public static final int API_MAKE_QR_CODE_PAYMENT = 17;
 
 
-
-
     public static final String COMMAND = "command";
 
     private static Context context;
@@ -539,7 +537,7 @@ public class Api_Constants {
                 }
                 case API_MEMBER_UPDATE_ACCOUNT_SECURITY: {
 
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_member + "UpdateAccountSecurity",
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, "http://103.198.194.228:54126/" + "UpdateAccountSecurity",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -857,7 +855,7 @@ public class Api_Constants {
 
                     break;
                 }
-                case API_MAKE_QR_CODE_PAYMENT:{
+                case API_MAKE_QR_CODE_PAYMENT: {
 
                     StringRequest postRequest = new StringRequest(Request.Method.POST, url_userwallet + "MakeQRCodePayment",
                             new Response.Listener<String>() {

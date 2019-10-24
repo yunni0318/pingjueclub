@@ -30,14 +30,12 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageview_default;
         private TextView textview_remarks, textview_transaction_id, textview_points_amount, textview_date, textview_currency_amount, textview_transaction_type, textview_transaction_type_amount;
         private View view_divider;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageview_default = itemView.findViewById(R.id.imageview_default);
             textview_remarks = itemView.findViewById(R.id.textview_remarks);
             textview_transaction_id = itemView.findViewById(R.id.textview_transaction_id);
             textview_points_amount = itemView.findViewById(R.id.textview_points_amount);
@@ -79,7 +77,6 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         if (trd_list_all.get(position).getType().equals(DATA_TYPE_MERCHANT_PAYMENT)) {
-            holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
             holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getActualAmount()));
@@ -94,7 +91,6 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
         } else if (trd_list_all.get(position).getType().equals(DATA_TYPE_ADMIN_TOPUP)) {
 
-            holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
@@ -112,7 +108,6 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
 
         } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT)) {
-            holder.imageview_default.setImageResource(R.drawable.records_list_adapter_default);
             holder.textview_remarks.setText(trd_list_all.get(position).getAdminTitle());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 

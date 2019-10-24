@@ -7,22 +7,9 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <ImageView
-        android:id="@+id/imageview_default"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/records_list_adapter_default" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imageview_default"
-        android:layout_toRightOf="@id/imageview_default"
         android:padding="10dp">
 
         <RelativeLayout
