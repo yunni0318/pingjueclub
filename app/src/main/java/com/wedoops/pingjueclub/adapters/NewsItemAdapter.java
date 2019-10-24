@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.like.IconType;
+import com.like.LikeButton;
 import com.wedoops.pingjueclub.R;
 import com.wedoops.pingjueclub.database.ServicesOtherNewsData;
 
@@ -60,9 +62,14 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
         String description_sub = html_striped_text.substring(0, endIndex) + "...";
 
         myViewHolder.desc.setText(description_sub);
+
         int minRandom = 1;
         int maxRandom = 100;
         myViewHolder.like.setText(String.valueOf(new Random().nextInt((maxRandom - minRandom) + 1) + minRandom));
+
+        myViewHolder.like_button.setIcon(IconType.Thumb);
+        myViewHolder.like_button.setLikeDrawableRes(R.drawable.like_icon);
+
         Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getEventBannerImagePath()).into(myViewHolder.imageView);
 //        myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -89,6 +96,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
         private CardView cardView;
         private ImageView imageView;
         private TextView title, desc, like;
+        private LikeButton like_button;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +105,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
             title = itemView.findViewById(R.id.news_title);
             desc = itemView.findViewById(R.id.news_desc);
             like = itemView.findViewById(R.id.news_like);
+            like_button = itemView.findViewById(R.id.like_button);
         }
     }
 }

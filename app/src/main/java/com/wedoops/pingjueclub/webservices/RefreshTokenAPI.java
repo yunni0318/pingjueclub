@@ -15,6 +15,7 @@ import com.wedoops.pingjueclub.EventDetailActivity;
 import com.wedoops.pingjueclub.MemberDashboardActivity;
 import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
+import com.wedoops.pingjueclub.PayFragment;
 import com.wedoops.pingjueclub.RecordsList;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 
@@ -43,7 +44,10 @@ public class RefreshTokenAPI {
     public static final int ORIGIN_EVENT_BOOKING_LIST = 1111;
     public static final int ORIGIN_EVENT_BOOKING_DETAIL = 1212;
     public static final int ORIGIN_CASH_WALLET_TRANSACTION = 1313;
+    public static final int ORIGIN_CASH_WALLET_TRANSACTION_V2 = 13131313;
     public static final int ORIGIN_MEMBER_CHANGE_PROFILE_PICTURE = 1414;
+    public static final int ORIGIN_MAKE_QR_CODE_PAYMENT= 1717;
+
 
     private static Context context;
     private static int origin;
@@ -109,7 +113,9 @@ public class RefreshTokenAPI {
                                     if (origin == ORIGIN_EVENT_DETAILS_MAKE_BOOKING) {
                                         ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS_MAKE_BOOKING);
                                     }
-
+                                    if (origin == ORIGIN_MAKE_QR_CODE_PAYMENT) {
+                                        PayFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_MAKE_QR_CODE_PAYMENT);
+                                    }
 //                                    if (currentContext == MemberDashboardActivity.get_activity) {
 //                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
 //                                    } else if (currentContext == EditProfileActivity.get_activity) {

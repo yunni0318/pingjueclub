@@ -354,7 +354,7 @@ public class MemberDashboardActivity extends Fragment {
 
     }
 
-    private static void callRefreshTokenWebService() {
+     private static void callRefreshTokenWebService() {
 
 //        String table_name = UserDetails.getTableName(UserDetails.class);
 //        String username_field = StringUtil.toSQLName("username");

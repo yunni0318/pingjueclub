@@ -19,6 +19,7 @@ import com.wedoops.pingjueclub.MainActivity;
 import com.wedoops.pingjueclub.MemberDashboardActivity;
 import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
+import com.wedoops.pingjueclub.PayFragment;
 import com.wedoops.pingjueclub.RecordsList;
 import com.wedoops.pingjueclub.ServicesFragment;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
@@ -60,6 +61,9 @@ public class Api_Constants {
     public static final int API_MEMBER_CHANGE_PROFILE_PICTURE = 14;
     public static final int API_MEMBER_QUICK_PROFILE = 15;
     public static final int API_SERVICE_PAGE_DETAILS = 16;
+    public static final int API_MAKE_QR_CODE_PAYMENT = 17;
+
+
 
 
     public static final String COMMAND = "command";
@@ -853,7 +857,47 @@ public class Api_Constants {
 
                     break;
                 }
+                case API_MAKE_QR_CODE_PAYMENT:{
 
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_userwallet + "MakeQRCodePayment",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    PayFragment.processWSData(convertResponseToJsonObject(response), API_MAKE_QR_CODE_PAYMENT);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("ProfilePictureBase64", b.getString("ProfilePictureBase64"));
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
 
                 default: {
                     break;

@@ -53,33 +53,41 @@ public class RecordsList extends Fragment {
     private static Activity get_activity;
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
-    private TextView dateType, weekly, monthly, yearly;
+    private static TextView dateType, weekly, monthly, yearly;
     private static String DATA_TYPE_MERCHANT_PAYMENT = "MERCHANT-PAYMENT";
     private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
     private static String DATA_TYPE_PAYMENT = "PAYMENT-";
 
     private static RecordsListAdapter adapter;
 
+    private static int counter;
+
+
     private static void callCashWalletTransactionWebService() {
 
         CustomProgressDialog.showProgressDialog(get_context);
+        if (counter < 4) {
+            counter++;
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            Bundle b = new Bundle();
+            b.putString("access_token", ud_list.get(0).getAccessToken());
+            b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION_V2);
 
-        Bundle b = new Bundle();
-        b.putString("access_token", ud_list.get(0).getAccessToken());
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION_V2);
+            new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION_V2, view.getContext(), true).execute(b);
 
-        new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION_V2, view.getContext(), true).execute(b);
+        } else {
+            callRefreshTokenWebService();
 
+        }
     }
 
-    private static void callRefreshTokenWebService(int origin) {
+    private static void callRefreshTokenWebService() {
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -90,9 +98,9 @@ public class RecordsList extends Fragment {
 
         Bundle b = new Bundle();
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, origin).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
     }
 
     private static void displayResult() {
@@ -103,12 +111,13 @@ public class RecordsList extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
-        List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
+//        List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
 
-        adapter = new RecordsListAdapter(trd_list_all);
+//        adapter = new RecordsListAdapter(trd_list_all);
 
         recyclerview_transaction.setLayoutManager(layoutManager);
-        recyclerview_transaction.setAdapter(adapter);
+        weekly.performClick();
+//        recyclerview_transaction.setAdapter(adapter);
 
     }
 
@@ -195,7 +204,7 @@ public class RecordsList extends Fragment {
 
                     if (errorCode == 401) {
 
-                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION);
+                        callRefreshTokenWebService();
 
                     } else {
 
@@ -229,6 +238,8 @@ public class RecordsList extends Fragment {
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
+        } else if (command == RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2) {
+
         }
     }
 
@@ -256,28 +267,41 @@ public class RecordsList extends Fragment {
                         ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
 
                         ud_list.get(0).save();
-
-                        if (origin == RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION) {
-                            callCashWalletTransactionWebService();
-                        }
-
-
+                        RecordsList.callCashWalletTransactionWebService();
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext());
 
                     }
 
                 } else {
+//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
+                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
 
-                    int errorCode = returnedObject.getInt("StatusCode");
+                    int errorCode = 0;
+                    String errorMessageEN = "";
+                    String errorMessageCN = "";
 
-                    if (errorCode == 401) {
-                        callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
+                    for (int i = 0; i < errorCode_array.length(); i++) {
+                        JSONObject error_object = errorCode_array.getJSONObject(i);
+                        errorCode = error_object.getInt("Code");
+                        errorMessageEN = error_object.getString("MessageEN");
+                        errorMessageCN = error_object.getString("MessageCN");
 
+                    }
+
+                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_activity.getApplicationContext(), "key_lang");
+
+                    if (errorCode == 1506) {
+                        new DisplayAlertDialog().displayAlertDialogError(1506, get_activity.getApplicationContext());
                     } else {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_activity.getApplicationContext());
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, view.getContext());
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_activity.getApplicationContext());
 
+                        }
                     }
                 }
 
@@ -348,16 +372,15 @@ public class RecordsList extends Fragment {
                 dateType.setText("Weekly");
 
                 Calendar cl = Calendar.getInstance();
+                cl.setFirstDayOfWeek(1);
 
                 //first day of week
                 cl.set(Calendar.DAY_OF_WEEK, 1);
                 String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
-
                 //last day of week
                 cl.set(Calendar.DAY_OF_WEEK, 7);
                 String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
-
 
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
                 String tdate_field = StringUtil.toSQLName("TDate");
@@ -366,7 +389,6 @@ public class RecordsList extends Fragment {
 
                 adapter = new RecordsListAdapter(trd_list_all);
                 recyclerview_transaction.setAdapter(adapter);
-
 
                 dateChoices.setVisibility(View.GONE);
             }

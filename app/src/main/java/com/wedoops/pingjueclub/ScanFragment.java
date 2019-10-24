@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -47,7 +48,8 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         super.onViewCreated(view, savedInstanceState);
 
         zXingScannerView = view.findViewById(R.id.zxscan);
-        amount=(TextView)view.findViewById(R.id.amount);
+        zXingScannerView.setSquareViewFinder(true);
+        amount = view.findViewById(R.id.amount);
         amount.setText("1234");
 
         //nestedScrollView.setScrollbarFadingEnabled(false);
@@ -64,8 +66,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                     public void onPermissionDenied(PermissionDeniedResponse response) {
                         if (response.isPermanentlyDenied()) {
                             showSettingsDialog();
-                        }
-                        else{
+                        } else {
                             if (getActivity() != null) {
                                 ((MainActivity) getActivity()).loadHomeFragment();
                             }
@@ -78,15 +79,14 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                     }
                 }).check();
 
-
     }
 
     @Override
     public void handleResult(Result rawResult) {
         if (getActivity() != null) {
 
-            if(rawResult.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)){
-                if(rawResult.getText().length() > 0){
+            if (rawResult.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
+                if (rawResult.getText().length() > 0) {
 
 //                    ((MainActivity) getActivity()).payScreen(rawResult.getText());
                     ((MainActivity) getActivity()).payScreen("22764751");
