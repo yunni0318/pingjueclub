@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ServiceDetails"/>
+        <activity android:name=".ServiceDetails" />
 
         <activity
             android:name=".MainActivity"
@@ -39,6 +39,9 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ServicesSubActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="DATABASE"
@@ -52,6 +55,7 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.wedoops.pingjueclub" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -70,6 +74,7 @@
             </intent-filter>
         </service>
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

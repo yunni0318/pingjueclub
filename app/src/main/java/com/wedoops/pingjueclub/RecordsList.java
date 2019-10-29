@@ -61,11 +61,13 @@ public class RecordsList extends Fragment {
     private static RecordsListAdapter adapter;
 
     private static int counter;
-
+    private static CustomProgressDialog customDialog;
 
     private static void callCashWalletTransactionWebService() {
 
-        CustomProgressDialog.showProgressDialog(get_context);
+//        CustomProgressDialog.showProgressDialog(get_context);
+        customDialog.showDialog(get_context);
+
         if (counter < 4) {
             counter++;
             List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
@@ -123,7 +125,8 @@ public class RecordsList extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_CASH_WALLET_TRANSACTION_V2) {
             boolean isSuccess = false;
@@ -237,6 +240,8 @@ public class RecordsList extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         } else if (command == RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2) {
 
@@ -456,6 +461,7 @@ public class RecordsList extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
+        customDialog = new CustomProgressDialog();
         setupFindViewById();
         callCashWalletTransactionWebService();
     }

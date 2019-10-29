@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import com.orm.StringUtil;
 import com.wedoops.pingjueclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.pingjueclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
+import com.wedoops.pingjueclub.database.CurrencyList;
 import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
@@ -48,7 +51,6 @@ public class MemberDashboardActivity extends Fragment {
 
     private static View view;
     private static RecyclerView recyclerview_top_banner, recyclerview_eventdata;
-    private static TextView textview_popular_trip;
     private static ImageButton imagebutton_class, imagebutton_business, imagebutton_style;
 
     private static final Handler handler = new Handler();
@@ -63,6 +65,8 @@ public class MemberDashboardActivity extends Fragment {
     public static int position = 0;
 
     private static String currentSelectedCategory;
+
+    private static CustomProgressDialog customDialog;
 
     private static View.OnClickListener onEventDataItemClickListener = new View.OnClickListener() {
         @Override
@@ -115,7 +119,7 @@ public class MemberDashboardActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.member_dashboard_activity, container, false);
-        get_context=getContext();
+        get_context = getContext();
         return view;
     }
 
@@ -123,11 +127,11 @@ public class MemberDashboardActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
+        customDialog = new CustomProgressDialog();
 
         checkLoginStatus();
         setupViewByID();
         setupListener();
-        setupCustomFont();
 
         button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
 
@@ -143,6 +147,7 @@ public class MemberDashboardActivity extends Fragment {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
+            customDialog.showDialog(get_context);
             callMemberDashboardWebService();
         }
 
@@ -151,7 +156,6 @@ public class MemberDashboardActivity extends Fragment {
     private void setupViewByID() {
         recyclerview_top_banner = view.findViewById(R.id.recyclerview_top_banner);
         recyclerview_eventdata = view.findViewById(R.id.recyclerview_eventdata);
-        textview_popular_trip = view.findViewById(R.id.textview_popular_trip);
         imagebutton_class = view.findViewById(R.id.imagebutton_class);
         imagebutton_business = view.findViewById(R.id.imagebutton_business);
         imagebutton_style = view.findViewById(R.id.imagebutton_style);
@@ -323,13 +327,9 @@ public class MemberDashboardActivity extends Fragment {
         handler.postDelayed(runnable, 2000);
     }
 
-    private static void setupCustomFont() {
-        Typeface typeface = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
-        textview_popular_trip.setTypeface(typeface);
-    }
 
     private static void callMemberDashboardWebService() {
-        CustomProgressDialog.showProgressDialog(get_context);
+//        CustomProgressDialog.showProgressDialog(get_context);
 
         if (counter < 4) {
             counter++;
@@ -343,9 +343,9 @@ public class MemberDashboardActivity extends Fragment {
 
             Bundle b = new Bundle();
             b.putString("access_token", ud_list.get(0).getAccessToken());
-            b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_DASHBOARD);
+            b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_DASHBOARDV2);
 
-            new CallWebServices(Api_Constants.API_MEMBER_DASHBOARD, view.getContext(), true).execute(b);
+            new CallWebServices(Api_Constants.API_MEMBER_DASHBOARDV2, view.getContext(), true).execute(b);
 
         } else {
             displayResult();
@@ -354,7 +354,7 @@ public class MemberDashboardActivity extends Fragment {
 
     }
 
-     private static void callRefreshTokenWebService() {
+    private static void callRefreshTokenWebService() {
 
 //        String table_name = UserDetails.getTableName(UserDetails.class);
 //        String username_field = StringUtil.toSQLName("username");
@@ -411,9 +411,10 @@ public class MemberDashboardActivity extends Fragment {
 
 
     public static void processWSData(JSONObject returnedObject, int command) {
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
-        if (command == Api_Constants.API_MEMBER_DASHBOARD) {
+        if (command == Api_Constants.API_MEMBER_DASHBOARDV2) {
             boolean isSuccess = false;
             try {
                 isSuccess = returnedObject.getBoolean("Success");
@@ -423,8 +424,12 @@ public class MemberDashboardActivity extends Fragment {
                     if (returnedObject.getInt("StatusCode") == 200) {
                         counter = 0;
                         JSONObject response_object = returnedObject.getJSONObject("ResponseData");
-                        JSONArray banner_data_array = response_object.getJSONArray("BannerData");
-                        JSONArray event_data_array = response_object.getJSONArray("EventData");
+                        JSONObject user_quick_profile_object = response_object.getJSONObject("UserQuickProfile");
+
+                        JSONArray currency_list_array = response_object.getJSONArray("CurrencyList");
+                        JSONObject dashboard_data_object = response_object.getJSONObject("DashboardData");
+                        JSONArray banner_data_array = dashboard_data_object.getJSONArray("BannerData");
+                        JSONArray event_data_array = dashboard_data_object.getJSONArray("EventData");
 
                         List<MemberDashboardTopBanner> mdtb_all = MemberDashboardTopBanner.listAll(MemberDashboardTopBanner.class);
                         if (mdtb_all.size() > 0) {
@@ -435,6 +440,35 @@ public class MemberDashboardActivity extends Fragment {
                         if (mded_all.size() > 0) {
                             MemberDashboardEventData.deleteAll(MemberDashboardEventData.class);
                         }
+
+                        List<CurrencyList> cl_all = CurrencyList.listAll(CurrencyList.class);
+                        if (cl_all.size() > 0) {
+                            CurrencyList.deleteAll(CurrencyList.class);
+                        }
+
+                        List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        UserDetails ud = (UserDetails.find(UserDetails.class, loginid_field + " = ?", ud_listall.get(0).getLoginID())).get(0);
+
+                        ud.setSrno(user_quick_profile_object.getString("Srno"));
+                        ud.setLoginID(user_quick_profile_object.getString("LoginID"));
+                        ud.setName(user_quick_profile_object.getString("Name"));
+                        ud.setNickName(user_quick_profile_object.getString("NickName"));
+                        ud.setDOB(user_quick_profile_object.getString("DOB"));
+                        ud.setEmail(user_quick_profile_object.getString("Email"));
+                        ud.setPhone(user_quick_profile_object.getString("Phone"));
+                        ud.setCountryCode(user_quick_profile_object.getString("CountryCode"));
+                        ud.setStateCode(user_quick_profile_object.getString("StateCode"));
+                        ud.setAddress(user_quick_profile_object.getString("Address"));
+                        ud.setGender(user_quick_profile_object.getString("Gender"));
+                        ud.setProfilePictureImagePath(user_quick_profile_object.getString("ProfilePictureImagePath"));
+                        ud.setUserLevelCode(user_quick_profile_object.getString("UserLevelCode"));
+                        ud.setJoinedDate(user_quick_profile_object.getString("JoinedDate"));
+                        ud.setCashWallet(user_quick_profile_object.getString("CashWallet"));
+
+                        ud.save();
+
 
                         for (int i = 0; i < banner_data_array.length(); i++) {
 
@@ -453,6 +487,13 @@ public class MemberDashboardActivity extends Fragment {
                             mded.save();
                         }
 
+                        for (int i = 0; i > currency_list_array.length(); i++) {
+                            JSONObject cl = currency_list_array.getJSONObject(i);
+                            CurrencyList cl_db = new CurrencyList(String.valueOf(cl.getInt("Srno")), cl.getString("CurrencyName"), cl.getString("CurrencyCode"), cl.getInt("CurrencyRate"), cl.getString("Status"), cl.getString("ImagePath"), cl.getString("CreatedDate"));
+                            cl_db.save();
+                        }
+
+
                         displayResult();
 
                     } else {
@@ -463,7 +504,8 @@ public class MemberDashboardActivity extends Fragment {
                 } else {
 
                     if (returnedObject.getInt("StatusCode") == 401) {
-                        CustomProgressDialog.showProgressDialog(get_context);
+//                        CustomProgressDialog.showProgressDialog(get_context);
+//                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService();
 
@@ -501,6 +543,8 @@ public class MemberDashboardActivity extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         } else if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 

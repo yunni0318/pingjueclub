@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,7 @@ public class MyBookingActivity extends Fragment {
     private static View view;
     private static RecyclerView recyclerview_bookingdata;
     private static Activity get_activity;
+    private static CustomProgressDialog customDialog;
 
     private static View.OnClickListener onMyBookingItemClickListener = new View.OnClickListener() {
         @Override
@@ -65,7 +68,7 @@ public class MyBookingActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_booking_activity, container, false);
-        get_context=getContext();
+        get_context = getContext();
         return view;
     }
 
@@ -74,6 +77,8 @@ public class MyBookingActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         get_activity = getActivity();
+        customDialog = new CustomProgressDialog();
+
         setupViewByID();
         callBookingListWebService();
 
@@ -86,7 +91,8 @@ public class MyBookingActivity extends Fragment {
 
     private static void callBookingListWebService() {
 
-        CustomProgressDialog.showProgressDialog(get_context);
+//        CustomProgressDialog.showProgressDialog(get_context);
+        customDialog.showDialog(get_context);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -142,7 +148,8 @@ public class MyBookingActivity extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_EVENT_BOOKING_LIST) {
 
@@ -180,7 +187,8 @@ public class MyBookingActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        CustomProgressDialog.showProgressDialog(get_context);
+//                        CustomProgressDialog.showProgressDialog(get_context);
+                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_EVENT_BOOKING_LIST);
 
@@ -216,6 +224,8 @@ public class MyBookingActivity extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         }
     }
@@ -223,7 +233,9 @@ public class MyBookingActivity extends Fragment {
     public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
         if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
-            CustomProgressDialog.closeProgressDialog();
+//            CustomProgressDialog.closeProgressDialog();
+
+            customDialog.hideDialog();
 
             boolean isSuccess = false;
             try {

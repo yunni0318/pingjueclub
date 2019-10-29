@@ -17,6 +17,7 @@ import com.wedoops.pingjueclub.MyBookingActivity;
 import com.wedoops.pingjueclub.MyBookingDetail;
 import com.wedoops.pingjueclub.PayFragment;
 import com.wedoops.pingjueclub.RecordsList;
+import com.wedoops.pingjueclub.ServicesFragment;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 
 import org.json.JSONObject;
@@ -46,7 +47,9 @@ public class RefreshTokenAPI {
     public static final int ORIGIN_CASH_WALLET_TRANSACTION = 1313;
     public static final int ORIGIN_CASH_WALLET_TRANSACTION_V2 = 13131313;
     public static final int ORIGIN_MEMBER_CHANGE_PROFILE_PICTURE = 1414;
+    public static final int ORIGIN_SERVICE_PAGE_DETAIL= 1616;
     public static final int ORIGIN_MAKE_QR_CODE_PAYMENT= 1717;
+
 
 
     private static Context context;
@@ -112,6 +115,9 @@ public class RefreshTokenAPI {
                                     }
                                     if (origin == ORIGIN_EVENT_DETAILS_MAKE_BOOKING) {
                                         ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS_MAKE_BOOKING);
+                                    }
+                                    if(origin == ORIGIN_SERVICE_PAGE_DETAIL){
+                                        ServicesFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_SERVICE_PAGE_DETAIL);
                                     }
                                     if (origin == ORIGIN_MAKE_QR_CODE_PAYMENT) {
                                         PayFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_MAKE_QR_CODE_PAYMENT);

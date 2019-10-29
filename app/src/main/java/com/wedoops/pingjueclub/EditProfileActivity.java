@@ -8,10 +8,12 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -58,12 +60,14 @@ public class EditProfileActivity extends Fragment {
     private static Context get_context;
     private static final String KEY_LANG = "key_lang"; // preference key
 
+    private static CustomProgressDialog customDialog;
+
     @Nullable
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.edit_profile_activity, container, false);
-        get_context=getContext();
+        get_context = getContext();
         return view;
     }
 
@@ -72,6 +76,7 @@ public class EditProfileActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         get_activity = getActivity();
+        customDialog = new CustomProgressDialog();
 
         loadLanguage();
         setupViewById();
@@ -160,7 +165,7 @@ public class EditProfileActivity extends Fragment {
 
     private static void callMemberAccountSettingWebService() {
 
-        CustomProgressDialog.showProgressDialog(get_context);
+//        CustomProgressDialog.showProgressDialog(get_context);
 
         List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -259,7 +264,8 @@ public class EditProfileActivity extends Fragment {
 
         if (isValid) {
 
-            CustomProgressDialog.showProgressDialog(get_context);
+//            CustomProgressDialog.showProgressDialog(get_context);
+            customDialog.showDialog(get_context);
 
             List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -290,7 +296,8 @@ public class EditProfileActivity extends Fragment {
 
         if (isValid) {
 
-            CustomProgressDialog.showProgressDialog(get_context);
+//            CustomProgressDialog.showProgressDialog(get_context);
+            customDialog.showDialog(get_context);
 
             List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
@@ -423,7 +430,8 @@ public class EditProfileActivity extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_MEMBER_ACCOUNT_SETTING) {
             boolean isSuccess = false;
@@ -462,8 +470,8 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
                         if (returnedObject.getInt("StatusCode") == 401) {
-                            CustomProgressDialog.showProgressDialog(get_context);
-
+//                            CustomProgressDialog.showProgressDialog(get_context);
+                            customDialog.showDialog(get_context);
                             callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
                         } else {
@@ -477,7 +485,8 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        CustomProgressDialog.showProgressDialog(get_context);
+//                        CustomProgressDialog.showProgressDialog(get_context);
+                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
@@ -489,6 +498,7 @@ public class EditProfileActivity extends Fragment {
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
             }
         } else if (command == Api_Constants.API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST) {
             boolean isSuccess = false;
@@ -533,7 +543,8 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        CustomProgressDialog.showProgressDialog(get_context);
+//                        CustomProgressDialog.showProgressDialog(get_context);
+                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
@@ -546,6 +557,8 @@ public class EditProfileActivity extends Fragment {
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         } else if (command == Api_Constants.API_MEMBER_UPDATE_ACCOUNT_NICKNAME) {
             boolean isSuccess = false;
@@ -555,7 +568,6 @@ public class EditProfileActivity extends Fragment {
                 if (isSuccess) {
 
                     if (returnedObject.getInt("StatusCode") == 200) {
-
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(
                                 view.getContext());
@@ -603,6 +615,8 @@ public class EditProfileActivity extends Fragment {
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         } else if (command == Api_Constants.API_MEMBER_UPDATE_ACCOUNT_SECURITY) {
             boolean isSuccess = false;
@@ -653,7 +667,8 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-                        CustomProgressDialog.showProgressDialog(get_context);
+//                        CustomProgressDialog.showProgressDialog(get_context);
+                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
@@ -666,6 +681,8 @@ public class EditProfileActivity extends Fragment {
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         }
     }
@@ -673,7 +690,8 @@ public class EditProfileActivity extends Fragment {
     public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
         if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
-            CustomProgressDialog.closeProgressDialog();
+//            CustomProgressDialog.closeProgressDialog();
+            customDialog.hideDialog();
 
             boolean isSuccess = false;
             try {

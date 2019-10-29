@@ -44,9 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edittext_username;
     private EditText edittext_password;
     private ImageButton imagebutton_language;
-    private ACProgressCustom progress;
+    //    private ACProgressCustom progress;
     private static final String KEY_LANG = "key_lang"; // preference key
     private String token = "";
+    private static CustomProgressDialog customDialog;
 
 
     @Override
@@ -54,10 +55,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_activity);
-        progress = new ACProgressCustom.Builder(this)
-                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
-                .speed(4)
-                .build();
+        customDialog = new CustomProgressDialog();
+//        progress = new ACProgressCustom.Builder(this)
+//                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
+//                .speed(4)
+//                .build();
         loadLanguage();
         setupViewByID();
         setupLanguage();
@@ -189,8 +191,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void callMemberLoginWebService(String username, String password) {
-        progress.show();
-
+//        progress.show();
+        customDialog.showDialog(this);
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -219,7 +221,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void processWSData(JSONObject returnedObject) {
 
-        progress.dismiss();
+//        progress.dismiss();
+        customDialog.hideDialog();
         boolean isSuccess = false;
         try {
             isSuccess = returnedObject.getBoolean("Success");
@@ -298,6 +301,7 @@ public class LoginActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("Error", e.toString());
+            new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
         }
 
     }

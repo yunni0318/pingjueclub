@@ -100,6 +100,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("Error", e.toString());
+            new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again",
+                    false, this);
+
         }
 
     }

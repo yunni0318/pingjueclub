@@ -534,6 +534,7 @@ public class EventDetailActivity extends Activity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
             }
         } else if (command == Api_Constants.API_EVENT_DETAILS_MAKE_BOOKING) {
             boolean isSuccess = false;
@@ -606,6 +607,8 @@ public class EventDetailActivity extends Activity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+
             }
         }
     }

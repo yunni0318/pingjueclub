@@ -15,10 +15,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,8 +33,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Base64;
@@ -113,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private ImageButton imagebutton_language;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String currentPhotoPath = "";
-    private ACProgressCustom customProgress;
-    private CoordinatorLayout toolbar_heart;
+    //    private ACProgressCustom customProgress;
+    private static CustomProgressDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +130,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         setContentView(R.layout.activity_main);
 
-        customProgress = new ACProgressCustom.Builder(this)
-                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
-                .speed(4)
-                .build();
+//        customProgress = new ACProgressCustom.Builder(this)
+//                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
+//                .speed(4)
+//                .build();
+        customDialog = new CustomProgressDialog();
 
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
@@ -284,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_logo = findViewById(R.id.toolbar_logo);
-        toolbar_heart = findViewById(R.id.toolbar_heart);
         toolbar_camera = findViewById(R.id.toolbar_camera);
 
         int width = (getResources().getDisplayMetrics().widthPixels * 2) / 3;
@@ -362,12 +368,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             }
         });
 
-        toolbar_heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         toolbar_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -634,14 +634,12 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 0:
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);
-                toolbar_heart.setVisibility(View.VISIBLE);
-                toolbar_camera.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
                 MemberDashboardActivity dashboardFragment = new MemberDashboardActivity();
                 return dashboardFragment;
             case 1:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Account");
                 EditProfileActivity accountFragment = new EditProfileActivity();
@@ -649,7 +647,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 2:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("My Booking");
                 MyBookingActivity bookingFragment = new MyBookingActivity();
@@ -657,7 +654,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 3:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("My Transaction Report");
                 RecordsList transactionsReportFragment = new RecordsList();
@@ -665,7 +661,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 4:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Services");
                 ServicesFragment servicesFragment = new ServicesFragment();
@@ -673,7 +668,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Guide");
                 GuideFragment guideFragment = new GuideFragment();
@@ -681,7 +675,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Benefit");
                 BenefitFragment benefitFragment = new BenefitFragment();
@@ -689,7 +682,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
-                toolbar_heart.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Term & Conditions");
                 TermNCondFragment termNCondFragment = new TermNCondFragment();
@@ -698,8 +690,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             default:
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);
-                toolbar_heart.setVisibility(View.VISIBLE);
-                toolbar_camera.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
                 return new MemberDashboardActivity();
         }
     }
@@ -791,7 +782,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callChangeProfilePictureWebService(String base64_string) {
-        customProgress.show();
+//        customProgress.show();
+        customDialog.showDialog(this);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
         String table_name = UserDetails.getTableName(UserDetails.class);
@@ -809,7 +801,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     private void callQuickProfileWebService() {
-        customProgress.show();
+//        customProgress.show();
+//        customDialog.showDialog(this);
 
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -830,7 +823,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     }
 
     public void processWSData(JSONObject returnedObject, int command) {
-        customProgress.dismiss();
+//        customProgress.dismiss();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE) {
             boolean isSuccess = false;
@@ -889,19 +883,15 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
                         setupNavigationDrawer();
 
-//                        navItemIndex = 0;
-//                        loadHomeFragment();
-
-//                        displayResult();
 
                     } else {
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);
-
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, MainActivity.this);
             }
         } else if (command == Api_Constants.API_MEMBER_QUICK_PROFILE) {
             boolean isSuccess = false;

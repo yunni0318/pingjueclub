@@ -1,5 +1,6 @@
 package com.wedoops.pingjueclub;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,13 +34,16 @@ import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.ServicesListData;
 import com.wedoops.pingjueclub.database.ServicesOtherNewsData;
 import com.wedoops.pingjueclub.database.ServicesTopBannerData;
+import com.wedoops.pingjueclub.database.SubServicesListData;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.helper.LinePagerIndicatorDecoration;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallRefreshToken;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
+import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,12 +53,15 @@ import java.util.List;
 public class ServicesFragment extends Fragment {
 
     private static final Handler handler = new Handler();
-    private int counter = 0;
+    private static int counter = 0;
     public static int position = 0;
     private static View view;
     private static RecyclerView recyclerView, recyclerViewServices, recyclerViewNews;
     private static Runnable runnable;
     private static ServicesTopBannerRecyclerAdapter topBanner_adapter;
+    private static CustomProgressDialog customDialog;
+    private static Context get_context;
+
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -103,14 +110,16 @@ public class ServicesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        customDialog = new CustomProgressDialog();
+        get_context = view.getContext();
         callWebService();
         setupDeclaration(view);
 
     }
 
-    private void callWebService() {
-        CustomProgressDialog.showProgressDialog(view.getContext());
+    private static void callWebService() {
+//        CustomProgressDialog.showProgressDialog(view.getContext());
+        customDialog.showDialog(get_context);
 
         if (counter < 4) {
             counter++;
@@ -132,6 +141,23 @@ public class ServicesFragment extends Fragment {
         } else {
             displayResult();
         }
+    }
+
+    private static void callRefreshTokenWebService() {
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL);
+
+//        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL, view.getContext(), RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL).execute(b);
+
     }
 
 
@@ -219,7 +245,6 @@ public class ServicesFragment extends Fragment {
 
         setupRecyclerView();
 
-
         ViewCompat.setNestedScrollingEnabled(recyclerViewServices, false);
         ViewCompat.setNestedScrollingEnabled(recyclerViewNews, false);
 
@@ -229,30 +254,6 @@ public class ServicesFragment extends Fragment {
         ServiceItemAdapter serviceItemAdapter = new ServiceItemAdapter(view.getContext(), sld_all);
         final NewsItemAdapter newsItemAdapter = new NewsItemAdapter(view.getContext(), son_all);
 
-
-//        final GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3) {
-//            @Override
-//            public boolean canScrollHorizontally() {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean canScrollVertically() {
-//                return false;
-//            }
-//        };
-//
-//        recyclerViewServices.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                recyclerViewServices.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-////                int viewWidth = recyclerViewServices.getMeasuredWidth();
-////                float cardViewWidth = view.getResources().getDimension(R.dimen.card_width);
-////                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
-////                gridLayoutManager.setSpanCount(newSpanCount);
-//                gridLayoutManager.requestLayout();
-//            }
-//        });
         recyclerViewServices.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         recyclerViewServices.setNestedScrollingEnabled(false);
         recyclerViewServices.setAdapter(serviceItemAdapter);
@@ -282,7 +283,8 @@ public class ServicesFragment extends Fragment {
 
 
     public static void processWSData(JSONObject returnedObject, int command) {
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_SERVICE_PAGE_DETAILS) {
             boolean isSuccess = false;
@@ -308,6 +310,11 @@ public class ServicesFragment extends Fragment {
                             ServicesListData.deleteAll(ServicesListData.class);
                         }
 
+                        List<SubServicesListData> ssld_all = SubServicesListData.listAll(SubServicesListData.class);
+                        if (ssld_all.size() > 0) {
+                            SubServicesListData.deleteAll(SubServicesListData.class);
+                        }
+
                         List<ServicesOtherNewsData> sond_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
                         if (sond_all.size() > 0) {
                             ServicesOtherNewsData.deleteAll(ServicesOtherNewsData.class);
@@ -325,8 +332,21 @@ public class ServicesFragment extends Fragment {
 
                             JSONObject sl = service_list_array.getJSONObject(i);
 
-                            ServicesListData sld = new ServicesListData(String.valueOf(sl.getInt("Srno")), String.valueOf(sl.getString("ServiceName")), String.valueOf(sl.getString("ServiceDescription")), String.valueOf(sl.getString("ServiceImagePath")), String.valueOf(sl.getString("Status")), String.valueOf(sl.getString("CreatedDate")));
+                            ServicesListData sld = new ServicesListData(sl.getString("MainServicesID"), sl.getString("MainServiceName"), sl.getString("MainServiceImagePath"));
                             sld.save();
+
+
+                            JSONArray sub_service_list_array = sl.getJSONArray("SubServiceList");
+
+                            for (int j = 0; j < sub_service_list_array.length(); j++) {
+                                String n = sub_service_list_array.getJSONObject(j).getString("SubServicesID");
+                                if (!n.equals("null")) {
+
+                                    SubServicesListData ssld = new SubServicesListData(sl.getString("MainServicesID"), sub_service_list_array.getJSONObject(j).getString("SubServicesID"), sub_service_list_array.getJSONObject(j).getString("SubServiceName"), sub_service_list_array.getJSONObject(j).getString("SubServiceImagePath"));
+                                    ssld.save();
+                                }
+                            }
+
                         }
 
                         for (int i = 0; i < other_news_array_data.length(); i++) {
@@ -349,9 +369,10 @@ public class ServicesFragment extends Fragment {
                 } else {
 
                     if (returnedObject.getInt("StatusCode") == 401) {
-//                        CustomProgressDialog.showProgressDialog(get_context);
-//
-//                        callRefreshTokenWebService();
+//                        CustomProgressDialog.showProgressDialog(view.getContext());
+                        customDialog.showDialog(get_context);
+
+                        callRefreshTokenWebService();
 
                     } else {
 //                        JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
@@ -387,6 +408,76 @@ public class ServicesFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
+            }
+        } else if (command == RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL) {
+
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                        ud_list.get(0).setAccessToken(response_object.getString("AccessToken"));
+                        ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
+
+                        ud_list.get(0).save();
+
+                        callWebService();
+
+                    } else {
+
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                    }
+
+                } else {
+//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
+                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                    int errorCode = 0;
+                    String errorMessageEN = "";
+                    String errorMessageCN = "";
+
+                    for (int i = 0; i < errorCode_array.length(); i++) {
+                        JSONObject error_object = errorCode_array.getJSONObject(i);
+                        errorCode = error_object.getInt("Code");
+                        errorMessageEN = error_object.getString("MessageEN");
+                        errorMessageCN = error_object.getString("MessageCN");
+
+                    }
+
+                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
+
+                    if (errorCode == 1506) {
+                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
+                    } else {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+
             }
         }
     }

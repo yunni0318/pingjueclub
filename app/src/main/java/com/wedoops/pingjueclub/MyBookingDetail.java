@@ -7,8 +7,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -447,6 +449,7 @@ public class MyBookingDetail extends Activity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
             }
         }
     }

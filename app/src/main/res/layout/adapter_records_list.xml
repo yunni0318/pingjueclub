@@ -32,7 +32,7 @@
                 android:paddingRight="5dp"
                 android:text="Loading"
                 android:textColor="#ffffff"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textview_transaction_id"
@@ -118,7 +118,7 @@
                 android:layout_marginRight="10dp"
                 android:text="Loading"
                 android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textview_transaction_type_amount"
@@ -131,7 +131,7 @@
                 android:gravity="end"
                 android:text="Loading"
                 android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
     </RelativeLayout>

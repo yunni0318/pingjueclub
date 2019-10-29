@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wedoops.pingjueclub"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 8
         versionName "1.0.2"
@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.3'
     implementation 'cc.cloudist.acplibrary:library:1.2.1'
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
     api 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'androidx.exifinterface:exifinterface:1.0.0'

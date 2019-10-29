@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#00000000">
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/custom_loading_imageView"-->
+    <!--        android:layout_width="128dp"-->
+    <!--        android:layout_height="128dp"-->
+    <!--        android:layout_centerInParent="true"-->
+    <!--        android:adjustViewBounds="true"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:scaleType="fitCenter" />-->
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/custom_loading_imageView"
+        android:layout_width="64dp"
+        android:layout_height="64dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/custom_loading_imageView"
+        android:layout_centerHorizontal="true"
+        android:text="Loading"
+        android:textColor="@color/textview_sidebar" />
+</RelativeLayout>

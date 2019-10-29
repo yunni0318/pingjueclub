@@ -36,10 +36,12 @@ public class PayFragment extends Fragment {
 
     private static LinearLayout payConfirmation, paySuccess;
     private CardView cancel, confirm;
-    private String transaction_id, remarks, currency, pay_amount;
+    private static String transaction_id, remarks, currency, pay_amount;
     private static TextView payTitle, payPointFront, payPointEnd, payCurrency, payAmount, paySuccessMessage, paySuccessID;
     public static Activity get_activity;
     private static int counter;
+    private static CustomProgressDialog customDialog;
+    private static Context get_context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class PayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.pay_fragment, container, false);
+        get_context = rootView.getContext();
         get_activity = getActivity();
         return rootView;
     }
@@ -107,6 +110,12 @@ public class PayFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        customDialog = new CustomProgressDialog();
+    }
+
     private static void displayResult(String message) {
         payConfirmation.setVisibility(View.GONE);
         paySuccess.setVisibility(View.VISIBLE);
@@ -115,7 +124,9 @@ public class PayFragment extends Fragment {
 
 
     private static void callWebServices() {
-        CustomProgressDialog.showProgressDialog(get_activity.getApplicationContext());
+//        CustomProgressDialog.showProgressDialog(get_activity.getApplicationContext());
+        customDialog.showDialog(get_context);
+
         if (counter < 4) {
             counter++;
             List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
@@ -127,6 +138,7 @@ public class PayFragment extends Fragment {
 
             Bundle b = new Bundle();
             b.putString("access_token", ud_list.get(0).getAccessToken());
+            b.putString("transactionid", transaction_id);
             b.putInt(Api_Constants.COMMAND, Api_Constants.API_MAKE_QR_CODE_PAYMENT);
 
             new CallWebServices(Api_Constants.API_MAKE_QR_CODE_PAYMENT, get_activity.getApplicationContext(), true).execute(b);
@@ -155,7 +167,8 @@ public class PayFragment extends Fragment {
 
 
     public static void processWSData(JSONObject returnedObject, int command) {
-        CustomProgressDialog.closeProgressDialog();
+//        CustomProgressDialog.closeProgressDialog();
+        customDialog.hideDialog();
 
         if (command == Api_Constants.API_MAKE_QR_CODE_PAYMENT) {
             boolean isSuccess = false;
@@ -178,7 +191,8 @@ public class PayFragment extends Fragment {
                 } else {
 
                     if (returnedObject.getInt("StatusCode") == 401) {
-                        CustomProgressDialog.showProgressDialog(get_activity.getApplicationContext());
+//                        CustomProgressDialog.showProgressDialog(get_activity.getApplicationContext());
+                        customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService();
 
@@ -212,7 +226,7 @@ public class PayFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                new DisplayAlertDialog().displayAlertDialogString(0, e.getMessage(), false, get_activity.getApplicationContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_activity.getApplicationContext());
             }
         } else if (command == RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT) {
 
@@ -277,6 +291,8 @@ public class PayFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_activity.getApplicationContext());
+
             }
         }
     }
