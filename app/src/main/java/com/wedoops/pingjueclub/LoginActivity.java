@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void callMemberLoginWebService(String username, String password) {
+    private void callMemberLoginWebService(final String username, final String password) {
 //        progress.show();
         customDialog.showDialog(this);
 
@@ -206,17 +206,19 @@ public class LoginActivity extends AppCompatActivity {
                         // Get new Instance ID token
                         token = task.getResult().getToken();
 
+                        Bundle b = new Bundle();
+                        b.putString("USERNAME", username);
+                        b.putString("PASSWORD", password);
+                        b.putString("DEVICEID", token);
+                        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_LOGIN_V2);
+
+                        new CallWebServices(Api_Constants.API_MEMBER_LOGIN_V2, LoginActivity.this, true).execute(b);
+
                     }
                 });
 
 
-        Bundle b = new Bundle();
-        b.putString("USERNAME", username);
-        b.putString("PASSWORD", password);
-        b.putString("DEVICEID", token);
-        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_LOGIN_V2);
 
-        new CallWebServices(Api_Constants.API_MEMBER_LOGIN_V2, LoginActivity.this, true).execute(b);
     }
 
     public void processWSData(JSONObject returnedObject) {

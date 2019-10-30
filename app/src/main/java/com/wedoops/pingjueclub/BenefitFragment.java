@@ -34,6 +34,7 @@ public class BenefitFragment extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
+
         float scWidth = outMetrics.widthPixels;
         float height = outMetrics.heightPixels;
         touchImageView.getLayoutParams().width = (int) (scWidth * 2.2f);

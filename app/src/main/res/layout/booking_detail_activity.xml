@@ -4,13 +4,13 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#191919"
     android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black">
+        android:background="#191919">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,32 +63,11 @@
 
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/textview_booking_detail_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/textview_dashboard_title"
-                android:drawableStart="@drawable/small_yellow_dot"
-                android:drawableLeft="@drawable/small_yellow_dot"
-                android:drawableEnd="@drawable/small_yellow_dot"
-                android:drawableRight="@drawable/small_yellow_dot"
-                android:drawablePadding="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="@string/my_booking_title"
-                android:textColor="#ffd35c"
-                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/recycler_memberdashboard_eventdata"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -106,23 +85,21 @@
                     <TextView
                         android:id="@+id/textview_upfront_payment"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="#000000"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="50dp"
-                        android:paddingTop="7dp"
-                        android:paddingRight="50dp"
-                        android:paddingBottom="7dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/radius_right_top_bottom"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="20dp"
                         android:text="0% UPFRONT PAYMENT"
-                        android:textColor="#ffd35c"
+                        android:textColor="#F8B888"
                         android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginStart="10dp"
                         android:gravity="bottom"
                         android:orientation="vertical">
 
@@ -154,117 +131,146 @@
 
                 </FrameLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/radius_bottom_left_right"
-                    android:orientation="horizontal"
-                    android:padding="10dp"
-                    android:weightSum="3.0">
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/textview_event_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_weight="1.0"
+                        android:layout_centerInParent="true"
                         android:text="12 May 2019 - 31 May 2019"
-                        android:textColor="#ffd35c"
+                        android:textColor="#ffffff"
                         android:textSize="10sp" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/linearlayout_event_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.0"
-                        android:gravity="center|end"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_bronze"
-                            android:layout_width="25dp"
+                            android:layout_width="15dp"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginEnd="5dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/user_level_bronze" />
+                            android:src="@drawable/bronze_medal" />
+
+                        <ImageView
+                            android:id="@+id/imageview_user_rank_silver"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_toEndOf="@id/imageview_user_rank_bronze"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/silver_medal" />
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_gold"
-                            android:layout_width="25dp"
+                            android:layout_width="15dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_toEndOf="@id/imageview_user_rank_silver"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/user_level_gold" />
+                            android:src="@drawable/gold_medal" />
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_platinum"
-                            android:layout_width="25dp"
+                            android:layout_width="15dp"
                             android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/imageview_user_rank_gold"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
                             android:src="@drawable/user_level_platinum" />
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_weight="1.0"
-                        android:gravity="end">
+                        android:layout_alignParentEnd="true">
 
                         <ImageView
                             android:id="@+id/imageview_group"
-                            android:layout_width="wrap_content"
+                            android:layout_width="20dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10dp"
                             android:adjustViewBounds="true"
                             android:background="@android:color/transparent"
-                            android:scaleType="centerInside"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/eventdata_group" />
 
                         <TextView
                             android:id="@+id/textview_join_trip_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_toRightOf="@+id/imageview_group"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/imageview_group"
                             android:text="0/40"
-                            android:textColor="#ffd35c"
+                            android:textColor="#ffffff"
                             android:textSize="10sp" />
                     </RelativeLayout>
-
-
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/listview_event_detail_timeline"
+            <!--            <ListView-->
+            <!--                android:id="@+id/listview_event_detail_timeline"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="10dp"-->
+            <!--                android:layout_marginLeft="10dp"-->
+            <!--                android:layout_marginEnd="10dp"-->
+            <!--                android:layout_marginRight="10dp"-->
+            <!--                android:layout_marginBottom="10dp" />-->
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_margin="10dp"
+                android:background="@drawable/radius_all_slight_black"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imageview_bell_small"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/bell_small" />
+
+                <TextView
+                    android:id="@+id/textview_join_trip_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/imageview_bell_small"
+                    android:text="Press JOIN TRIP To Make Your Payment"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/textview_event_detail_trip_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/textview_dashboard_title"
-                android:drawableStart="@drawable/small_yellow_dot"
-                android:drawableLeft="@drawable/small_yellow_dot"
-                android:drawableEnd="@drawable/small_yellow_dot"
-                android:drawableRight="@drawable/small_yellow_dot"
-                android:drawablePadding="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
                 android:text="@string/event_detail_trip_detail_title"
-                android:textColor="#ffd35c"
+                android:textColor="#FDC58C"
                 android:textSize="14sp" />
 
             <WebView

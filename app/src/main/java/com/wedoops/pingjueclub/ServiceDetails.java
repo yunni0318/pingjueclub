@@ -4,6 +4,9 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +18,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.orm.StringUtil;
+import com.wedoops.pingjueclub.adapters.ServiceDetailsItemAdapter;
+import com.wedoops.pingjueclub.adapters.ServiceSubItemAdapter;
 import com.wedoops.pingjueclub.database.ServicesMerchantDetails;
+import com.wedoops.pingjueclub.database.SubServicesListData;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.CONSTANTS_VALUE;
@@ -30,10 +36,9 @@ import java.util.List;
 
 public class ServiceDetails extends AppCompatActivity {
 
-    private TextView textView;
-    private ImageView imageView;
     private static CustomProgressDialog customDialog;
     private String subservice_id;
+    private RecyclerView recyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +56,21 @@ public class ServiceDetails extends AppCompatActivity {
 
     private void setupDeclaration() {
         customDialog = new CustomProgressDialog();
+        recyclerview = findViewById(R.id.recyclerview);
+    }
 
-        textView = findViewById(R.id.service_detail_text);
-        imageView = findViewById(R.id.service_detail_iamge);
+    private void setupRecyclerView() {
+        String tablename_ssld = StringUtil.toSQLName("ServicesMerchantDetails");
+
+        List<ServicesMerchantDetails> smd_list_all = ServicesMerchantDetails.listAll(ServicesMerchantDetails.class);
+
+
+        RecyclerView.LayoutManager sub_mLayoutManager = new LinearLayoutManager(this);
+        ServiceDetailsItemAdapter adapter = new ServiceDetailsItemAdapter(this, smd_list_all);
+
+        recyclerview.setLayoutManager(sub_mLayoutManager);
+        recyclerview.setNestedScrollingEnabled(false);
+        recyclerview.setAdapter(adapter);
     }
 
     private void callWebService() {
@@ -88,16 +105,20 @@ public class ServiceDetails extends AppCompatActivity {
 //                    JSONObject response_object = returnedObject.getJSONObject("ResponseData");
                     JSONArray response_array = returnedObject.getJSONArray("ResponseData");
 
+                    List<ServicesMerchantDetails> smd_listall = ServicesMerchantDetails.listAll(ServicesMerchantDetails.class);
+                    if (smd_listall.size() > 0) {
+                        ServicesMerchantDetails.deleteAll(ServicesMerchantDetails.class);
+                    }
+
                     for (int i = 0; i < response_array.length(); i++) {
                         ServicesMerchantDetails smd = new ServicesMerchantDetails(response_array.getJSONObject(i).getString("Srno"), response_array.getJSONObject(i).getString("MerchantID"), response_array.getJSONObject(i).getString("CompanyRegisterNo"), response_array.getJSONObject(i).getString("CompanyCategory"), response_array.getJSONObject(i).getString("CompanyName"), response_array.getJSONObject(i).getString("CompanyName"), response_array.getJSONObject(i).getString("CompanyLatX"), response_array.getJSONObject(i).getString("CompanyLatY"), response_array.getJSONObject(i).getString("CompanyDescription"), response_array.getJSONObject(i).getString("CompanyLogo"), response_array.getJSONObject(i).getString("CompanyImages"), response_array.getJSONObject(i).getString("Status"));
                         smd.save();
                     }
 
-                    Log.d("SUCCESS", "")
-                    ;
+                    setupRecyclerView();
+
                 } else {
                     new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
-
                 }
 
             } else {

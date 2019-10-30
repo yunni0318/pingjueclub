@@ -11,19 +11,19 @@
         android:layout_height="match_parent" />
 
     <androidx.core.widget.NestedScrollView
-        android:layout_gravity="top"
         android:layout_width="match_parent"
-        android:theme="@style/NestedScrollBarStyle"
-        android:layout_height="115dp">
+        android:layout_height="115dp"
+        android:layout_gravity="top"
+        android:theme="@style/NestedScrollBarStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:paddingTop="2dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -47,24 +47,6 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="."
-                    android:textColor="@color/textview_sidebar"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:text="00"
-                    android:textColor="@color/textview_sidebar"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,27 +67,9 @@
                 android:paddingTop="3dp"
                 android:paddingBottom="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:text="="
-                    android:textColor="@android:color/white"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:text="MYR"
-                    android:textColor="@android:color/white"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
-
-                <TextView
+                    android:id="@+id/textview_currency_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -143,9 +107,9 @@
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="Make sure the QR code match to the camera hole to scan and pay PINJUE merchant or your friends."
                     android:textColor="@android:color/white"
                     android:textSize="17sp" />
@@ -155,11 +119,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
-
-
-
 
 
 </FrameLayout>

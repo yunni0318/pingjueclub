@@ -38,7 +38,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         public TextView textview_upfront_payment;
         public TextView textview_event_date;
         public TextView textview_join_trip_amount;
-        public ImageView imageview_user_rank_bronze, imageview_user_rank_gold, imageview_user_rank_platinum;
+        public ImageView imageview_user_rank_bronze,imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
         public TextView textview_event_name;
         public TextView textview_event_price;
 
@@ -51,6 +51,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             textview_event_date = v.findViewById(R.id.textview_event_date);
             textview_join_trip_amount = v.findViewById(R.id.textview_join_trip_amount);
             imageview_user_rank_bronze = v.findViewById(R.id.imageview_user_rank_bronze);
+            imageview_user_rank_silver = v.findViewById(R.id.imageview_user_rank_silver);
             imageview_user_rank_gold = v.findViewById(R.id.imageview_user_rank_gold);
             imageview_user_rank_platinum = v.findViewById(R.id.imageview_user_rank_platinum);
             textview_event_name = v.findViewById(R.id.textview_event_name);
@@ -217,11 +218,16 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         myViewHolder.textview_event_price.setText(String.format("RM %s", eventprice_value));
 
         myViewHolder.imageview_user_rank_bronze.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_silver.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_gold.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_platinum.setVisibility(View.GONE);
 
         if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             myViewHolder.imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+        }
+
+        if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+            myViewHolder.imageview_user_rank_silver.setVisibility(View.VISIBLE);
         }
 
         if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
@@ -231,22 +237,6 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
             myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
-
-
-//        if (ed.get(i).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-//
-//            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
-//
-//        } else if (ed.get(i).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-//            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_gold);
-//
-//        } else {
-//            myViewHolder.imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
-//        }
-
-
-        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(myViewHolder.textview_upfront_payment.getContext(), R.anim.animation_eventdate_upfront_payment);
-        myViewHolder.textview_upfront_payment.setAnimation(rotate);
 
     }
 

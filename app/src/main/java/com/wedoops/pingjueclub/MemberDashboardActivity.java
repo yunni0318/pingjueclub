@@ -10,6 +10,7 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -261,7 +262,7 @@ public class MemberDashboardActivity extends Fragment {
         recyclerview_top_banner.setItemAnimator(new DefaultItemAnimator());
         recyclerview_top_banner.setAdapter(topBanner_adapter);
         recyclerview_eventdata.setAdapter(eventData_adapter);
-        recyclerview_eventdata.setNestedScrollingEnabled(false);
+
 
         recyclerview_top_banner.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -292,6 +293,11 @@ public class MemberDashboardActivity extends Fragment {
         //Recycler OnClick Alternative
         eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
         topBanner_adapter.setOnTopBannerItemClickListener(onTopBannerItemClickListener);
+
+//        ViewCompat.setNestedScrollingEnabled(recyclerview_eventdata, false);
+//        ViewCompat.setNestedScrollingEnabled(recyclerview_top_banner, false);
+//        recyclerview_top_banner.setNestedScrollingEnabled(false);
+//        recyclerview_eventdata.setNestedScrollingEnabled(false);
 
     }
 
@@ -487,7 +493,7 @@ public class MemberDashboardActivity extends Fragment {
                             mded.save();
                         }
 
-                        for (int i = 0; i > currency_list_array.length(); i++) {
+                        for (int i = 0; i < currency_list_array.length(); i++) {
                             JSONObject cl = currency_list_array.getJSONObject(i);
                             CurrencyList cl_db = new CurrencyList(String.valueOf(cl.getInt("Srno")), cl.getString("CurrencyName"), cl.getString("CurrencyCode"), cl.getInt("CurrencyRate"), cl.getString("Status"), cl.getString("ImagePath"), cl.getString("CreatedDate"));
                             cl_db.save();

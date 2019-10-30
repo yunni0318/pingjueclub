@@ -722,6 +722,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     private void loadLanguage() {
         String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
+        if (lang.equals("en_us") || lang.equals("")) {
+            lang = "en_US";
+        }else {
+            lang = "zh_cn";
+        }
         Locale myLocale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();

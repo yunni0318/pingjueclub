@@ -47,9 +47,12 @@ public class CustomProgressDialog {
 
     public void hideDialog() {
 
-        if (dialog.isShowing()) {
-            dialog.dismiss();
+        if (dialog != null) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
+
 
     }
 

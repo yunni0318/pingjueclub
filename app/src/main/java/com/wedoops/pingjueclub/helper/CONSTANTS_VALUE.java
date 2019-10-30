@@ -4,6 +4,7 @@ public class CONSTANTS_VALUE {
     public static final String SHAREDPREFECENCE_MEMBER_LOGIN_USERNAME = "username";
     public static final String SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD = "password";
     public static final String USER_LEVEL_CODE_BRONZE = "BRONZE";
+    public static final String USER_LEVEL_CODE_SILVER = "SILVER";
     public static final String USER_LEVEL_CODE_GOLD = "GOLD";
     public static final String USER_LEVEL_CODE_PLATINUM = "PLATINUM";
     public static final String EVENT_TOP_BANNER_ADVERTISEMENT = "ADVERTISEMENT";

@@ -8,8 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -53,12 +55,11 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class EventDetailActivity extends Activity {
 
-    private ImageView imageview_eventdetail, imageview_user_rank_bronze, imageview_user_rank_gold, imageview_user_rank_platinum;
-    private ListView listview_event_detail_timeline;
+    private ImageView imageview_eventdetail, imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
     private Button event_detail_button_jointrip;
     private WebView event_detail_webview;
     private SwipeRefreshLayout swipeRefreshLayout;
-    public TextView textview_upfront_payment, textview_event_date, textview_join_trip_amount, textview_event_name, textview_event_price;
+    public TextView textview_upfront_payment, textview_event_date, textview_join_trip_amount, textview_event_name, textview_event_price, textview_join_trip_payment;
     private static final String KEY_LANG = "key_lang"; // preference key
 
 
@@ -144,6 +145,7 @@ public class EventDetailActivity extends Activity {
         imageview_eventdetail = findViewById(R.id.imageview_eventdetail);
 
         imageview_user_rank_bronze = findViewById(R.id.imageview_user_rank_bronze);
+        imageview_user_rank_silver = findViewById(R.id.imageview_user_rank_silver);
         imageview_user_rank_gold = findViewById(R.id.imageview_user_rank_gold);
         imageview_user_rank_platinum = findViewById(R.id.imageview_user_rank_platinum);
 
@@ -152,6 +154,7 @@ public class EventDetailActivity extends Activity {
         textview_join_trip_amount = findViewById(R.id.textview_join_trip_amount);
         textview_event_name = findViewById(R.id.textview_event_name);
         textview_event_price = findViewById(R.id.textview_event_price);
+        textview_join_trip_payment = findViewById(R.id.textview_join_trip_payment);
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/poppins-v6-latin-regular.ttf");
         textview_upfront_payment.setTypeface(typeface);
@@ -164,7 +167,6 @@ public class EventDetailActivity extends Activity {
         Typeface typeface_bold_700 = Typeface.createFromAsset(this.getAssets(), "fonts/poppins-v6-latin-700.ttf");
         textview_event_name.setTypeface(typeface_bold_700);
 
-        listview_event_detail_timeline = findViewById(R.id.listview_event_detail_timeline);
         event_detail_button_jointrip = findViewById(R.id.event_detail_button_jointrip);
         event_detail_button_jointrip.setText(this.getResources().getString(R.string.event_detail_join_trip));
         event_detail_webview = findViewById(R.id.event_detail_webview);
@@ -271,11 +273,16 @@ public class EventDetailActivity extends Activity {
         textview_event_price.setText(String.format("RM %s", eventprice_value));
 
         imageview_user_rank_bronze.setVisibility(View.GONE);
+        imageview_user_rank_silver.setVisibility(View.GONE);
         imageview_user_rank_gold.setVisibility(View.GONE);
         imageview_user_rank_platinum.setVisibility(View.GONE);
 
         if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+        }
+
+        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+            imageview_user_rank_silver.setVisibility(View.VISIBLE);
         }
 
         if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
@@ -286,8 +293,8 @@ public class EventDetailActivity extends Activity {
             imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
 
-        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_eventdate_upfront_payment);
-        textview_upfront_payment.setAnimation(rotate);
+//        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_eventdate_upfront_payment);
+//        textview_upfront_payment.setAnimation(rotate);
 
 
         List<EventDetailBookingData> edbd_all = EventDetailBookingData.listAll(EventDetailBookingData.class);
@@ -304,100 +311,22 @@ public class EventDetailActivity extends Activity {
                     String event_price_decimal = decimalFormat.format(eded_all.get(0).getEventPrice());
                     String upfront_decimal = String.format("%.2f", eded_all.get(0).getEventUpfrontRate());
 
-                    TimelineRow myRow = new TimelineRow(0);
-//                    myRow.setTitle(" ");
-                    myRow.setDescription(String.format("Booking No. %s. You have paid %s/%s. Upfront payment rate is: %s. Please pay the remaining amount.", edbd_all.get(0).getBookingNumber(), paidAmount_decimal, event_price_decimal, upfront_decimal));
-                    myRow.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.bell_small));
-                    myRow.setBackgroundSize(50);
-                    myRow.setBellowLineColor(Color.parseColor("#ffd35c"));
-                    myRow.setBellowLineSize(2);
-                    myRow.setImageSize(40);
-                    myRow.setBackgroundColor(Color.TRANSPARENT);
-                    myRow.setDescriptionColor(Color.WHITE);
+                    textview_join_trip_payment.setText(String.format("Booking No. %s. You have paid %s/%s. Upfront payment rate is: %s. Please pay the remaining amount.", edbd_all.get(0).getBookingNumber(), paidAmount_decimal, event_price_decimal, upfront_decimal));
 
-                    TimelineRow myRow2 = new TimelineRow(1);
-                    myRow2.setBackgroundSize(0);
-
-
-                    timelineRowsList.add(myRow);
-                    timelineRowsList.add(myRow2);
-
-                    ArrayAdapter<TimelineRow> timeline_Adapter = new TimelineViewAdapter(this, 0, timelineRowsList,
-                            //if true, list will be sorted by date
-                            false);
-                    listview_event_detail_timeline.setAdapter(timeline_Adapter);
 
                 } else {
                     String paidAmount_decimal = String.format("%.2f", Double.parseDouble(edbd_all.get(0).getPaidAmount()));
+                    textview_join_trip_payment.setText(String.format("Booking No. %s You have paid %s", edbd_all.get(0).getBookingNumber(), paidAmount_decimal));
 
-                    TimelineRow myRow = new TimelineRow(0);
-//                    myRow.setTitle(" ");
-                    myRow.setDescription(String.format("Booking No. %s You have paid %s", edbd_all.get(0).getBookingNumber(), paidAmount_decimal));
-                    myRow.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.bell_small));
-                    myRow.setImageSize(40);
-                    myRow.setBackgroundSize(50);
-                    myRow.setBackgroundColor(Color.TRANSPARENT);
-                    myRow.setDescriptionColor(Color.WHITE);
-
-                    TimelineRow myRow2 = new TimelineRow(1);
-                    myRow2.setTitle(" ");
-                    myRow2.setBackgroundSize(100);
-
-                    timelineRowsList.add(myRow);
-                    timelineRowsList.add(myRow2);
-
-
-                    ArrayAdapter<TimelineRow> timeline_Adapter = new TimelineViewAdapter(this, 0, timelineRowsList,
-                            //if true, list will be sorted by date
-                            false);
-                    listview_event_detail_timeline.setAdapter(timeline_Adapter);
                 }
             } else {
-                TimelineRow myRow = new TimelineRow(0);
-//                myRow.setTitle(" ");
-                myRow.setDescription(this.getResources().getString(R.string.event_detail_joined_status_false));
-                myRow.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.bell_small));
-                myRow.setImageSize(40);
-                myRow.setBackgroundSize(50);
-                myRow.setBackgroundColor(Color.TRANSPARENT);
-                myRow.setDescriptionColor(Color.WHITE);
+                textview_join_trip_payment.setText(this.getResources().getString(R.string.event_detail_joined_status_false));
 
-                TimelineRow myRow2 = new TimelineRow(1);
-                myRow2.setTitle(" ");
-                myRow2.setBackgroundSize(100);
-
-                timelineRowsList.add(myRow);
-                timelineRowsList.add(myRow2);
-
-
-                ArrayAdapter<TimelineRow> timeline_Adapter = new TimelineViewAdapter(this, 0, timelineRowsList,
-                        //if true, list will be sorted by date
-                        false);
-                listview_event_detail_timeline.setAdapter(timeline_Adapter);
             }
 
         } else {
-            TimelineRow myRow = new TimelineRow(0);
-//            myRow.setTitle(" ");
-            myRow.setDescription(this.getResources().getString(R.string.event_detail_joined_status_false));
-            myRow.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.bell_small));
-            myRow.setImageSize(40);
-            myRow.setBackgroundSize(50);
-            myRow.setBackgroundColor(Color.TRANSPARENT);
-            myRow.setDescriptionColor(Color.WHITE);
+            textview_join_trip_payment.setText(this.getResources().getString(R.string.event_detail_joined_status_false));
 
-            TimelineRow myRow2 = new TimelineRow(1);
-            myRow2.setTitle(" ");
-            myRow2.setBackgroundSize(100);
-
-            timelineRowsList.add(myRow);
-            timelineRowsList.add(myRow2);
-
-
-            ArrayAdapter<TimelineRow> timeline_Adapter = new TimelineViewAdapter(this, 0, timelineRowsList,
-                    //if true, list will be sorted by date
-                    false);
-            listview_event_detail_timeline.setAdapter(timeline_Adapter);
         }
 
         event_detail_webview.loadData("<body style=\"word-wrap:break-word;\" >" + eded_all.get(0).getEventDescription() + "</body>", "text/html", null);

@@ -27,13 +27,20 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.wedoops.pingjueclub.database.CurrencyList;
+import com.wedoops.pingjueclub.database.UserDetails;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScanFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView zXingScannerView;
-    private TextView amount;
+    private TextView amount, textview_currency_rate;
+    private View view;
 
     @Nullable
     @Override
@@ -46,14 +53,25 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
 
-        zXingScannerView = view.findViewById(R.id.zxscan);
+        setupDeclaration();
+
         zXingScannerView.setSquareViewFinder(true);
-        amount = view.findViewById(R.id.amount);
-        amount.setText("1234");
 
-        //nestedScrollView.setScrollbarFadingEnabled(false);
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
+        BigDecimal cash_wallet_decimal = new BigDecimal(ud.get(0).getCashWallet());
+        cash_wallet_decimal = cash_wallet_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        List<CurrencyList> cl = CurrencyList.listAll(CurrencyList.class);
+        BigDecimal currency_rate = new BigDecimal(cl.get(0).getCurrencyRate());
+        currency_rate = cash_wallet_decimal.multiply(currency_rate);
+        currency_rate.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+
+        amount.setText(cash_wallet_decimal.toString());
+        textview_currency_rate.setText(String.format("= %s %s", cl.get(0).getCurrencyCode(), currency_rate.toString()));
 
         Dexter.withActivity(getActivity()).withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
@@ -80,6 +98,14 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                 }).check();
 
     }
+
+
+    private void setupDeclaration() {
+        zXingScannerView = view.findViewById(R.id.zxscan);
+        amount = view.findViewById(R.id.amount);
+        textview_currency_rate = view.findViewById(R.id.textview_currency_rate);
+    }
+
 
     @Override
     public void handleResult(Result rawResult) {
