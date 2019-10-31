@@ -1,9 +1,11 @@
 package com.wedoops.pingjueclub;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -27,7 +29,7 @@ public class BenefitFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        touchImageView = (TouchImageView) view.findViewById(R.id.imageViewBenefit);
+        touchImageView = view.findViewById(R.id.imageViewBenefit);
 
         Glide.with(this).load("http://103.198.194.228:64408/Images/benefit_view.jpg").placeholder(R.drawable.empty_image).into(touchImageView);
 

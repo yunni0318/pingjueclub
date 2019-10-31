@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.orm.StringUtil;
+import com.wedoops.pingjueclub.database.CurrencyList;
 import com.wedoops.pingjueclub.database.MemberDashboardEventData;
 import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
@@ -30,15 +31,17 @@ import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class PayFragment extends Fragment {
 
-    private static LinearLayout payConfirmation, paySuccess;
-    private CardView cancel, confirm;
-    private static String transaction_id, remarks, currency, pay_amount;
-    private static TextView payTitle, payPointFront, payPointEnd, payCurrency, payAmount, paySuccessMessage, paySuccessID;
-    public static Activity get_activity;
+    private static LinearLayout payConfirmation, linearlayout_paySuccess;
+    private static CardView cancel, confirm;
+    private static String transaction_id, remarks, currency, actual_amount_points, actual_amount_money, discounted_amount_points, discounted_amount_money, selected_currency;
+    private static TextView textview_remarks, textview_points, textview_converted_amount, paySuccessMessage, paySuccessID;
     private static int counter;
     private static CustomProgressDialog customDialog;
     private static Context get_context;
@@ -46,12 +49,16 @@ public class PayFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             transaction_id = bundle.getString("TRANSACTION_ID", "");
-            remarks = "GYMS Member";
-            currency = "EUR";
-            pay_amount = "1000";
+            remarks = bundle.getString("REMARKS", "");
+            actual_amount_points = bundle.getString("ACTUAL_AMOUNT_POINTS", "");
+            actual_amount_money = bundle.getString("ACTUAL_AMOUNT_MONEY", "");
+            discounted_amount_points = bundle.getString("DISCOUNTED_AMOUNT_POINTS", "");
+            discounted_amount_money = bundle.getString("DISCOUNTED_AMOUNT_MONEY", "");
+            selected_currency = bundle.getString("SELECTED_CURRENCY", "");
 
         } else {
             if (getActivity() != null) {
@@ -68,7 +75,6 @@ public class PayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.pay_fragment, container, false);
         get_context = rootView.getContext();
-        get_activity = getActivity();
         return rootView;
     }
 
@@ -78,19 +84,26 @@ public class PayFragment extends Fragment {
         payConfirmation = view.findViewById(R.id.payConfirmation);
         cancel = view.findViewById(R.id.payCancelBtn);
         confirm = view.findViewById(R.id.payConfirmBtn);
-        paySuccess = view.findViewById(R.id.paySuccess);
-        payTitle = view.findViewById(R.id.payTitle);
-        payPointFront = view.findViewById(R.id.payPointFront);
-        payPointEnd = view.findViewById(R.id.payPointEnd);
-        payCurrency = view.findViewById(R.id.payCurrency);
-        payAmount = view.findViewById(R.id.payAmount);
+        linearlayout_paySuccess = view.findViewById(R.id.linearlayout_paySuccess);
+        textview_remarks = view.findViewById(R.id.textview_remarks);
+        textview_points = view.findViewById(R.id.textview_points);
+        textview_converted_amount = view.findViewById(R.id.textview_converted_amount);
         paySuccessMessage = view.findViewById(R.id.paySuccessMessage);
         paySuccessID = view.findViewById(R.id.paySuccessID);
+        textview_remarks.setText(remarks);
 
-        payTitle.setText(String.format(getResources().getString(R.string.pay_confirmation_msg), remarks));
-        payPointFront.setText(pay_amount);
-        payAmount.setText(String.valueOf(pay_amount));
-//        paySuccessMessage.setText(String.format(getResources().getString(R.string.pay_success_msg), pay_amount, remarks));
+        BigDecimal actual_amount_points_decimal = new BigDecimal(actual_amount_points);
+        actual_amount_points_decimal = actual_amount_points_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        BigDecimal actual_amount_money_decimal = new BigDecimal(actual_amount_money);
+        actual_amount_money_decimal = actual_amount_money_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        NumberFormat formatter = new DecimalFormat("#,###0.00");
+        String actual_amount_points_string = formatter.format(actual_amount_points_decimal.doubleValue());
+        String actual_amount_money_string = formatter.format(actual_amount_money_decimal.doubleValue());
+
+        textview_points.setText(actual_amount_points_string);
+        textview_converted_amount.setText(String.format("= %s %s", selected_currency, actual_amount_money_string));
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +131,7 @@ public class PayFragment extends Fragment {
 
     private static void displayResult(String message) {
         payConfirmation.setVisibility(View.GONE);
-        paySuccess.setVisibility(View.VISIBLE);
+        linearlayout_paySuccess.setVisibility(View.VISIBLE);
         paySuccessMessage.setText(message);
     }
 
@@ -141,7 +154,7 @@ public class PayFragment extends Fragment {
             b.putString("transactionid", transaction_id);
             b.putInt(Api_Constants.COMMAND, Api_Constants.API_MAKE_QR_CODE_PAYMENT);
 
-            new CallWebServices(Api_Constants.API_MAKE_QR_CODE_PAYMENT, get_activity.getApplicationContext(), true).execute(b);
+            new CallWebServices(Api_Constants.API_MAKE_QR_CODE_PAYMENT, get_context, true).execute(b);
 
         } else {
             callRefreshTokenWebService();
@@ -161,8 +174,16 @@ public class PayFragment extends Fragment {
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallRefreshToken(RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT, get_activity, RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT, get_context, RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT).execute(b);
 
+    }
+
+    public static void processFCMData(String isSuccess) {
+        if (isSuccess.equals("true")) {
+            displayResult("");
+        } else {
+
+        }
     }
 
 
@@ -184,7 +205,7 @@ public class PayFragment extends Fragment {
                         displayResult(response_object.getString("MessageEN"));
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context);
 
                     }
 
@@ -211,13 +232,15 @@ public class PayFragment extends Fragment {
 
                         }
 
-                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_activity.getApplicationContext(), "key_lang");
+                        cancel.performClick();
+
+                        String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_context, "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context);
 
                         }
 
@@ -226,7 +249,7 @@ public class PayFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_activity.getApplicationContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context);
             }
         } else if (command == RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT) {
 
@@ -254,7 +277,7 @@ public class PayFragment extends Fragment {
                         PayFragment.callWebServices();
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context);
 
                     }
 
@@ -274,16 +297,16 @@ public class PayFragment extends Fragment {
 
                     }
 
-                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_activity.getApplicationContext(), "key_lang");
+                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_context, "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, get_activity.getApplicationContext());
+                        new DisplayAlertDialog().displayAlertDialogError(1506, get_context);
                     } else {
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context);
 
                         }
                     }
@@ -291,7 +314,7 @@ public class PayFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_activity.getApplicationContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context);
 
             }
         }

@@ -36,6 +36,8 @@ dependencies {
     implementation 'cc.cloudist.acplibrary:library:1.2.1'
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    implementation "com.github.skydoves:powermenu:2.1.2"
+
 
     api 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'androidx.exifinterface:exifinterface:1.0.0'

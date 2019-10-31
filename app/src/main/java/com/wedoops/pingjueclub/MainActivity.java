@@ -547,22 +547,35 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     }
 
-    public void payScreen(final String trasactionid) {
+    public void payScreen(final String scanned_value) {
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                PayFragment payFragment = new PayFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("TRANSACTION_ID", trasactionid);
-//                bundle.putString("REMARKS", trasactionid);
-//                bundle.putString("PAY_AMOUNT", trasactionid);
-//                bundle.putString("CURRENCY", trasactionid);
 
-                payFragment.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.framelayout_fragment_container, payFragment, "PAY");
-                fragmentTransaction.commitAllowingStateLoss();
+                String[] split_scanned_value = scanned_value.split("\\|");
+
+                if (split_scanned_value.length == 7) {
+
+                    PayFragment payFragment = new PayFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("TRANSACTION_ID", split_scanned_value[0]);
+                    bundle.putString("REMARKS", split_scanned_value[1]);
+                    bundle.putString("ACTUAL_AMOUNT_POINTS", split_scanned_value[2]);
+                    bundle.putString("ACTUAL_AMOUNT_MONEY", split_scanned_value[3]);
+                    bundle.putString("DISCOUNTED_AMOUNT_POINTS", split_scanned_value[4]);
+                    bundle.putString("DISCOUNTED_AMOUNT_MONEY", split_scanned_value[5]);
+                    bundle.putString("SELECTED_CURRENCY", split_scanned_value[6]);
+
+                    payFragment.setArguments(bundle);
+
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.framelayout_fragment_container, payFragment, "PAY");
+                    fragmentTransaction.commitAllowingStateLoss();
+
+                }
+
+
             }
         };
 
@@ -724,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
         if (lang.equals("en_us") || lang.equals("")) {
             lang = "en_US";
-        }else {
+        } else {
             lang = "zh_cn";
         }
         Locale myLocale = new Locale(lang);
