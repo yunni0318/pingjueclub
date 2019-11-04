@@ -33,7 +33,8 @@
                 android:adjustViewBounds="true"
                 android:onClick="imagebutton_change_language_onclick"
                 android:scaleType="center"
-                android:src="@drawable/language_usa" />
+                android:src="@drawable/language_usa"
+                android:visibility="gone" />
 
             <ImageView
                 android:layout_width="230dp"
@@ -115,22 +116,6 @@
                 android:background="@drawable/button_login_style"
                 android:onClick="button_login_onclick"
                 android:text="@string/login_activity_login_btn"
-                android:textColor="@color/textview_sidebar"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Don't Have Account Yet?"
-                android:textColor="@color/edittext_hint_username"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Register Now!"
                 android:textColor="@color/textview_sidebar"
                 android:textSize="18sp" />
 

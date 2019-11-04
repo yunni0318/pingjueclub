@@ -62,6 +62,7 @@ public class Api_Constants {
     public static final int API_SERVICE_PAGE_DETAILS = 16;
     public static final int API_MAKE_QR_CODE_PAYMENT = 17;
     public static final int API_SERVICE_MERCHANT_LIST = 18;
+    public static final int API_UPDATE_DEVICE_ID = 19;
 
 
     public static final String COMMAND = "command";
@@ -84,14 +85,14 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(response));
+                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(response),API_MEMBER_LOGIN_V2);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Log.e("Error.Response", error.toString());
-                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(""));
+                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(""),API_MEMBER_LOGIN_V2);
 
 //                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
@@ -669,8 +670,6 @@ public class Api_Constants {
                                         MemberDashboardActivity.processWSData(null, API_MEMBER_QUICK_PROFILE);
 
                                     }
-
-
                                 }
                             }
                     ) {
@@ -816,6 +815,48 @@ public class Api_Constants {
 
                             Map<String, String> params = new HashMap<String, String>();
                             params.put("ServicesID", b.getString("ServicesID"));
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_UPDATE_DEVICE_ID:{
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_authentication + "UpdateDeviceID",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Log.e("Response", response.toString());
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("DeviceID", b.getString("device_id"));
                             return params;
                         }
 

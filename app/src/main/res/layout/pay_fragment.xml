@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="15dp"
-    android:paddingTop="?android:actionBarSize"
-    android:paddingRight="15dp">
+    android:padding="15dp"
+    android:paddingTop="?android:actionBarSize">
 
     <LinearLayout
         android:id="@+id/payConfirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical"
+        android:padding="15dp"
         android:visibility="visible">
 
         <LinearLayout
@@ -176,6 +176,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
+        android:padding="15dp"
         android:visibility="gone">
 
         <ImageView
@@ -210,36 +211,36 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="3dp"-->
+        <!--            android:orientation="horizontal">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="( id: "
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="( id: "-->
+        <!--                android:textColor="@android:color/white"-->
+        <!--                android:textSize="18sp" />-->
 
-            <TextView
-                android:id="@+id/paySuccessID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PJ 190008"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+        <!--            <TextView-->
+        <!--                android:id="@+id/paySuccessID"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="PJ 190008"-->
+        <!--                android:textColor="@android:color/white"-->
+        <!--                android:textSize="18sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" )"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text=" )"-->
+        <!--                android:textColor="@android:color/white"-->
+        <!--                android:textSize="18sp" />-->
 
 
-        </LinearLayout>
+        <!--        </LinearLayout>-->
 
 
     </LinearLayout>

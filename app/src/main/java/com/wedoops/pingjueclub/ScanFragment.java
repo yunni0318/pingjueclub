@@ -214,11 +214,13 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                 if (rawResult.getText().length() > 0) {
                     String[] split_scanned_value = rawResult.getText().split("\\|");
 
-                    if(split_scanned_value.length == 6){
+                    if (split_scanned_value.length == 6) {
                         ((MainActivity) getActivity()).payScreen(rawResult.getText() + "|" + selectedCurrency);
 
-                    }else{
+                    } else {
                         Toast.makeText(view.getContext(), "Invalid QR Code, Please Try Again", Toast.LENGTH_LONG).show();
+                        zXingScannerView.stopCamera();
+                        startCamera();
                     }
 
 //                    ((MainActivity) getActivity()).payScreen("22764751");

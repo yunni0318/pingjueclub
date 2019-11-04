@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardviewnews_id"
     android:layout_width="@dimen/news_card_width"
@@ -79,9 +78,7 @@
                 <com.like.LikeButton
                     android:id="@+id/like_button"
                     android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:icon_size="20dp"
-                     />
+                    android:layout_height="20dp"/>
 
                 <TextView
                     android:id="@+id/news_like"

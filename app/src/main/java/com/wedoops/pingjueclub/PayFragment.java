@@ -41,7 +41,7 @@ public class PayFragment extends Fragment {
     private static LinearLayout payConfirmation, linearlayout_paySuccess;
     private static CardView cancel, confirm;
     private static String transaction_id, remarks, currency, actual_amount_points, actual_amount_money, discounted_amount_points, discounted_amount_money, selected_currency;
-    private static TextView textview_remarks, textview_points, textview_converted_amount, paySuccessMessage, paySuccessID;
+    private static TextView textview_remarks, textview_points, textview_converted_amount, paySuccessMessage;
     private static int counter;
     private static CustomProgressDialog customDialog;
     private static Context get_context;
@@ -89,7 +89,6 @@ public class PayFragment extends Fragment {
         textview_points = view.findViewById(R.id.textview_points);
         textview_converted_amount = view.findViewById(R.id.textview_converted_amount);
         paySuccessMessage = view.findViewById(R.id.paySuccessMessage);
-        paySuccessID = view.findViewById(R.id.paySuccessID);
         textview_remarks.setText(remarks);
 
         BigDecimal actual_amount_points_decimal = new BigDecimal(actual_amount_points);

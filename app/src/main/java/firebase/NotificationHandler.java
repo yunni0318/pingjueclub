@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -18,9 +19,17 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.orm.StringUtil;
 import com.wedoops.pingjueclub.MainActivity;
 import com.wedoops.pingjueclub.PayFragment;
 import com.wedoops.pingjueclub.R;
+import com.wedoops.pingjueclub.database.UserDetails;
+import com.wedoops.pingjueclub.webservices.Api_Constants;
+import com.wedoops.pingjueclub.webservices.CallWebServices;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class NotificationHandler extends FirebaseMessagingService {
 
@@ -34,57 +43,59 @@ public class NotificationHandler extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        Log.d("Token", token);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-//        sendRegistrationToServer(token);
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (ud.size() > 0) {
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
+
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+            if (ud_list.size() > 0) {
+                Bundle b = new Bundle();
+                b.putString("access_token", ud_list.get(0).getAccessToken());
+                b.putString("device_id", token);
+                b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
+
+                new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
+            }
+        }
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d("Handler", "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             if (remoteMessage.getData().get("ServiceName").equals("MakeQRPayment")) {
                 if (remoteMessage.getData().get("IsSuccess").equals("true")) {
-//                    Log.d("Handler", "Message data payload: " + remoteMessage.getData());
                     sendNotification(remoteMessage);
                 }
             }
-
-
-//            if (/* Check if data needs to be processed by long running job */ true) {
-//                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-////                scheduleJob();
-//            } else {
-//                // Handle message within 10 seconds
-////                handleNow();
-//            }
-
         }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d("Handler", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
 
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {
 
+        JSONObject SuccessMessage_Object = convertResponseToJsonObject(remoteMessage.getData().get("SuccessMessage"));
+        String success_message;
+        String bodyTitle;
+        try {
+            success_message = SuccessMessage_Object.getString("MessageEN");
+            bodyTitle = remoteMessage.getNotification().getBody();
+        } catch (Exception e) {
+            success_message = "";
+            bodyTitle = "";
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "0")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("QR Payment")
-                .setContentText("QR Payment Successful!")
+                .setContentTitle(bodyTitle)
+                .setContentText(success_message)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(success_message))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
@@ -112,6 +123,18 @@ public class NotificationHandler extends FirebaseMessagingService {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private static JSONObject convertResponseToJsonObject(String responses) {
+        JSONObject jObject;
+
+        try {
+            jObject = new JSONObject(responses);
+
+        } catch (Exception e) {
+            jObject = new JSONObject();
+        }
+        return jObject;
     }
 
 }

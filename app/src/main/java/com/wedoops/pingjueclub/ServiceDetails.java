@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class ServiceDetails extends AppCompatActivity {
     private static CustomProgressDialog customDialog;
     private String subservice_id;
     private RecyclerView recyclerview;
+    private ImageView toolbar_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,14 @@ public class ServiceDetails extends AppCompatActivity {
     private void setupDeclaration() {
         customDialog = new CustomProgressDialog();
         recyclerview = findViewById(R.id.recyclerview);
+        toolbar_back = findViewById(R.id.toolbar_back);
+
+        toolbar_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setupRecyclerView() {

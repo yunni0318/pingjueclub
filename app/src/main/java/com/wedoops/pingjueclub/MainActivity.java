@@ -363,8 +363,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationView.getMenu().getItem(2).setChecked(true);
-                navigationView.getMenu().performIdentifierAction(R.id.menu_my_booking, 0);
+//                navigationView.getMenu().getItem(2).setChecked(true);
+//                navigationView.getMenu().performIdentifierAction(R.id.menu_my_booking, 0);
+                navigationView.getMenu().getItem(0).setChecked(true);
+                navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
             }
         });
 

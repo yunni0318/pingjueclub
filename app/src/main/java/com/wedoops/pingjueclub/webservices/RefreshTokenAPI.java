@@ -50,8 +50,6 @@ public class RefreshTokenAPI {
     public static final int ORIGIN_SERVICE_PAGE_DETAIL= 1616;
     public static final int ORIGIN_MAKE_QR_CODE_PAYMENT= 1717;
 
-
-
     private static Context context;
     private static int origin;
 

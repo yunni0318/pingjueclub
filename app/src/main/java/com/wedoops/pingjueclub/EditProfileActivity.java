@@ -53,8 +53,8 @@ public class EditProfileActivity extends Fragment {
     public static Activity get_activity;
 
     private static ImageView imageview_user_profile, imageview_user_rank;
-    private static TextView textview_user_rank, textview_user_nickname, textview_profile_title, textview_fullname_title, textview_nickname_title, textview_change_password_title, textview_current_password_title, textview_new_password_title, textview_confirm_password;
-    private static EditText edittext_fullname, edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
+    private static TextView textview_user_rank, textview_user_nickname, textview_profile_title, textview_nickname_title, textview_change_password_title, textview_current_password_title, textview_new_password_title, textview_confirm_password;
+    private static EditText  edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
 
     private static Button button_save_profile, button_change_password;
     private static Context get_context;
@@ -94,10 +94,8 @@ public class EditProfileActivity extends Fragment {
         textview_user_rank = view.findViewById(R.id.textview_user_rank);
         textview_user_nickname = view.findViewById(R.id.textview_user_nickname);
         textview_profile_title = view.findViewById(R.id.textview_profile_title);
-        textview_fullname_title = view.findViewById(R.id.textview_fullname_title);
         textview_nickname_title = view.findViewById(R.id.textview_nickname_title);
 
-        edittext_fullname = view.findViewById(R.id.edittext_fullname);
         edittext_nickname = view.findViewById(R.id.edittext_nickname);
 
         button_save_profile = view.findViewById(R.id.button_save_profile);
@@ -151,14 +149,11 @@ public class EditProfileActivity extends Fragment {
 
     private static void setupEditText() {
 
-        edittext_fullname.setEnabled(false);
         edittext_nickname.setEnabled(true);
 
         textview_profile_title.setText(view.getContext().getResources().getString(R.string.edit_profile_profile_title));
-        textview_fullname_title.setText(view.getContext().getResources().getString(R.string.edit_profile_fullname_title));
         textview_nickname_title.setText(view.getContext().getResources().getString(R.string.edit_profile_nickname_title));
 
-        edittext_fullname.setTextColor(Color.parseColor("#aaaaaa"));
         edittext_nickname.setTextColor(Color.parseColor("#aaaaaa"));
 
     }
@@ -331,7 +326,6 @@ public class EditProfileActivity extends Fragment {
         Typeface typeface = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
         textview_user_nickname.setTypeface(typeface);
         textview_profile_title.setTypeface(typeface);
-        textview_fullname_title.setTypeface(typeface);
         textview_nickname_title.setTypeface(typeface);
 
         textview_change_password_title.setTypeface(typeface);
@@ -365,7 +359,6 @@ public class EditProfileActivity extends Fragment {
 
         textview_user_nickname.setText(ud_list.get(0).getNickName());
 
-        edittext_fullname.setText(ud_list.get(0).getName());
         edittext_nickname.setText(ud_list.get(0).getNickName());
 
         String tablename_cl = StringUtil.toSQLName("CountryList");

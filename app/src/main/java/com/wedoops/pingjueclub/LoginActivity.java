@@ -218,93 +218,96 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
 
-
     }
 
-    public void processWSData(JSONObject returnedObject) {
+    public void processWSData(JSONObject returnedObject, int command) {
 
 //        progress.dismiss();
         customDialog.hideDialog();
-        boolean isSuccess = false;
-        try {
-            isSuccess = returnedObject.getBoolean("Success");
 
-            if (isSuccess) {
+        if (command == Api_Constants.API_MEMBER_LOGIN_V2) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
 
-                if (returnedObject.getInt("StatusCode") == 200) {
+                if (isSuccess) {
 
-                    JSONObject response_object = returnedObject.getJSONObject("ResponseData");
-                    JSONObject login_access_object = response_object.getJSONObject("UserLoginAccessToken");
-                    JSONObject user_profile_object = response_object.getJSONObject("UserQuickProfile");
+                    if (returnedObject.getInt("StatusCode") == 200) {
 
-                    String accessToken = login_access_object.getString("AccessToken");
-                    String refreshToken = login_access_object.getString("RefreshToken");
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+                        JSONObject login_access_object = response_object.getJSONObject("UserLoginAccessToken");
+                        JSONObject user_profile_object = response_object.getJSONObject("UserQuickProfile");
 
-                    String Srno = String.valueOf(user_profile_object.getInt("Srno"));
-                    String LoginID = user_profile_object.getString("LoginID");
-                    String Name = user_profile_object.getString("Name");
-                    String NickName = user_profile_object.getString("NickName");
-                    String DOB = user_profile_object.getString("DOB");
-                    String Email = user_profile_object.getString("Email");
-                    String Phone = user_profile_object.getString("Phone");
-                    String CountryCode = user_profile_object.getString("CountryCode");
-                    String StateCode = user_profile_object.getString("StateCode");
-                    String Address = user_profile_object.getString("Address");
-                    String Gender = user_profile_object.getString("Gender");
-                    String ProfilePictureImagePath = user_profile_object.getString("ProfilePictureImagePath");
-                    String UserLevelCode = user_profile_object.getString("UserLevelCode");
-                    String JoinedDate = user_profile_object.getString("JoinedDate");
-                    String CashWallet = String.valueOf(user_profile_object.getString("CashWallet"));
+                        String accessToken = login_access_object.getString("AccessToken");
+                        String refreshToken = login_access_object.getString("RefreshToken");
+
+                        String Srno = String.valueOf(user_profile_object.getInt("Srno"));
+                        String LoginID = user_profile_object.getString("LoginID");
+                        String Name = user_profile_object.getString("Name");
+                        String NickName = user_profile_object.getString("NickName");
+                        String DOB = user_profile_object.getString("DOB");
+                        String Email = user_profile_object.getString("Email");
+                        String Phone = user_profile_object.getString("Phone");
+                        String CountryCode = user_profile_object.getString("CountryCode");
+                        String StateCode = user_profile_object.getString("StateCode");
+                        String Address = user_profile_object.getString("Address");
+                        String Gender = user_profile_object.getString("Gender");
+                        String ProfilePictureImagePath = user_profile_object.getString("ProfilePictureImagePath");
+                        String UserLevelCode = user_profile_object.getString("UserLevelCode");
+                        String JoinedDate = user_profile_object.getString("JoinedDate");
+                        String CashWallet = String.valueOf(user_profile_object.getString("CashWallet"));
 
 
-                    UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet);
-                    ud.save();
+                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet);
+                        ud.save();
 
-                    new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());
+                        new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
 
-                } else {
-                    new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
 
-                }
-
-            } else {
-
-                JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
-
-                int errorCode = 0;
-                String errorMessageEN = "";
-                String errorMessageCN = "";
-
-                for (int i = 0; i < errorCode_array.length(); i++) {
-                    JSONObject error_object = errorCode_array.getJSONObject(i);
-                    errorCode = error_object.getInt("Code");
-                    errorMessageEN = error_object.getString("MessageEN");
-                    errorMessageCN = error_object.getString("MessageCN");
-
-                }
-
-                String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
-
-                if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                    }
 
                 } else {
-                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                    int errorCode = 0;
+                    String errorMessageEN = "";
+                    String errorMessageCN = "";
+
+                    for (int i = 0; i < errorCode_array.length(); i++) {
+                        JSONObject error_object = errorCode_array.getJSONObject(i);
+                        errorCode = error_object.getInt("Code");
+                        errorMessageEN = error_object.getString("MessageEN");
+                        errorMessageCN = error_object.getString("MessageCN");
+
+                    }
+
+                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
+
+                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                    }
 
                 }
 
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
             }
-
-        } catch (Exception e) {
-            Log.e("Error", e.toString());
-            new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
         }
+
 
     }
 }
