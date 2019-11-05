@@ -347,26 +347,39 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         homeBottomNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationView.getMenu().getItem(0).setChecked(true);
-                navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+
+                Menu menu = navigationView.getMenu();
+
+                if (!menu.getItem(0).isChecked()) {
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                    navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+                }
+
             }
         });
 
         recordBottomNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationView.getMenu().getItem(3).setChecked(true);
-                navigationView.getMenu().performIdentifierAction(R.id.menu_my_transactions_report, 0);
+                Menu menu = navigationView.getMenu();
+
+                if (!menu.getItem(3).isChecked()) {
+                    navigationView.getMenu().getItem(3).setChecked(true);
+                    navigationView.getMenu().performIdentifierAction(R.id.menu_my_transactions_report, 0);
+                }
+
             }
         });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                navigationView.getMenu().getItem(2).setChecked(true);
-//                navigationView.getMenu().performIdentifierAction(R.id.menu_my_booking, 0);
-                navigationView.getMenu().getItem(0).setChecked(true);
-                navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+                Menu menu = navigationView.getMenu();
+
+                if (!menu.getItem(0).isChecked()) {
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                    navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+                }
             }
         });
 
@@ -374,6 +387,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         toolbar_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                for (int i = 0; i < navigationView.getMenu().size(); i++) {
+                    navigationView.getMenu().getItem(i).setChecked(false);
+                }
                 cameraScan();
             }
         });

@@ -56,6 +56,21 @@ public class CustomProgressDialog {
 
     }
 
+    public boolean isShowing() {
+
+        if (dialog != null) {
+            if (dialog.isShowing()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+
+        }
+    }
+
+
 //    public static void showProgressDialog(Context context) {
 //
 //        progressFlower = new ACProgressCustom.Builder(context)

@@ -129,12 +129,12 @@ public class MemberDashboardActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
         customDialog = new CustomProgressDialog();
-
         checkLoginStatus();
         setupViewByID();
         setupListener();
 
         button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
+
 
     }
 
@@ -621,6 +621,11 @@ public class MemberDashboardActivity extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        handler.removeCallbacks(null);
+    }
 }
 
 
