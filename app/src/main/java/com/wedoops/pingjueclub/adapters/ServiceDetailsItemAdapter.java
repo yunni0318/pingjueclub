@@ -41,7 +41,7 @@ public class ServiceDetailsItemAdapter extends RecyclerView.Adapter<ServiceDetai
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
 
-        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getCompanyImages()).into(myViewHolder.imageView);
+        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getCompanyImages()).placeholder(R.drawable.not_found).into(myViewHolder.imageView);
         myViewHolder.textview_company_name.setText(mData.get(i).getCompanyName());
         myViewHolder.textview_company_address.setText(mData.get(i).getCompanyAddress());
         myViewHolder.textview_company_description.setText(mData.get(i).getCompanyDescription());

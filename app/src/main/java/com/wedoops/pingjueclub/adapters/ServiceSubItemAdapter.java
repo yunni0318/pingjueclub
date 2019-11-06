@@ -49,6 +49,8 @@ public class ServiceSubItemAdapter extends RecyclerView.Adapter<ServiceSubItemAd
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ServiceDetails.class);
                 intent.putExtra("subservice_id", mData.get(i).getSubServicesID());
+                intent.putExtra("subservice_name", mData.get(i).getSubServiceName());
+
                 mContext.startActivity(intent);
             }
         });

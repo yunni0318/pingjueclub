@@ -38,9 +38,10 @@ import java.util.List;
 public class ServiceDetails extends AppCompatActivity {
 
     private static CustomProgressDialog customDialog;
-    private String subservice_id;
+    private String subservice_id, subservice_name;
     private RecyclerView recyclerview;
     private ImageView toolbar_back;
+    private TextView toolbar_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class ServiceDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         subservice_id = intent.getExtras().getString("subservice_id");
-
+        subservice_name = intent.getExtras().getString("subservice_name");
         setupDeclaration();
         callWebService();
 
@@ -60,7 +61,9 @@ public class ServiceDetails extends AppCompatActivity {
         customDialog = new CustomProgressDialog();
         recyclerview = findViewById(R.id.recyclerview);
         toolbar_back = findViewById(R.id.toolbar_back);
-
+        toolbar_title = findViewById(R.id.toolbar_title);
+        toolbar_title.setText(subservice_name);
+        
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +73,7 @@ public class ServiceDetails extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        String tablename_ssld = StringUtil.toSQLName("ServicesMerchantDetails");
+//        String tablename_ssld = StringUtil.toSQLName("ServicesMerchantDetails");
 
         List<ServicesMerchantDetails> smd_list_all = ServicesMerchantDetails.listAll(ServicesMerchantDetails.class);
 
