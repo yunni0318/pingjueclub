@@ -53,7 +53,7 @@ public class RecordsList extends Fragment {
     private static Activity get_activity;
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
-    private static TextView dateType, weekly, monthly, yearly;
+    private static TextView dateType, weekly, monthly, yearly, dateAll;
     private static String DATA_TYPE_MERCHANT_PAYMENT = "MERCHANT-PAYMENT";
     private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
     private static String DATA_TYPE_PAYMENT = "PAYMENT-";
@@ -118,7 +118,7 @@ public class RecordsList extends Fragment {
 //        adapter = new RecordsListAdapter(trd_list_all);
 
         recyclerview_transaction.setLayoutManager(layoutManager);
-        weekly.performClick();
+        dateAll.performClick();
 //        recyclerview_transaction.setAdapter(adapter);
 
     }
@@ -330,9 +330,11 @@ public class RecordsList extends Fragment {
 
         final TextInputEditText textinputedittext_filter = view.findViewById(R.id.textinputedittext_filter);
 
+        recyclerview_transaction = view.findViewById(R.id.recyclerview_transaction);
         dateType = view.findViewById(R.id.dateType);
         dateSelection = view.findViewById(R.id.dateSelection);
         dateChoices = view.findViewById(R.id.dateChoices);
+        dateAll = view.findViewById(R.id.dateAll);
         weekly = view.findViewById(R.id.dateWeekly);
         monthly = view.findViewById(R.id.dateMonthly);
         yearly = view.findViewById(R.id.dateYearly);
@@ -363,11 +365,80 @@ public class RecordsList extends Fragment {
             public void afterTextChanged(Editable s) {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
                 String referencecode_field = StringUtil.toSQLName("TRederenceCode");
+                String tdate_field = StringUtil.toSQLName("TDate");
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+
+                List<TransactionsReportData> trd_list_all;
+                if (dateType.getText().equals("All")) {
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+                } else if (dateType.getText().equals("Weekly")) {
+                    Calendar cl = Calendar.getInstance();
+                    cl.setFirstDayOfWeek(1);
+
+                    //first day of week
+                    cl.set(Calendar.DAY_OF_WEEK, 1);
+                    String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                    //last day of week
+                    cl.set(Calendar.DAY_OF_WEEK, 7);
+                    String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+
+                } else if (dateType.getText().equals("Monthly")) {
+
+                    Calendar cl = Calendar.getInstance();
+
+                    //first day of month
+                    cl.set(Calendar.DAY_OF_MONTH, cl.getActualMinimum(Calendar.DAY_OF_MONTH));
+                    String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                    //last day of week
+                    cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+
+                } else if (dateType.getText().equals("Yearly")) {
+                    Calendar cl = Calendar.getInstance();
+
+                    //first day of year
+                    cl.set(Calendar.DAY_OF_YEAR, cl.getActualMinimum(Calendar.DAY_OF_YEAR));
+                    String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                    //last day of year
+                    cl.set(Calendar.DAY_OF_YEAR, cl.getActualMaximum(Calendar.DAY_OF_YEAR));
+                    String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+
+                } else {
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+
+                }
+
 
                 adapter = new RecordsListAdapter(trd_list_all);
                 recyclerview_transaction.setAdapter(adapter);
+            }
+        });
+
+        dateAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateType.setText("All");
+
+                List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
+
+                adapter = new RecordsListAdapter(trd_list_all);
+                recyclerview_transaction.setAdapter(adapter);
+
+                dateChoices.setVisibility(View.GONE);
+
             }
         });
 
@@ -455,6 +526,7 @@ public class RecordsList extends Fragment {
                 dateChoices.setVisibility(View.GONE);
             }
         });
+
     }
 
     @Override
@@ -462,12 +534,7 @@ public class RecordsList extends Fragment {
         super.onActivityCreated(savedInstanceState);
         get_activity = getActivity();
         customDialog = new CustomProgressDialog();
-        setupFindViewById();
         callCashWalletTransactionWebService();
-    }
-
-    private void setupFindViewById() {
-        recyclerview_transaction = view.findViewById(R.id.recyclerview_transaction);
     }
 
 }

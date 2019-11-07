@@ -17,7 +17,7 @@
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/not_found" />
 
