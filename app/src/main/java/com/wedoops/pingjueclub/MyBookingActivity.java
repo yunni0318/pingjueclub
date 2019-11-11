@@ -39,7 +39,6 @@ public class MyBookingActivity extends Fragment {
 
     private static MyBookingAdapter bookinglist_adapter;
 
-    private static TextView textview_my_booking;
 
 
     private static View view;
@@ -85,7 +84,6 @@ public class MyBookingActivity extends Fragment {
     }
 
     private void setupViewByID() {
-        textview_my_booking = view.findViewById(R.id.textview_my_booking);
         recyclerview_bookingdata = view.findViewById(R.id.recyclerview_bookingdata);
     }
 

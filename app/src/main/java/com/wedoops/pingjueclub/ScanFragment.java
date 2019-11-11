@@ -53,11 +53,9 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class ScanFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView zXingScannerView;
-    private TextView amount, textview_currency_rate;
+    private TextView amount;
     private View view;
-    private String selectedCurrency;
-    private PowerMenu pm;
-    private ImageButton imagebutton_currency;
+//    private PowerMenu pm;
 
     @Nullable
     @Override
@@ -74,27 +72,10 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
 
         setupDeclaration();
         setupCustomFont();
-        setupPowerMenu();
+//        setupPowerMenu();
 
         List<CurrencyList> cl = CurrencyList.listAll(CurrencyList.class);
         changeCurrencyRate(cl.get(0).getCurrencyName());
-
-//        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-//
-//        BigDecimal cash_wallet_decimal = new BigDecimal(ud.get(0).getCashWallet());
-//        cash_wallet_decimal = cash_wallet_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
-//
-//        List<CurrencyList> cl = CurrencyList.listAll(CurrencyList.class);
-//        BigDecimal currency_rate = new BigDecimal(cl.get(0).getCurrencyRate());
-//        currency_rate = cash_wallet_decimal.multiply(currency_rate);
-//        currency_rate.setScale(2, BigDecimal.ROUND_HALF_UP);
-//
-//        NumberFormat formatter = new DecimalFormat("#,###0.00");
-//        String cash_wallet_string = formatter.format(cash_wallet_decimal.doubleValue());
-//        String currency_rate_string = formatter.format(currency_rate.doubleValue());
-//
-//        amount.setText(cash_wallet_string);
-//        textview_currency_rate.setText(String.format("= %s %s", cl.get(0).getCurrencyCode(), currency_rate_string));
 
 
         Dexter.withActivity(getActivity()).withPermission(Manifest.permission.CAMERA)
@@ -127,58 +108,46 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     private void setupDeclaration() {
         zXingScannerView = view.findViewById(R.id.zxscan);
         amount = view.findViewById(R.id.amount);
-        textview_currency_rate = view.findViewById(R.id.textview_currency_rate);
-        imagebutton_currency = view.findViewById(R.id.imagebutton_currency);
 
-        imagebutton_currency.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pm != null) {
-                    pm.showAsDropDown(v);
-                }
-            }
-        });
     }
 
     private void setupCustomFont() {
 
-        Typeface typeface = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/NUNITOSANS-REGULAR.TTF");
-        textview_currency_rate.setTypeface(typeface);
 
         Typeface typeface2 = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/NUNITOSANS-SEMIBOLD.TTF");
         amount.setTypeface(typeface2);
 
     }
 
-    private void setupPowerMenu() {
-        pm = new PowerMenu.Builder(view.getContext()).build();
-        pm.setAnimation(MenuAnimation.SHOWUP_TOP_LEFT);
-        pm.setMenuRadius(10f); // sets the corner radius.
-        pm.setMenuShadow(10f); // sets the shadow.
-        pm.setMenuColor(Color.parseColor("#000000"));
-        pm.setTextColor(Color.parseColor("#ffffff"));
-        pm.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
-            @Override
-            public void onItemClick(int position, PowerMenuItem item) {
-                changeCurrencyRate(item.getTitle());
-                zXingScannerView.stopCamera();
-                startCamera();
-                pm.dismiss();
-            }
-        });
-
-        final List<CurrencyList> cl = CurrencyList.listAll(CurrencyList.class);
-
-        if (cl.size() > 0) {
-            for (int i = 0; i < cl.size(); i++) {
-
-                final int ii = i;
-                pm.addItem(new PowerMenuItem(cl.get(ii).getCurrencyName()));
-
-            }
-        }
-
-    }
+//    private void setupPowerMenu() {
+//        pm = new PowerMenu.Builder(view.getContext()).build();
+//        pm.setAnimation(MenuAnimation.SHOWUP_TOP_LEFT);
+//        pm.setMenuRadius(10f); // sets the corner radius.
+//        pm.setMenuShadow(10f); // sets the shadow.
+//        pm.setMenuColor(Color.parseColor("#000000"));
+//        pm.setTextColor(Color.parseColor("#ffffff"));
+//        pm.setOnMenuItemClickListener(new OnMenuItemClickListener<PowerMenuItem>() {
+//            @Override
+//            public void onItemClick(int position, PowerMenuItem item) {
+//                changeCurrencyRate(item.getTitle());
+//                zXingScannerView.stopCamera();
+//                startCamera();
+//                pm.dismiss();
+//            }
+//        });
+//
+//        final List<CurrencyList> cl = CurrencyList.listAll(CurrencyList.class);
+//
+//        if (cl.size() > 0) {
+//            for (int i = 0; i < cl.size(); i++) {
+//
+//                final int ii = i;
+//                pm.addItem(new PowerMenuItem(cl.get(ii).getCurrencyName()));
+//
+//            }
+//        }
+//
+//    }
 
     private void changeCurrencyRate(String currencyName) {
 
@@ -187,22 +156,12 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         BigDecimal cash_wallet_decimal = new BigDecimal(ud.get(0).getCashWallet());
         cash_wallet_decimal = cash_wallet_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        String currencylist_table = CurrencyList.getTableName(CurrencyList.class);
-        String currencyname_field = StringUtil.toSQLName("CurrencyName");
-
-        List<CurrencyList> cl = CurrencyList.findWithQuery(CurrencyList.class, "SELECT * FROM " + currencylist_table + " WHERE " + currencyname_field + " = '" + currencyName + "'");
-        BigDecimal currency_rate = new BigDecimal(cl.get(0).getCurrencyRate());
-        currency_rate = cash_wallet_decimal.multiply(currency_rate);
-        currency_rate.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         NumberFormat formatter = new DecimalFormat("#,###0.00");
         String cash_wallet_string = formatter.format(cash_wallet_decimal.doubleValue());
-        String currency_rate_string = formatter.format(currency_rate.doubleValue());
 
         amount.setText(cash_wallet_string);
-        textview_currency_rate.setText(String.format("= %s %s", cl.get(0).getCurrencyCode(), currency_rate_string));
 
-        selectedCurrency = cl.get(0).getCurrencyCode();
     }
 
 
@@ -214,8 +173,8 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
                 if (rawResult.getText().length() > 0) {
                     String[] split_scanned_value = rawResult.getText().split("\\|");
 
-                    if (split_scanned_value.length == 6) {
-                        ((MainActivity) getActivity()).payScreen(rawResult.getText() + "|" + selectedCurrency);
+                    if (split_scanned_value.length == 7) {
+                        ((MainActivity) getActivity()).payScreen(rawResult.getText());
 
                     } else {
                         Toast.makeText(view.getContext(), "Invalid QR Code, Please Try Again", Toast.LENGTH_LONG).show();

@@ -4,7 +4,7 @@
     <!-- Login Activity-->
     <string name="login_activity_login">User Log In</string>
     <string name="login_activity_login_btn">LOGIN</string>
-    <string name="login_activity_edittext_hint_username">Email</string>
+    <string name="login_activity_edittext_hint_username">Username</string>
     <string name="login_activity_edittext_hint_password">Password</string>
     <string name="forgot_password_title">Forgot Password</string>
     <string name="login_activity_button_forgot_password"><u>Forgot Password?</u></string>

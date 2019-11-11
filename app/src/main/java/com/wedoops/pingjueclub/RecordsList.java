@@ -7,11 +7,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,9 +61,12 @@ public class RecordsList extends Fragment {
     private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
     private static String DATA_TYPE_PAYMENT = "PAYMENT-";
 
-    private static RecordsListAdapter adapter;
+    private static RecordsListAdapter adapter = new RecordsListAdapter();
+    ;
 
-    private static int counter;
+    private Handler handler;
+
+    private static int counter = 0;
     private static CustomProgressDialog customDialog;
 
     private static void callCashWalletTransactionWebService() {
@@ -100,9 +106,9 @@ public class RecordsList extends Fragment {
 
         Bundle b = new Bundle();
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2);
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallRefreshToken(RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
     }
 
     private static void displayResult() {
@@ -113,19 +119,15 @@ public class RecordsList extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
-//        List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
-
-//        adapter = new RecordsListAdapter(trd_list_all);
-
         recyclerview_transaction.setLayoutManager(layoutManager);
+        recyclerview_transaction.setAdapter(adapter);
         dateAll.performClick();
-//        recyclerview_transaction.setAdapter(adapter);
+
 
     }
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
-//        CustomProgressDialog.closeProgressDialog();
         customDialog.hideDialog();
 
         if (command == Api_Constants.API_CASH_WALLET_TRANSACTION_V2) {
@@ -244,13 +246,76 @@ public class RecordsList extends Fragment {
 
             }
         } else if (command == RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
 
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                        ud_list.get(0).setAccessToken(response_object.getString("AccessToken"));
+                        ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
+
+                        ud_list.get(0).save();
+
+                        callCashWalletTransactionWebService();
+
+                    } else {
+
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+
+                    }
+
+                } else {
+//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
+                    JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                    int errorCode = 0;
+                    String errorMessageEN = "";
+                    String errorMessageCN = "";
+
+                    for (int i = 0; i < errorCode_array.length(); i++) {
+                        JSONObject error_object = errorCode_array.getJSONObject(i);
+                        errorCode = error_object.getInt("Code");
+                        errorMessageEN = error_object.getString("MessageEN");
+                        errorMessageCN = error_object.getString("MessageCN");
+
+                    }
+
+                    String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
+
+                    if (errorCode == 1506) {
+                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
+                    } else {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+
+                        } else {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
         }
     }
 
     public static void processRefreshToken(JSONObject returnedObject, int command, int origin) {
         if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
-
+            counter = 0;
             boolean isSuccess = false;
             try {
                 isSuccess = returnedObject.getBoolean("Success");
@@ -280,7 +345,6 @@ public class RecordsList extends Fragment {
                     }
 
                 } else {
-//                    JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
                     JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
 
                     int errorCode = 0;
@@ -321,12 +385,24 @@ public class RecordsList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_transactions_report, container, false);
         get_context = getContext();
+        handler = new Handler();
         return view;
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        get_activity = getActivity();
+
+    }
+
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        customDialog = new CustomProgressDialog();
+        callCashWalletTransactionWebService();
 
         final TextInputEditText textinputedittext_filter = view.findViewById(R.id.textinputedittext_filter);
 
@@ -384,7 +460,7 @@ public class RecordsList extends Fragment {
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
                 } else if (dateType.getText().equals("Monthly")) {
@@ -400,7 +476,7 @@ public class RecordsList extends Fragment {
                     cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
                 } else if (dateType.getText().equals("Yearly")) {
@@ -414,16 +490,24 @@ public class RecordsList extends Fragment {
                     cl.set(Calendar.DAY_OF_YEAR, cl.getActualMaximum(Calendar.DAY_OF_YEAR));
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where "+ referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
                 } else {
                     trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
 
                 }
 
+                customDialog.showDialog(get_context);
 
-                adapter = new RecordsListAdapter(trd_list_all);
-                recyclerview_transaction.setAdapter(adapter);
+                adapter.UpdateRecordListAdapter(trd_list_all);
+                recyclerview_transaction.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customDialog.hideDialog();
+
+                    }
+                });
+
             }
         });
 
@@ -432,10 +516,17 @@ public class RecordsList extends Fragment {
             public void onClick(View v) {
                 dateType.setText("All");
 
+                customDialog.showDialog(get_context);
+
                 List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
 
-                adapter = new RecordsListAdapter(trd_list_all);
-                recyclerview_transaction.setAdapter(adapter);
+                adapter.UpdateRecordListAdapter(trd_list_all);
+                recyclerview_transaction.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customDialog.hideDialog();
+                    }
+                });
 
                 dateChoices.setVisibility(View.GONE);
 
@@ -463,8 +554,16 @@ public class RecordsList extends Fragment {
 
                 List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
-                adapter = new RecordsListAdapter(trd_list_all);
-                recyclerview_transaction.setAdapter(adapter);
+                customDialog.showDialog(get_context);
+
+                adapter.UpdateRecordListAdapter(trd_list_all);
+                recyclerview_transaction.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customDialog.hideDialog();
+
+                    }
+                });
 
                 dateChoices.setVisibility(View.GONE);
             }
@@ -492,9 +591,16 @@ public class RecordsList extends Fragment {
 
                 List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
-                adapter = new RecordsListAdapter(trd_list_all);
-                recyclerview_transaction.setAdapter(adapter);
+                customDialog.showDialog(get_context);
 
+                adapter.UpdateRecordListAdapter(trd_list_all);
+                recyclerview_transaction.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customDialog.hideDialog();
+
+                    }
+                });
                 dateChoices.setVisibility(View.GONE);
             }
         });
@@ -520,21 +626,19 @@ public class RecordsList extends Fragment {
 
                 List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
-                adapter = new RecordsListAdapter(trd_list_all);
-                recyclerview_transaction.setAdapter(adapter);
+                customDialog.showDialog(get_context);
 
+                adapter.UpdateRecordListAdapter(trd_list_all);
+                recyclerview_transaction.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        customDialog.hideDialog();
+
+                    }
+                });
                 dateChoices.setVisibility(View.GONE);
             }
         });
 
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        get_activity = getActivity();
-        customDialog = new CustomProgressDialog();
-        callCashWalletTransactionWebService();
-    }
-
 }

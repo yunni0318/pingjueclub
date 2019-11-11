@@ -59,8 +59,17 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
         }
     }
 
-    public RecordsListAdapter(List<TransactionsReportData> trd) {
+//    public RecordsListAdapter(List<TransactionsReportData> trd) {
+//        this.trd_list_all = trd;
+//    }
+
+    public RecordsListAdapter() {
+    }
+
+    public void UpdateRecordListAdapter(List<TransactionsReportData> trd) {
+
         this.trd_list_all = trd;
+        this.notifyDataSetChanged();
     }
 
 
@@ -156,7 +165,6 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
 
     }
-
 
     @Override
     public int getItemCount() {

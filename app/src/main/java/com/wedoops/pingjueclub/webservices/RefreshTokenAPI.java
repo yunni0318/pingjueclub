@@ -120,6 +120,12 @@ public class RefreshTokenAPI {
                                     if (origin == ORIGIN_MAKE_QR_CODE_PAYMENT) {
                                         PayFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_MAKE_QR_CODE_PAYMENT);
                                     }
+
+                                    if (origin == ORIGIN_CASH_WALLET_TRANSACTION_V2) {
+                                        RecordsList.processWSData(convertResponseToJsonObject(response), ORIGIN_CASH_WALLET_TRANSACTION_V2);
+                                    }
+
+
 //                                    if (currentContext == MemberDashboardActivity.get_activity) {
 //                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
 //                                    } else if (currentContext == EditProfileActivity.get_activity) {

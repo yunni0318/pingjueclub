@@ -1,6 +1,5 @@
 package com.wedoops.pingjueclub;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,9 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.orm.StringUtil;
-import com.wedoops.pingjueclub.database.CurrencyList;
-import com.wedoops.pingjueclub.database.MemberDashboardEventData;
-import com.wedoops.pingjueclub.database.MemberDashboardTopBanner;
 import com.wedoops.pingjueclub.database.UserDetails;
 import com.wedoops.pingjueclub.helper.ApplicationClass;
 import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
@@ -177,17 +173,8 @@ public class PayFragment extends Fragment {
 
     }
 
-    public static void processFCMData(String isSuccess) {
-        if (isSuccess.equals("true")) {
-            displayResult("");
-        } else {
-
-        }
-    }
-
 
     public static void processWSData(JSONObject returnedObject, int command) {
-//        CustomProgressDialog.closeProgressDialog();
         customDialog.hideDialog();
 
         if (command == Api_Constants.API_MAKE_QR_CODE_PAYMENT) {

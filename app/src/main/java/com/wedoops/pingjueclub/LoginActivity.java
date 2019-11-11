@@ -175,6 +175,14 @@ public class LoginActivity extends AppCompatActivity {
             isValid = false;
         }
 
+//        if (!ApplicationClass.isEmailValid(username)) {
+//            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.forgotpassword_email_invalid_error));
+//            spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.forgotpassword_email_invalid_error).length(), 0);
+//            username.setError(spannableStringBuilder);
+//            isValid = false;
+//        }
+
+
         if (password.length() < 1) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getResources().getString(R.string.login_password_error));
             spannableStringBuilder.setSpan(foregroundColorSpan, 0, getResources().getString(R.string.login_password_error).length(), 0);
