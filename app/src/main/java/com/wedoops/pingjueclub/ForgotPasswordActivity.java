@@ -15,6 +15,7 @@ import com.wedoops.pingjueclub.helper.DisplayAlertDialog;
 import com.wedoops.pingjueclub.webservices.Api_Constants;
 import com.wedoops.pingjueclub.webservices.CallWebServices;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -93,8 +94,34 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
 
             } else {
-                JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
-                new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), this);
+//                JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
+                JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
+
+                int errorCode = 0;
+                String errorMessageEN = "";
+                String errorMessageCN = "";
+
+                for (int i = 0; i < errorCode_array.length(); i++) {
+                    JSONObject error_object = errorCode_array.getJSONObject(i);
+                    errorCode = error_object.getInt("Code");
+                    errorMessageEN = error_object.getString("MessageEN");
+                    errorMessageCN = error_object.getString("MessageCN");
+
+                }
+
+                String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
+
+                if (errorCode == 1506) {
+                    new DisplayAlertDialog().displayAlertDialogError(1506, this);
+                } else {
+                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+
+                    }
+                }
 
             }
 
