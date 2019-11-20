@@ -35,7 +35,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="CompanyName"
                 android:textColor="@color/textview_sidebar"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <RelativeLayout
                 android:id="@+id/relative_company_address"

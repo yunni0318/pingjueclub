@@ -157,7 +157,7 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
         cash_wallet_decimal = cash_wallet_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
 
 
-        NumberFormat formatter = new DecimalFormat("#,###0.00");
+        NumberFormat formatter = new DecimalFormat("#,###,###.00");
         String cash_wallet_string = formatter.format(cash_wallet_decimal.doubleValue());
 
         amount.setText(cash_wallet_string);

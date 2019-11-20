@@ -93,11 +93,11 @@ public class PayFragment extends Fragment {
         BigDecimal actual_amount_money_decimal = new BigDecimal(actual_amount_money);
         actual_amount_money_decimal = actual_amount_money_decimal.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        NumberFormat formatter = new DecimalFormat("#,###0.00");
+        NumberFormat formatter = new DecimalFormat("#,###,###.00");
         String actual_amount_points_string = formatter.format(actual_amount_points_decimal.doubleValue());
         String actual_amount_money_string = formatter.format(actual_amount_money_decimal.doubleValue());
 
-        textview_points.setText(actual_amount_points_string);
+        textview_points.setText(String.format("%s PTS", actual_amount_points_string));
         textview_converted_amount.setText(String.format("= %s %s", selected_currency, actual_amount_money_string));
 
         confirm.setOnClickListener(new View.OnClickListener() {
