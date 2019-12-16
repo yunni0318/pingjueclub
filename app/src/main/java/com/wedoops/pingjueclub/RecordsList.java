@@ -155,7 +155,7 @@ public class RecordsList extends Fragment {
                                 String TStatus;
 
                                 //Merchant Payment
-                                int actualamount = 0;
+                                double actualamount = 0;
                                 int discountrate = 0;
                                 int discountamount = 0;
 
@@ -167,7 +167,7 @@ public class RecordsList extends Fragment {
 
                                 if (bd_type.getString("Type").equals(DATA_TYPE_MERCHANT_PAYMENT)) {
 
-                                    actualamount = bd_type.getInt("ActualAmount");
+                                    actualamount = bd_type.getDouble("ActualAmount");
                                     discountrate = bd_type.getInt("DiscountRate");
                                     discountamount = bd_type.getInt("DiscountAmount");
                                     remarks = bd_type.getString("Remarks");

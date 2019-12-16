@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 public class TransactionsReportData extends SugarRecord {
     private String TRederenceCode;
     private String Type;
-    private int ActualAmount;
+    private double ActualAmount;
     private int DiscountRate;
     private int DiscountAmount;
     private String Remarks;
@@ -19,7 +19,7 @@ public class TransactionsReportData extends SugarRecord {
 
     }
 
-    public TransactionsReportData(String TRederenceCode, String Type, int ActualAmount, int DiscountRate, int DiscountAmount, String Remarks, String TDate, String TStatus, int PointAmount, boolean IsCashIn, String AdminTitle) {
+    public TransactionsReportData(String TRederenceCode, String Type, double ActualAmount, int DiscountRate, int DiscountAmount, String Remarks, String TDate, String TStatus, int PointAmount, boolean IsCashIn, String AdminTitle) {
         this.TRederenceCode = TRederenceCode;
         this.Type = Type;
         this.ActualAmount = ActualAmount;
@@ -41,7 +41,7 @@ public class TransactionsReportData extends SugarRecord {
         return Type;
     }
 
-    public int getActualAmount() {
+    public double getActualAmount() {
         return ActualAmount;
     }
 
@@ -85,7 +85,7 @@ public class TransactionsReportData extends SugarRecord {
         Type = type;
     }
 
-    public void setActualAmount(int actualAmount) {
+    public void setActualAmount(double actualAmount) {
         ActualAmount = actualAmount;
     }
 

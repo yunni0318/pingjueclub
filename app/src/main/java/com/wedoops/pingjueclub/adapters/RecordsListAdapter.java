@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.wedoops.pingjueclub.R;
 import com.wedoops.pingjueclub.database.TransactionsReportData;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +89,10 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
         if (trd_list_all.get(position).getType().equals(DATA_TYPE_MERCHANT_PAYMENT)) {
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
-            holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getActualAmount()));
+
+            DecimalFormat format = new DecimalFormat("0.#");
+            String actual_amount_string = format.format(trd_list_all.get(position).getActualAmount());
+            holder.textview_points_amount.setText(String.format("- %s pts", actual_amount_string));
 
             holder.textview_currency_amount.setText("(MYR) XXX");
             holder.textview_transaction_type.setText("Discount");
