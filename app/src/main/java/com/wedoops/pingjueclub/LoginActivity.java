@@ -36,7 +36,6 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 
 public class LoginActivity extends AppCompatActivity {
 

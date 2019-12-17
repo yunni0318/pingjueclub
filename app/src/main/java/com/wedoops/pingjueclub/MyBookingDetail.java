@@ -41,8 +41,6 @@ import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.qap.ctimelineview.TimelineRow;
-import org.qap.ctimelineview.TimelineViewAdapter;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -281,8 +279,6 @@ public class MyBookingDetail extends Activity {
 //        textview_upfront_payment.setAnimation(rotate);
 
         List<MyBookingBookingData> mbbd_all = MyBookingBookingData.listAll(MyBookingBookingData.class);
-
-        ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
 
         if (mbbd_all.get(0).getIsJoined().equals(CONSTANTS_VALUE.EVENT_DETAIL_PAYMENT_JOINED_STATUS)) {
 

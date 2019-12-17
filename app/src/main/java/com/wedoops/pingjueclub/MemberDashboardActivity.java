@@ -2,6 +2,7 @@ package com.wedoops.pingjueclub;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,9 +26,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.VideoController;
+import com.google.android.gms.ads.formats.MediaView;
+import com.google.android.gms.ads.formats.NativeAdOptions;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.google.android.gms.internal.ads.zzcax;
 import com.orm.StringUtil;
 import com.wedoops.pingjueclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.pingjueclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
@@ -68,6 +83,10 @@ public class MemberDashboardActivity extends Fragment {
     private static String currentSelectedCategory;
 
     private static CustomProgressDialog customDialog;
+
+    private static AdLoader adLoader;
+    private static AlertDialog alert;
+    private View customLayout;
 
     private static View.OnClickListener onEventDataItemClickListener = new View.OnClickListener() {
         @Override
@@ -132,11 +151,105 @@ public class MemberDashboardActivity extends Fragment {
         checkLoginStatus();
         setupViewByID();
         setupListener();
+        setupAdvertisement();
 
         button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
 
 
     }
+
+
+    private void setupAdvertisement() {
+
+        customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText("ATTENTION");
+        textview_message.setText("You can receive PTS by viewing the following advertisement");
+        builder.setView(customLayout);
+
+        builder.setCancelable(false);
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
+
+
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                adLoader.loadAd(new AdRequest.Builder().build());
+            }
+        });
+
+        alert = builder.create();
+
+
+//        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-2772663182449117/8882399941")
+        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-3940256099942544/2247696110")
+                .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+                    @Override
+                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+                        // Show the ad.
+
+                        if (adLoader.isLoading()) {
+
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+                            View customLayout = getLayoutInflater().inflate(R.layout.advertisement_dialog_custom_view, null);
+                            FrameLayout framelayout = customLayout.findViewById(R.id.framelayout);
+
+                            builder.setView(customLayout);
+//                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                }
+//                            });
+                            builder.setCancelable(true);
+
+                            UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater().inflate(R.layout.advertisement_unified_native_adview, null);
+                            MediaView mv = adView.findViewById(R.id.mediaview);
+
+                            mv.setMediaContent(unifiedNativeAd.getMediaContent());
+                            adView.setMediaView(mv);
+                            adView.setNativeAd(unifiedNativeAd);
+                            framelayout.removeAllViews();
+                            framelayout.addView(adView);
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+
+                        }
+
+
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+                        // Handle the failure by logging, altering the UI, and so on.
+                        Log.e("AdFailed", String.format("%d", errorCode));
+                    }
+                })
+                .withNativeAdOptions(new NativeAdOptions.Builder()
+                        // Methods in the NativeAdOptions.Builder class can be
+                        // used here to specify individual options settings.
+                        .build())
+                .build();
+
+    }
+
 
     private void checkLoginStatus() {
 
@@ -384,6 +497,10 @@ public class MemberDashboardActivity extends Fragment {
 
     }
 
+    private static void checkTopUpStatus() {
+        alert.show();
+
+    }
 
     private static void displayResult() {
 
@@ -499,7 +616,7 @@ public class MemberDashboardActivity extends Fragment {
                             cl_db.save();
                         }
 
-
+                        checkTopUpStatus();
                         displayResult();
 
                     } else {

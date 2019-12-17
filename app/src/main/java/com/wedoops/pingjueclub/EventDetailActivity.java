@@ -40,8 +40,6 @@ import com.wedoops.pingjueclub.webservices.RefreshTokenAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.qap.ctimelineview.TimelineRow;
-import org.qap.ctimelineview.TimelineViewAdapter;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -299,7 +297,6 @@ public class EventDetailActivity extends Activity {
 
         List<EventDetailBookingData> edbd_all = EventDetailBookingData.listAll(EventDetailBookingData.class);
 
-        ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
 
         if (edbd_all.get(0).getIsJoined().equals(CONSTANTS_VALUE.EVENT_DETAIL_PAYMENT_JOINED_STATUS)) {
 

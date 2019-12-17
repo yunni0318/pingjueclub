@@ -90,7 +90,7 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
-            DecimalFormat format = new DecimalFormat("0.#");
+            DecimalFormat format = new DecimalFormat("0.##");
             String actual_amount_string = format.format(trd_list_all.get(position).getActualAmount());
             holder.textview_points_amount.setText(String.format("- %s pts", actual_amount_string));
 

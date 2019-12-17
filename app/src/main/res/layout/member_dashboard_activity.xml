@@ -10,7 +10,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -38,7 +37,6 @@
                 <!--<include layout="@layout/custom_actionbar" />-->
 
             </FrameLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,6 +99,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
 
 
     </RelativeLayout>

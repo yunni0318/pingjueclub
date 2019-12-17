@@ -1,17 +1,8 @@
 package com.wedoops.pingjueclub;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.Window;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-
-import cc.cloudist.acplibrary.ACProgressConstant;
-import cc.cloudist.acplibrary.ACProgressCustom;
-import cc.cloudist.acplibrary.ACProgressFlower;
 import pl.droidsonroids.gif.GifImageView;
 
 public class CustomProgressDialog {

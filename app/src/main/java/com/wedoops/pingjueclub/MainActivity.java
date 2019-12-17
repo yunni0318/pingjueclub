@@ -19,6 +19,11 @@ import android.provider.MediaStore;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.NativeAdOptions;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -48,6 +53,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,7 +90,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressCustom;
 
 import static com.wedoops.pingjueclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
@@ -119,22 +124,19 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private ImageButton imagebutton_language;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String currentPhotoPath = "";
-    //    private ACProgressCustom customProgress;
     private static CustomProgressDialog customDialog;
+    private AlertDialog alert;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setTheme(R.style.AppTheme);
         loadLanguage();
-
+        setupProgressDialog();
+        setupAdvertisement();
         setContentView(R.layout.activity_main);
-
-//        customProgress = new ACProgressCustom.Builder(this)
-//                .useImages(R.drawable.pj_loading_1, R.drawable.pj_loading_2)
-//                .speed(4)
-//                .build();
-        customDialog = new CustomProgressDialog();
 
         if (checkAndRequestPermissions()) {
             mHandler = new Handler();
@@ -146,6 +148,18 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
         }
     }
+
+    private void setupProgressDialog() {
+        customDialog = new CustomProgressDialog();
+
+    }
+
+    private void setupAdvertisement() {
+//        MobileAds.initialize(this, "ca-app-pub-2772663182449117/8882399941");
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/2247696110");
+
+    }
+
 
     private boolean checkAndRequestPermissions() {
         int networkStatePermission = ContextCompat.checkSelfPermission(this,
@@ -306,40 +320,48 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(MainActivity.this.getString(R.string.warning_title));
-                builder.setMessage(MainActivity.this.getString(R.string.logout_confirmation));
+
+                View customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+                Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                textview_title.setText("LOGOUT");
+                textview_message.setText(MainActivity.this.getString(R.string.logout_confirmation));
+                builder.setView(customLayout);
+
                 builder.setCancelable(false);
-                builder.setPositiveButton(MainActivity.this.getString(R.string.Ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
 
-                                dialog.dismiss();
+                button_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                    }
+                });
 
-                                UserDetails.deleteAll(UserDetails.class);
-                                MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
-                                MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
 
-                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                button_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                        UserDetails.deleteAll(UserDetails.class);
+                        MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
+                        MemberDashboardTopBanner.deleteAll(MemberDashboardTopBanner.class);
 
-                                startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                            }
-                        });
+                        startActivity(intent);
+                    }
+                });
 
-                builder.setNegativeButton(MainActivity.this.getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
+                alert = builder.create();
 
-                                dialog.dismiss();
+                alert.show();
 
-                            }
-                        });
-                builder.show();
 
             }
         });
