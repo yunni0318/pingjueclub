@@ -20,12 +20,13 @@ public class UserDetails extends SugarRecord {
     private String UserLevelCode;
     private String JoinedDate;
     private String CashWallet;
+    private boolean GotNewTopUp;
 
     public UserDetails() {
 
     }
 
-    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String name, String nickname, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet) {
+    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String name, String nickname, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet, boolean gotNewTopUp) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         Srno = srno;
@@ -43,6 +44,7 @@ public class UserDetails extends SugarRecord {
         UserLevelCode = userLevelCode;
         JoinedDate = joinedDate;
         CashWallet = cashWallet;
+        this.GotNewTopUp = gotNewTopUp;
     }
 
     public String getAccessToken() {
@@ -113,6 +115,10 @@ public class UserDetails extends SugarRecord {
         return CashWallet;
     }
 
+    public boolean isGotNewTopUp() {
+        return GotNewTopUp;
+    }
+
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
@@ -179,5 +185,9 @@ public class UserDetails extends SugarRecord {
 
     public void setCashWallet(String cashWallet) {
         CashWallet = cashWallet;
+    }
+
+    public void setGotNewTopUp(boolean gotNewTopUp) {
+        GotNewTopUp = gotNewTopUp;
     }
 }

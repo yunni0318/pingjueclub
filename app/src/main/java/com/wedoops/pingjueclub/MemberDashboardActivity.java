@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -86,7 +89,6 @@ public class MemberDashboardActivity extends Fragment {
 
     private static AdLoader adLoader;
     private static AlertDialog alert;
-    private View customLayout;
 
     private static View.OnClickListener onEventDataItemClickListener = new View.OnClickListener() {
         @Override
@@ -161,17 +163,18 @@ public class MemberDashboardActivity extends Fragment {
 
     private void setupAdvertisement() {
 
-        customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+
+        View askDialog = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
 
-        TextView textview_title = customLayout.findViewById(R.id.textview_title);
-        TextView textview_message = customLayout.findViewById(R.id.textview_message);
-        Button button_cancel = customLayout.findViewById(R.id.button_cancel);
-        Button button_ok = customLayout.findViewById(R.id.button_ok);
+        TextView textview_title = askDialog.findViewById(R.id.textview_title);
+        TextView textview_message = askDialog.findViewById(R.id.textview_message);
+        Button button_cancel = askDialog.findViewById(R.id.button_cancel);
+        Button button_ok = askDialog.findViewById(R.id.button_ok);
 
         textview_title.setText("ATTENTION");
         textview_message.setText("You can receive PTS by viewing the following advertisement");
-        builder.setView(customLayout);
+        builder.setView(askDialog);
 
         builder.setCancelable(false);
 
@@ -187,66 +190,125 @@ public class MemberDashboardActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 alert.dismiss();
-                adLoader.loadAd(new AdRequest.Builder().build());
+
+                final AlertDialog alert_video;
+
+                View customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_video_layout, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+                VideoView videoview = customLayout.findViewById(R.id.videoview);
+                final Button button_skip = customLayout.findViewById(R.id.button_skip);
+
+                String path = "android.resource://com.wedoops.pingjueclub/" + R.raw.sample_ads;
+                videoview.setVideoURI(Uri.parse(path));
+                videoview.start();
+
+                builder.setView(customLayout);
+                builder.setCancelable(false);
+
+                alert_video = builder.create();
+
+                alert_video.show();
+
+
+                new CountDownTimer(6000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        button_skip.setText(millisUntilFinished / 1000 + " seconds to skip");
+                        //here you can have your logic to set text to edittext
+                    }
+
+                    public void onFinish() {
+                        button_skip.setText("Skip");
+                    }
+
+                }.start();
+
+                button_skip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(button_skip.getText().toString().equals("Skip")){
+                            alert_video.dismiss();
+
+                            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+                            String table_name = UserDetails.getTableName(UserDetails.class);
+                            String loginid_field = StringUtil.toSQLName("LoginID");
+
+                            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+                            Bundle b = new Bundle();
+                            b.putString("access_token", ud_list.get(0).getAccessToken());
+                            b.putInt(Api_Constants.COMMAND, Api_Constants.API_DISTRIBUTE_PENDING_AMOUNT);
+
+                            new CallWebServices(Api_Constants.API_DISTRIBUTE_PENDING_AMOUNT, view.getContext(), true).execute(b);
+
+
+                        }
+                    }
+                });
+
+//                adLoader.loadAd(new AdRequest.Builder().build());
             }
         });
 
         alert = builder.create();
-
-
-//        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-2772663182449117/8882399941")
-        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-3940256099942544/2247696110")
-                .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-                    @Override
-                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        // Show the ad.
-
-                        if (adLoader.isLoading()) {
-
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
-
-                            View customLayout = getLayoutInflater().inflate(R.layout.advertisement_dialog_custom_view, null);
-                            FrameLayout framelayout = customLayout.findViewById(R.id.framelayout);
-
-                            builder.setView(customLayout);
-//                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                }
-//                            });
-                            builder.setCancelable(true);
-
-                            UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater().inflate(R.layout.advertisement_unified_native_adview, null);
-                            MediaView mv = adView.findViewById(R.id.mediaview);
-
-                            mv.setMediaContent(unifiedNativeAd.getMediaContent());
-                            adView.setMediaView(mv);
-                            adView.setNativeAd(unifiedNativeAd);
-                            framelayout.removeAllViews();
-                            framelayout.addView(adView);
-
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-
-
-                        }
-
-
-                    }
-                })
-                .withAdListener(new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-                        // Handle the failure by logging, altering the UI, and so on.
-                        Log.e("AdFailed", String.format("%d", errorCode));
-                    }
-                })
-                .withNativeAdOptions(new NativeAdOptions.Builder()
-                        // Methods in the NativeAdOptions.Builder class can be
-                        // used here to specify individual options settings.
-                        .build())
-                .build();
+//
+//
+////        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-2772663182449117/8882399941")
+//        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-4167585096532227/2369549218")
+////        adLoader = new AdLoader.Builder(get_context, "ca-app-pub-3940256099942544/2247696110")
+//                .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+//                    @Override
+//                    public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+//                        // Show the ad.
+//
+//                        if (adLoader.isLoading()) {
+//
+//                        } else {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+//
+//                            View customLayout = getLayoutInflater().inflate(R.layout.advertisement_dialog_custom_view, null);
+//                            FrameLayout framelayout = customLayout.findViewById(R.id.framelayout);
+//
+//                            builder.setView(customLayout);
+////                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+////                                @Override
+////                                public void onClick(DialogInterface dialog, int which) {
+////                                }
+////                            });
+//                            builder.setCancelable(true);
+//
+//                            UnifiedNativeAdView adView = (UnifiedNativeAdView) getLayoutInflater().inflate(R.layout.advertisement_unified_native_adview, null);
+//                            MediaView mv = adView.findViewById(R.id.mediaview);
+//
+//                            mv.setMediaContent(unifiedNativeAd.getMediaContent());
+//                            adView.setMediaView(mv);
+//                            adView.setNativeAd(unifiedNativeAd);
+//                            framelayout.removeAllViews();
+//                            framelayout.addView(adView);
+//
+//                            AlertDialog dialog = builder.create();
+//                            dialog.show();
+//
+//
+//                        }
+//
+//
+//                    }
+//                })
+//                .withAdListener(new AdListener() {
+//                    @Override
+//                    public void onAdFailedToLoad(int errorCode) {
+//                        // Handle the failure by logging, altering the UI, and so on.
+//                        Log.e("AdFailed", String.format("%d", errorCode));
+//                    }
+//                })
+//                .withNativeAdOptions(new NativeAdOptions.Builder()
+//                        // Methods in the NativeAdOptions.Builder class can be
+//                        // used here to specify individual options settings.
+//                        .build())
+//                .build();
 
     }
 
@@ -498,8 +560,12 @@ public class MemberDashboardActivity extends Fragment {
     }
 
     private static void checkTopUpStatus() {
-        alert.show();
 
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        if (ud.get(0).isGotNewTopUp()) {
+            alert.show();
+        }
     }
 
     private static void displayResult() {
@@ -589,6 +655,7 @@ public class MemberDashboardActivity extends Fragment {
                         ud.setUserLevelCode(user_quick_profile_object.getString("UserLevelCode"));
                         ud.setJoinedDate(user_quick_profile_object.getString("JoinedDate"));
                         ud.setCashWallet(user_quick_profile_object.getString("CashWallet"));
+                        ud.setGotNewTopUp(user_quick_profile_object.getBoolean("GotNewTopUp"));
 
                         ud.save();
 

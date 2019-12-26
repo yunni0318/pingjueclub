@@ -263,9 +263,10 @@ public class LoginActivity extends AppCompatActivity {
                         String UserLevelCode = user_profile_object.getString("UserLevelCode");
                         String JoinedDate = user_profile_object.getString("JoinedDate");
                         String CashWallet = String.valueOf(user_profile_object.getString("CashWallet"));
+                        boolean gotnewtopup = user_profile_object.getBoolean("GotNewTopUp");
 
 
-                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet);
+                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet,gotnewtopup);
                         ud.save();
 
                         new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());

@@ -63,6 +63,7 @@ public class Api_Constants {
     public static final int API_MAKE_QR_CODE_PAYMENT = 17;
     public static final int API_SERVICE_MERCHANT_LIST = 18;
     public static final int API_UPDATE_DEVICE_ID = 19;
+    public static final int API_DISTRIBUTE_PENDING_AMOUNT = 20;
 
 
     public static final String COMMAND = "command";
@@ -860,6 +861,38 @@ public class Api_Constants {
                             return params;
                         }
 
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_DISTRIBUTE_PENDING_AMOUNT: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_userwallet + "DistributePendingAmount",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Log.e("Response", response.toString());
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.networkResponse.toString());
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
                     };
                     queue.add(postRequest);
 

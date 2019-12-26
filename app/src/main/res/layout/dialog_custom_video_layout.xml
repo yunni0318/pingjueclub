@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#111111"
+    android:padding="15dp">
+
+    <VideoView
+        android:id="@+id/videoview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/button_skip"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:background="#50ffffff"
+        android:text="5 Seconds To Skip"
+        android:layout_gravity="bottom|right" />
+
+
+</FrameLayout>
