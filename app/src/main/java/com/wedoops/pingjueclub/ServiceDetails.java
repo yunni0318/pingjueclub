@@ -38,7 +38,8 @@ import java.util.List;
 public class ServiceDetails extends AppCompatActivity {
 
     private static CustomProgressDialog customDialog;
-    private String subservice_id, subservice_name;
+    //    private String subservice_id, subservice_name;
+    private String mainservicesid, mainservicesname;
     private RecyclerView recyclerview;
     private ImageView toolbar_back;
     private TextView toolbar_title;
@@ -50,8 +51,10 @@ public class ServiceDetails extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        subservice_id = intent.getExtras().getString("subservice_id");
-        subservice_name = intent.getExtras().getString("subservice_name");
+//        subservice_id = intent.getExtras().getString("subservice_id");
+//        subservice_name = intent.getExtras().getString("subservice_name");
+        mainservicesid = intent.getStringExtra("main_services_id");
+        mainservicesname = intent.getStringExtra("main_services_name");
         setupDeclaration();
         callWebService();
 
@@ -62,8 +65,10 @@ public class ServiceDetails extends AppCompatActivity {
         recyclerview = findViewById(R.id.recyclerview);
         toolbar_back = findViewById(R.id.toolbar_back);
         toolbar_title = findViewById(R.id.toolbar_title);
-        toolbar_title.setText(subservice_name);
-        
+//        toolbar_title.setText(subservice_name);
+        toolbar_title.setText(mainservicesname);
+
+
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +81,6 @@ public class ServiceDetails extends AppCompatActivity {
 //        String tablename_ssld = StringUtil.toSQLName("ServicesMerchantDetails");
 
         List<ServicesMerchantDetails> smd_list_all = ServicesMerchantDetails.listAll(ServicesMerchantDetails.class);
-
 
         RecyclerView.LayoutManager sub_mLayoutManager = new LinearLayoutManager(this);
         ServiceDetailsItemAdapter adapter = new ServiceDetailsItemAdapter(this, smd_list_all);
@@ -95,7 +99,9 @@ public class ServiceDetails extends AppCompatActivity {
         List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
         Bundle b = new Bundle();
-        b.putString("ServicesID", subservice_id);
+//        b.putString("ServicesID", subservice_id);
+        b.putString("ServicesID", mainservicesid);
+
         b.putString("access_token", ud_list.get(0).getAccessToken());
 
 

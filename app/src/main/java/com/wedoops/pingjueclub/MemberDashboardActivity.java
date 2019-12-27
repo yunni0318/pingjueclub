@@ -90,6 +90,8 @@ public class MemberDashboardActivity extends Fragment {
     private static AdLoader adLoader;
     private static AlertDialog alert;
 
+    private CountDownTimer cdt;
+
     private static View.OnClickListener onEventDataItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -211,7 +213,7 @@ public class MemberDashboardActivity extends Fragment {
                 alert_video.show();
 
 
-                new CountDownTimer(6000, 1000) {
+                cdt = new CountDownTimer(6000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
                         button_skip.setText(millisUntilFinished / 1000 + " seconds to skip");
@@ -229,6 +231,8 @@ public class MemberDashboardActivity extends Fragment {
                     public void onClick(View v) {
                         if(button_skip.getText().toString().equals("Skip")){
                             alert_video.dismiss();
+
+                            cdt.cancel();
 
                             List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
@@ -315,7 +319,7 @@ public class MemberDashboardActivity extends Fragment {
 
     private void checkLoginStatus() {
 
-        List<UserDetails> ud = UserDetails.findWithQuery(UserDetails.class, "Select access_token from USER_DETAILS");
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
         if (ud.size() < 1) {
             get_activity.finish();
@@ -424,7 +428,11 @@ public class MemberDashboardActivity extends Fragment {
                     }
                 };
                 smoothScroller.setTargetPosition(position);
-                startSmoothScroll(smoothScroller);
+                try{
+                    startSmoothScroll(smoothScroller);
+                }catch (Exception ex){
+                    setupRecyclerView();
+                }
             }
 
         };

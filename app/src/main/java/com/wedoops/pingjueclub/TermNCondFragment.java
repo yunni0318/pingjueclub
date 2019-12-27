@@ -37,7 +37,7 @@ public class TermNCondFragment extends Fragment {
     private void setupDeclaration() {
         webView = view.findViewById(R.id.webView);
 
-        webView.loadUrl("https://www.google.com/");
+        webView.loadUrl("http://103.198.194.228:54153/tnc");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.setWebViewClient(new WebViewClient());

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.wedoops.pingjueclub.R;
+import com.wedoops.pingjueclub.ServiceDetails;
 import com.wedoops.pingjueclub.ServicesSubActivity;
 import com.wedoops.pingjueclub.database.ServicesListData;
 
@@ -48,7 +49,8 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, ServicesSubActivity.class);
+//                Intent intent = new Intent(mContext, ServicesSubActivity.class);
+                Intent intent = new Intent(mContext, ServiceDetails.class);
                 intent.putExtra("main_services_id", mData.get(i).getMainServicesID());
                 intent.putExtra("main_services_name", mData.get(i).getMainServiceName());
 
