@@ -1,43 +1,42 @@
 {
   "project_info": {
-    "project_number": "651135377124",
-    "firebase_url": "https://pjclub-27657.firebaseio.com",
-    "project_id": "pjclub-27657",
-    "storage_bucket": "pjclub-27657.appspot.com"
+    "project_number": "55073528255",
+    "firebase_url": "https://platinum-noble-club.firebaseio.com",
+    "project_id": "platinum-noble-club",
+    "storage_bucket": "platinum-noble-club.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:651135377124:android:16be4fd4e2c13452",
+        "mobilesdk_app_id": "1:55073528255:android:31aa9ac6c1b42fe88d690a",
         "android_client_info": {
-          "package_name": "com.wedoops.pingjueclub"
+          "package_name": "com.wedoops.platinumnobleclub"
         }
       },
       "oauth_client": [
         {
-          "client_id": "651135377124-86g5g687imav1vmbrmfj49jfa5a4gipu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.wedoops.pingjueclub",
-            "certificate_hash": "f6ca4b72d41ebc4070791180467277c4f934c3a9"
-          }
-        },
-        {
-          "client_id": "651135377124-c5vrm8rn41cu7nsekhbjcp0i2o61b9o3.apps.googleusercontent.com",
+          "client_id": "55073528255-bjm958cses7ljqu904h57k2tskp50rt7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2uRtHrZaYn0DqGudSrYLVSV7gnHc7vqw"
+          "current_key": "AIzaSyBusLAeSo2xLLjtuNnsT3wP7ymXJxRKZk4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "651135377124-c5vrm8rn41cu7nsekhbjcp0i2o61b9o3.apps.googleusercontent.com",
+              "client_id": "55073528255-bjm958cses7ljqu904h57k2tskp50rt7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "55073528255-8hnm1juove22n6lqfj27p5svbmmjtie9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wedoops.pjclub"
+              }
             }
           ]
         }

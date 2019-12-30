@@ -1,4 +1,4 @@
-package com.wedoops.pingjueclub;
+package com.wedoops.platinumnobleclub;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;

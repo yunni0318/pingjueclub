@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">品爵</string>
+    <string name="app_name">Platinum Noble Club</string>
 
     <!-- Login Activity-->
     <string name="login_activity_login">User Log In</string>

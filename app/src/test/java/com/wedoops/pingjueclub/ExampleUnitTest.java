@@ -1,4 +1,4 @@
-package com.wedoops.pingjueclub;
+package com.wedoops.platinumnobleclub;
 
 import org.junit.Test;
 
