@@ -23,7 +23,9 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
     private List<TransactionsReportData> trd_list_all;
     private static String DATA_TYPE_MERCHANT_PAYMENT = "MERCHANT-PAYMENT";
     private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
-    private static String DATA_TYPE_PAYMENT = "PAYMENT-";
+    private static String DATA_TYPE_ADMIN_DEDUCT = "ADMIN-DEDUCT";
+    private static String DATA_TYPE_PAYMENT_PARTIAL = "PAYMENT-PARTIAL";
+    private static String DATA_TYPE_PAYMENT_FULL = "PAYMENT-FULL";
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -91,7 +93,7 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             String actual_amount_string = format.format(trd_list_all.get(position).getActualAmount());
             holder.textview_points_amount.setText(String.format("- %s pts", actual_amount_string));
 
-            holder.textview_currency_amount.setText("(MYR) XXX");
+            holder.textview_currency_amount.setText("");
             holder.textview_transaction_type.setText("Discount");
             holder.textview_transaction_type_amount.setText(String.format("- %d%%", trd_list_all.get(position).getDiscountRate()));
 
@@ -117,7 +119,24 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             holder.textview_transaction_type_amount.setVisibility(View.GONE);
 
 
-        } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT)) {
+        } else if (trd_list_all.get(position).getType().equals(DATA_TYPE_ADMIN_DEDUCT)) {
+
+            holder.textview_remarks.setText(trd_list_all.get(position).getRemarks());
+            holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
+
+            if (trd_list_all.get(position).isCashIn()) {
+                holder.textview_points_amount.setText(String.format("+ %d pts", trd_list_all.get(position).getPointAmount()));
+
+            } else {
+                holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
+            }
+
+            holder.textview_currency_amount.setVisibility(View.GONE);
+            holder.textview_transaction_type.setVisibility(View.GONE);
+            holder.textview_transaction_type_amount.setVisibility(View.GONE);
+
+
+        } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT_PARTIAL)) {
             holder.textview_remarks.setText(trd_list_all.get(position).getAdminTitle());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
@@ -128,7 +147,26 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
                 holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
             }
 
-            holder.textview_currency_amount.setText("(MYR) XXX");
+            holder.textview_currency_amount.setText("");
+            holder.textview_transaction_type.setText(trd_list_all.get(position).getType());
+            holder.textview_transaction_type_amount.setText(trd_list_all.get(position).getRemarks());
+
+            holder.textview_currency_amount.setVisibility(View.INVISIBLE);
+            holder.textview_transaction_type.setVisibility(View.VISIBLE);
+            holder.textview_transaction_type_amount.setVisibility(View.VISIBLE);
+
+        } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT_FULL)) {
+            holder.textview_remarks.setText(trd_list_all.get(position).getAdminTitle());
+            holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
+
+            if (trd_list_all.get(position).isCashIn()) {
+                holder.textview_points_amount.setText(String.format("+ %d pts", trd_list_all.get(position).getPointAmount()));
+
+            } else {
+                holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
+            }
+
+            holder.textview_currency_amount.setText("");
             holder.textview_transaction_type.setText(trd_list_all.get(position).getType());
             holder.textview_transaction_type_amount.setText(trd_list_all.get(position).getRemarks());
 
@@ -169,6 +207,17 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
     @Override
     public int getItemCount() {
-        return trd_list_all.size();
+
+        if (trd_list_all == null) {
+            return 0;
+        } else {
+            if (trd_list_all.size() > 0) {
+                return trd_list_all.size();
+
+            } else {
+                return 0;
+            }
+        }
+
     }
 }

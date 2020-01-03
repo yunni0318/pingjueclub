@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,15 +50,23 @@ public class RecordsList extends Fragment {
     private static TextView dateType, weekly, monthly, yearly, dateAll;
     private static String DATA_TYPE_MERCHANT_PAYMENT = "MERCHANT-PAYMENT";
     private static String DATA_TYPE_ADMIN_TOPUP = "ADMIN-TOPUP";
-    private static String DATA_TYPE_PAYMENT = "PAYMENT-";
+    private static String DATA_TYPE_ADMIN_DEDUCT = "ADMIN-DEDUCT";
+    private static String DATA_TYPE_PAYMENT_PARTIAL = "PAYMENT-PARTIAL";
+    private static String DATA_TYPE_PAYMENT_FULL = "PAYMENT-FULL";
 
     private static RecordsListAdapter adapter = new RecordsListAdapter();
-    ;
 
-    private Handler handler;
+
+    private static Handler handler;
 
     private static int counter = 0;
     private static CustomProgressDialog customDialog;
+
+    private static RecyclerViewReadyCallback recyclerViewReadyCallback;
+
+    public interface RecyclerViewReadyCallback {
+        void onLayoutReady();
+    }
 
     private static void callCashWalletTransactionWebService() {
 
@@ -102,17 +111,45 @@ public class RecordsList extends Fragment {
     }
 
     private static void displayResult() {
+
         setupRecyclerView();
     }
 
     private static void setupRecyclerView() {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+//        recyclerview_transaction.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                if (recyclerViewReadyCallback != null) {
+//                    recyclerViewReadyCallback.onLayoutReady();
+//                }
+//                recyclerview_transaction.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//            }
+//        });
+//
+//
+//        recyclerViewReadyCallback = new RecyclerViewReadyCallback() {
+//            @Override
+//            public void onLayoutReady() {
+//
+//                recyclerview_transaction.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Log.d("READY","FINISH LOADING");
+//                        customDialog.hideDialog();
+//                    }
+//                });
+//
+//
+//            }
+//        };
 
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerview_transaction.setLayoutManager(layoutManager);
         recyclerview_transaction.setAdapter(adapter);
-        dateAll.performClick();
 
+        dateAll.performClick();
 
     }
 
@@ -173,7 +210,22 @@ public class RecordsList extends Fragment {
                                     TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, null);
                                     trd.save();
 
-                                } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT)) {
+                                } else if (bd_type.getString("Type").contains(DATA_TYPE_ADMIN_DEDUCT)) {
+                                    TStatus = bd_type.getString("TStatus");
+                                    pointamount = bd_type.getInt("PointAmount");
+                                    iscashin = bd_type.getBoolean("IsCashIn");
+                                    remarks = bd_type.getString("Remarks");
+                                    TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, null);
+                                    trd.save();
+
+                                } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT_PARTIAL)) {
+                                    TStatus = bd_type.getString("TStatus");
+                                    pointamount = bd_type.getInt("PointAmount");
+                                    iscashin = bd_type.getBoolean("IsCashIn");
+                                    remarks = bd_type.getString("Remarks");
+                                    TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode"), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, bd_type.getString("EventTitle"));
+                                    trd.save();
+                                } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT_FULL)) {
                                     TStatus = bd_type.getString("TStatus");
                                     pointamount = bd_type.getInt("PointAmount");
                                     iscashin = bd_type.getBoolean("IsCashIn");
@@ -374,7 +426,7 @@ public class RecordsList extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.my_transactions_report, container, false);
-        get_context = getContext();
+        get_context = view.getContext();
         handler = new Handler();
         return view;
     }
@@ -487,16 +539,7 @@ public class RecordsList extends Fragment {
 
                 }
 
-                customDialog.showDialog(get_context);
-
                 adapter.UpdateRecordListAdapter(trd_list_all);
-                recyclerview_transaction.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        customDialog.hideDialog();
-
-                    }
-                });
 
             }
         });
@@ -505,20 +548,25 @@ public class RecordsList extends Fragment {
             @Override
             public void onClick(View v) {
                 dateType.setText("All");
+                dateChoices.setVisibility(View.GONE);
 
                 customDialog.showDialog(get_context);
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
-
-                adapter.UpdateRecordListAdapter(trd_list_all);
-                recyclerview_transaction.post(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        customDialog.hideDialog();
-                    }
-                });
+                        List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
 
-                dateChoices.setVisibility(View.GONE);
+                        adapter.UpdateRecordListAdapter(trd_list_all);
+
+                        recyclerview_transaction.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                customDialog.hideDialog();
+                            }
+                        });
+                    }
+                }, 500);
 
             }
         });
@@ -542,20 +590,26 @@ public class RecordsList extends Fragment {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
                 String tdate_field = StringUtil.toSQLName("TDate");
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                dateChoices.setVisibility(View.GONE);
 
                 customDialog.showDialog(get_context);
 
-                adapter.UpdateRecordListAdapter(trd_list_all);
-                recyclerview_transaction.post(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        customDialog.hideDialog();
 
+                        adapter.UpdateRecordListAdapter(trd_list_all);
+
+                        recyclerview_transaction.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                customDialog.hideDialog();
+                            }
+                        });
                     }
-                });
+                }, 500);
 
-                dateChoices.setVisibility(View.GONE);
             }
         });
 
@@ -579,19 +633,26 @@ public class RecordsList extends Fragment {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
                 String tdate_field = StringUtil.toSQLName("TDate");
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
                 customDialog.showDialog(get_context);
+                dateChoices.setVisibility(View.GONE);
 
-                adapter.UpdateRecordListAdapter(trd_list_all);
-                recyclerview_transaction.post(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        customDialog.hideDialog();
 
+                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        recyclerview_transaction.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                customDialog.hideDialog();
+
+                            }
+                        });
                     }
-                });
-                dateChoices.setVisibility(View.GONE);
+                }, 500);
+
             }
         });
 
@@ -614,19 +675,26 @@ public class RecordsList extends Fragment {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
                 String tdate_field = StringUtil.toSQLName("TDate");
 
-                List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
                 customDialog.showDialog(get_context);
 
-                adapter.UpdateRecordListAdapter(trd_list_all);
-                recyclerview_transaction.post(new Runnable() {
+                dateChoices.setVisibility(View.GONE);
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        customDialog.hideDialog();
 
+                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        recyclerview_transaction.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                customDialog.hideDialog();
+
+                            }
+                        });
                     }
-                });
-                dateChoices.setVisibility(View.GONE);
+                }, 500);
+
             }
         });
 
