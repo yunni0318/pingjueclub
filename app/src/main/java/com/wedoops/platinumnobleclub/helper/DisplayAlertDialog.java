@@ -166,8 +166,8 @@ public class DisplayAlertDialog {
                 break;
 
             }
-            case 200: {
-                message = context.getString(R.string.error_unknown);
+            case 503: {
+                message = "Service Unavailable, Please Try Again Later";
                 break;
             }
             case 2501: {

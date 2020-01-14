@@ -27,7 +27,9 @@ import java.util.Map;
 
 public class RefreshTokenAPI {
 
-    private static String url_authentication = "http://103.244.0.237:54126/api/Authentication/";
+    //    private static String url_authentication = "http://103.244.0.237:54126/api/Authentication/";
+    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
+
     private static String access_token_prefix = "bearer ";
 
     public static final int API_REFRESH_TOKEN = 44;
@@ -47,8 +49,8 @@ public class RefreshTokenAPI {
     public static final int ORIGIN_CASH_WALLET_TRANSACTION = 1313;
     public static final int ORIGIN_CASH_WALLET_TRANSACTION_V2 = 13131313;
     public static final int ORIGIN_MEMBER_CHANGE_PROFILE_PICTURE = 1414;
-    public static final int ORIGIN_SERVICE_PAGE_DETAIL= 1616;
-    public static final int ORIGIN_MAKE_QR_CODE_PAYMENT= 1717;
+    public static final int ORIGIN_SERVICE_PAGE_DETAIL = 1616;
+    public static final int ORIGIN_MAKE_QR_CODE_PAYMENT = 1717;
 
     private static Context context;
     private static int origin;
@@ -114,7 +116,7 @@ public class RefreshTokenAPI {
                                     if (origin == ORIGIN_EVENT_DETAILS_MAKE_BOOKING) {
                                         ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS_MAKE_BOOKING);
                                     }
-                                    if(origin == ORIGIN_SERVICE_PAGE_DETAIL){
+                                    if (origin == ORIGIN_SERVICE_PAGE_DETAIL) {
                                         ServicesFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_SERVICE_PAGE_DETAIL);
                                     }
                                     if (origin == ORIGIN_MAKE_QR_CODE_PAYMENT) {

@@ -32,13 +32,21 @@ import java.util.Map;
 
 public class Api_Constants {
 
-    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
-    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
-    private static String url_event = "http://103.198.194.228:54126/api/Event/";
-    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
-    private static String url_member = "http://103.198.194.228:54126/api/Member/";
-    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
-    private static String url_services = "http://103.198.194.228:54126/api/Services/";
+//    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
+//    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
+//    private static String url_event = "http://103.198.194.228:54126/api/Event/";
+//    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
+//    private static String url_member = "http://103.198.194.228:54126/api/Member/";
+//    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
+//    private static String url_services = "http://103.198.194.228:54126/api/Services/";
+
+    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
+    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
+    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
+    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
+    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
+    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
+    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
