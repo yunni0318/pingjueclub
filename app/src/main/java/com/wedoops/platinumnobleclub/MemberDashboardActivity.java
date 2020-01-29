@@ -214,7 +214,7 @@ public class MemberDashboardActivity extends Fragment {
                 button_skip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(button_skip.getText().toString().equals("Skip")){
+                        if (button_skip.getText().toString().equals("Skip")) {
                             alert_video.dismiss();
 
                             cdt.cancel();
@@ -413,9 +413,9 @@ public class MemberDashboardActivity extends Fragment {
                     }
                 };
                 smoothScroller.setTargetPosition(position);
-                try{
+                try {
                     startSmoothScroll(smoothScroller);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     setupRecyclerView();
                 }
             }
@@ -548,7 +548,7 @@ public class MemberDashboardActivity extends Fragment {
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
 //        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, RefreshTokenAPI.ORIGIN_MEMBER_DASHBOARD).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, RefreshTokenAPI.ORIGIN_MEMBER_DASHBOARD).execute(b);
 
     }
 
@@ -680,7 +680,7 @@ public class MemberDashboardActivity extends Fragment {
                         displayResult();
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -713,10 +713,10 @@ public class MemberDashboardActivity extends Fragment {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
 
@@ -726,7 +726,7 @@ public class MemberDashboardActivity extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         } else if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
@@ -757,7 +757,7 @@ public class MemberDashboardActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -780,13 +780,13 @@ public class MemberDashboardActivity extends Fragment {
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext(), get_activity);
                     } else {
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }

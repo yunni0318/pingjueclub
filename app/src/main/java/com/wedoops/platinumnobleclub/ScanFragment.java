@@ -1,7 +1,6 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +11,14 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,9 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     private ZXingScannerView zXingScannerView;
     private TextView amount;
     private View view;
-//    private PowerMenu pm;
+    //    private PowerMenu pm;
+    private AlertDialog alert;
+
 
     @Nullable
     @Override
@@ -198,26 +201,66 @@ public class ScanFragment extends Fragment implements ZXingScannerView.ResultHan
     }
 
     private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+
+        View customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText("Need Permissions");
+        textview_message.setText("This app needs permission to use this feature. You can grant them in app settings.");
+        button_ok.setText("GOTO SETTINGS");
+
+        builder.setView(customLayout);
+
+        builder.setCancelable(false);
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onClick(View v) {
+                alert.dismiss();
                 if (getActivity() != null) {
                     ((MainActivity) getActivity()).loadHomeFragment();
                 }
             }
         });
-        builder.show();
+
+
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                openSettings();
+            }
+        });
+
+        alert = builder.create();
+
+        alert.show();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("Need Permissions");
+//        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+//        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                dialogInterface.cancel();
+//                openSettings();
+//            }
+//        });
+//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//                if (getActivity() != null) {
+//                    ((MainActivity) getActivity()).loadHomeFragment();
+//                }
+//            }
+//        });
+//        builder.show();
     }
 
     private void openSettings() {

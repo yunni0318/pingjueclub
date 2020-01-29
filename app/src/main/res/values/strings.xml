@@ -27,12 +27,13 @@
 
     <!-- Event Detail Activity -->
     <string name="event_detail_title">Event Detail</string>
-    <string name="event_detail_join_trip_bell">Press \'JOIN TRIP\' to make your payment.</string>
-    <string name="event_detail_trip_detail_title">TRIP DETAILS</string>
-    <string name="event_detail_join_trip">JOIN TRIP</string>
-    <string name="event_detail_joined_status_false">Press \'JOIN TRIP\' to make your payment.</string>
-    <string name="event_detail_confirm_join_trip">Confirm to join this trip?</string>
-    <string name="event_detail_trip_confirmed">JOIN TRIP CONFIRMED!</string>
+    <string name="event_detail_join_trip_bell">Press \'JOIN EVENT\' to make your payment.</string>
+    <string name="event_detail_trip_detail_title">EVENT DETAILS</string>
+    <string name="event_detail_join_trip">JOIN EVENT</string>
+    <string name="event_detail_joined_status_false">Press \'JOIN EVENT\' to make your payment.</string>
+    <string name="event_detail_confirm_join_trip">Confirm to join this event?</string>
+    <string name="event_detail_is_joined">YOU\'VE JOINED</string>
+    <string name="event_detail_trip_confirmed">JOIN EVENT CONFIRMED!</string>
 
     <!-- Edit Profile Activity -->
     <string name="edit_profile_profile_title">PROFILE</string>
@@ -128,11 +129,12 @@
 
     <!-- Button Message-->
     <string name="cancel">CANCEL</string>
-    <string name="join_trip">JOIN TRIP</string>
+    <string name="join_trip">JOIN EVENT</string>
     <string name="loading_please_wait">Loading...</string>
 
     <!-- Others -->
     <string name="userrank_bronze">BRONZE</string>
+    <string name="userrank_silver">SILVER</string>
     <string name="userrank_gold">GOLD</string>
     <string name="userrank_platinum">PLATINUM</string>
     <string-array name="imagePicker">

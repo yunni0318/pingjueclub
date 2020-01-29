@@ -18,11 +18,14 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class TermNCondFragment extends Fragment {
 
     private View view;
     private WebView webView;
+    private static AlertDialog alert;
 
     @Nullable
     @Override
@@ -68,20 +71,49 @@ public class TermNCondFragment extends Fragment {
                 view.setBackgroundColor(Color.parseColor("#191919"));
                 view.loadUrl("about:blank");
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Dialog_Alert);
-                builder.setTitle("Warning");
-                builder.setMessage("something went wrong, please try again later");
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(view.getContext());
+
+                View customLayout = getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+                TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                textview_title.setText("Warning");
+                textview_message.setText("something went wrong, please try again later");
+                button_ok.setText(view.getContext().getString(R.string.Ok));
+
+                builder.setView(customLayout);
+
                 builder.setCancelable(false);
-                builder.setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
 
-                                dialog.dismiss();
 
-                            }
-                        });
-                builder.show();
+                button_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                    }
+                });
+
+                alert = builder.create();
+
+                alert.show();
+
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Dialog_Alert);
+//                builder.setTitle("Warning");
+//                builder.setMessage("something went wrong, please try again later");
+//                builder.setCancelable(false);
+//                builder.setPositiveButton("OK",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog,
+//                                                int which) {
+//
+//                                dialog.dismiss();
+//
+//                            }
+//                        });
+//                builder.show();
             }
         });
 

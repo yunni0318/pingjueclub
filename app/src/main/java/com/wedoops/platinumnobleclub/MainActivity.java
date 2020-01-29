@@ -526,18 +526,27 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         if (ud.size() > 0) {
 
-            if (ud.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
                 imageview_user_rank.setImageResource(R.drawable.bronze_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_bronze));
+            }
 
-            } else if (ud.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+                imageview_user_rank.setImageResource(R.drawable.silver_medal);
+                textview_user_rank.setText(getResources().getString(R.string.userrank_silver));
+            }
+
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
                 imageview_user_rank.setImageResource(R.drawable.gold_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_gold));
+            }
 
-            } else {
-                imageview_user_rank.setImageResource(R.drawable.platinum_medal);
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_platinum));
             }
+
 
             textview_user_nickname.setText(ud.get(0).getNickName());
 
@@ -934,19 +943,19 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         ud.setCashWallet(CashWallet);
                         ud.save();
 
-                        new DisplayAlertDialog().displayAlertDialogSuccess(success_object.getInt("Code"), MainActivity.this);
+                        new DisplayAlertDialog().displayAlertDialogSuccess(success_object.getInt("Code"), MainActivity.this, MainActivity.this);
 
                         setupNavigationDrawer();
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this, MainActivity.this);
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, MainActivity.this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, MainActivity.this, MainActivity.this);
             }
         } else if (command == Api_Constants.API_MEMBER_QUICK_PROFILE) {
             boolean isSuccess = false;
@@ -990,7 +999,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         setupNavigationDrawer();
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this, MainActivity.this);
 
                     }
 

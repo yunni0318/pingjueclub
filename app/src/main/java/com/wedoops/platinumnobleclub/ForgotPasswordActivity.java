@@ -86,10 +86,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     JSONObject response_object = returnedObject.getJSONObject("ResponseData");
 
 //                    new DisplayAlertDialog().displayAlertDialogSuccess(response_object.getInt("Code"),this);
-                    new DisplayAlertDialog().displayAlertDialogString(0, response_object.getString("MessageEN"), true, this);
+                    new DisplayAlertDialog().displayAlertDialogString(0, response_object.getString("MessageEN"), true, this, this);
 
                 } else {
-                    new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                    new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, this);
 
                 }
 
@@ -112,13 +112,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
                 if (errorCode == 1506) {
-                    new DisplayAlertDialog().displayAlertDialogError(1506, this);
+                    new DisplayAlertDialog().displayAlertDialogError(1506, this, this);
                 } else {
                     if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this, this);
 
                     }
                 }
@@ -128,7 +128,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error", e.toString());
             new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again",
-                    false, this);
+                    false, this, this);
 
         }
 

@@ -39,7 +39,6 @@ public class MyBookingActivity extends Fragment {
     private static MyBookingAdapter bookinglist_adapter;
 
 
-
     private static View view;
     private static RecyclerView recyclerview_bookingdata;
     private static Activity get_activity;
@@ -119,7 +118,7 @@ public class MyBookingActivity extends Fragment {
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, origin).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
     }
 
     private static void setupRecyclerView() {
@@ -175,7 +174,7 @@ public class MyBookingActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -208,10 +207,10 @@ public class MyBookingActivity extends Fragment {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }
@@ -221,7 +220,7 @@ public class MyBookingActivity extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         }
@@ -262,7 +261,7 @@ public class MyBookingActivity extends Fragment {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -292,10 +291,10 @@ public class MyBookingActivity extends Fragment {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }

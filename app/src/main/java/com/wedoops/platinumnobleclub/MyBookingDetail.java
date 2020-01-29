@@ -101,7 +101,7 @@ public class MyBookingDetail extends Activity {
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, origin).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, MyBookingDetail.this, origin).execute(b);
     }
 
     private void setupFindById() {
@@ -346,7 +346,7 @@ public class MyBookingDetail extends Activity {
                         displayResult();
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MyBookingDetail.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MyBookingDetail.this, MyBookingDetail.this);
 
                     }
 
@@ -359,14 +359,14 @@ public class MyBookingDetail extends Activity {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this, MyBookingDetail.this);
 
                     }
                 }
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this, MyBookingDetail.this);
             }
         }
     }
@@ -402,7 +402,7 @@ public class MyBookingDetail extends Activity {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, MyBookingDetail.this);
 
                     }
 
@@ -432,10 +432,10 @@ public class MyBookingDetail extends Activity {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, MyBookingDetail.this);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this, MyBookingDetail.this);
 
                         }
                     }

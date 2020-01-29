@@ -121,14 +121,14 @@ public class ServiceDetails extends AppCompatActivity {
                     }
 
                     for (int i = 0; i < response_array.length(); i++) {
-                        ServicesMerchantDetails smd = new ServicesMerchantDetails(response_array.getJSONObject(i).getString("Srno"), response_array.getJSONObject(i).getString("MerchantID"), response_array.getJSONObject(i).getString("CompanyRegisterNo"), response_array.getJSONObject(i).getString("CompanyCategory"), response_array.getJSONObject(i).getString("CompanyName"), response_array.getJSONObject(i).getString("CompanyName"), response_array.getJSONObject(i).getString("CompanyLatX"), response_array.getJSONObject(i).getString("CompanyLatY"), response_array.getJSONObject(i).getString("CompanyDescription"), response_array.getJSONObject(i).getString("CompanyLogo"), response_array.getJSONObject(i).getString("CompanyImages"), response_array.getJSONObject(i).getString("Status"));
+                        ServicesMerchantDetails smd = new ServicesMerchantDetails(response_array.getJSONObject(i).getString("Srno"), response_array.getJSONObject(i).getString("MerchantID"), response_array.getJSONObject(i).getString("CompanyRegisterNo"), response_array.getJSONObject(i).getString("CompanyCategory"), response_array.getJSONObject(i).getString("CompanyName"), response_array.getJSONObject(i).getString("CompanyAddress"), response_array.getJSONObject(i).getString("CompanyLatX"), response_array.getJSONObject(i).getString("CompanyLatY"), response_array.getJSONObject(i).getString("CompanyDescription"), response_array.getJSONObject(i).getString("CompanyLogo"), response_array.getJSONObject(i).getString("CompanyImages"), response_array.getJSONObject(i).getString("Status"));
                         smd.save();
                     }
 
                     setupRecyclerView();
 
                 } else {
-                    new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                    new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this,this);
                 }
 
             } else {
@@ -150,10 +150,10 @@ public class ServiceDetails extends AppCompatActivity {
                 String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
                 if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this,this);
 
                 } else {
-                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                    new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this,this);
 
                 }
 
@@ -161,7 +161,7 @@ public class ServiceDetails extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("Error", e.toString());
-            new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+            new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this,this);
         }
 
     }

@@ -1,5 +1,6 @@
 package com.wedoops.platinumnobleclub.webservices;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,13 +11,15 @@ public class CallRefreshToken extends AsyncTask<Bundle, Void, Bundle> {
     private int module;
     private int origin;
     private Context context;
+    private Activity activity;
     private ProgressDialog progress;
 
 
-    public CallRefreshToken(int module, Context context, int origin) {
+    public CallRefreshToken(int module, Context context, Activity activity, int origin) {
         this.context = context;
         this.module = module;
         this.origin = origin;
+        this.activity = activity;
     }
 
 
@@ -28,7 +31,7 @@ public class CallRefreshToken extends AsyncTask<Bundle, Void, Bundle> {
     @Override
     protected Bundle doInBackground(Bundle... bundles) {
 
-        return RefreshTokenAPI.processRequest(bundles[0], context, origin);
+        return RefreshTokenAPI.processRequest(bundles[0], context, origin,activity);
     }
 
     @Override

@@ -107,7 +107,7 @@ public class RecordsList extends Fragment {
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
     }
 
     private static void displayResult() {
@@ -241,7 +241,7 @@ public class RecordsList extends Fragment {
                         displayResult();
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -272,10 +272,10 @@ public class RecordsList extends Fragment {
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }
@@ -284,7 +284,7 @@ public class RecordsList extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         } else if (command == RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2) {
@@ -314,7 +314,7 @@ public class RecordsList extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -337,13 +337,13 @@ public class RecordsList extends Fragment {
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext(), get_activity);
                     } else {
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }
@@ -382,7 +382,7 @@ public class RecordsList extends Fragment {
                         RecordsList.callCashWalletTransactionWebService();
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext(), get_activity);
 
                     }
 
@@ -404,13 +404,13 @@ public class RecordsList extends Fragment {
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_activity.getApplicationContext(), "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, get_activity.getApplicationContext());
+                        new DisplayAlertDialog().displayAlertDialogError(1506, get_activity.getApplicationContext(), get_activity);
                     } else {
                         if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_activity.getApplicationContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_activity.getApplicationContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_activity.getApplicationContext(), get_activity);
 
                         }
                     }
