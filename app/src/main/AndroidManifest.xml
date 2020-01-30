@@ -32,7 +32,14 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <data android:scheme="geo"/>
+            </intent-filter>
+
+            <intent-filter android:priority="0">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.APP_MAPS" />
+
+                <data android:scheme="geo" />
             </intent-filter>
         </activity>
 

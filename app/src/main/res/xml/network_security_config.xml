@@ -6,6 +6,5 @@
         <domain includeSubdomains="true">www.google.com</domain>
         <domain includeSubdomains="true">api.platinumnobleclub.com</domain>
         <domain includeSubdomains="true">web.platinumnobleclub.com</domain>
-
     </domain-config>
 </network-security-config>

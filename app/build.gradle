@@ -2,15 +2,24 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\xxx\\PingJueClub\\pingjueclub\\APK_KEYSTORE\\KEYSTORE\\PNC_KEYSTORE.jks')
+            storePassword 'PL@TINUM'
+            keyAlias = 'key0'
+            keyPassword 'PL@TINUM'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId 'com.wedoops.platinumnobleclub'
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.0.6"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
