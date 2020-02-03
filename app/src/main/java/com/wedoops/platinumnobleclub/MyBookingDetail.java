@@ -166,7 +166,7 @@ public class MyBookingDetail extends Activity {
         String new_startdate = "";
         String new_enddate = "";
 
-        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -175,7 +175,7 @@ public class MyBookingDetail extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -190,7 +190,7 @@ public class MyBookingDetail extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -209,7 +209,7 @@ public class MyBookingDetail extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -223,7 +223,7 @@ public class MyBookingDetail extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -242,10 +242,18 @@ public class MyBookingDetail extends Activity {
 
         Glide.with(this).load(mbed_all.get(0).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).into(imageview_eventdetail);
         textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
-        textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
+
+        if (final_startDate.equals(final_endDate)) {
+            textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+
+        } else {
+            textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
+
+        }
+
         textview_join_trip_amount.setText(String.format("%s/%s", mbed_all.get(0).getReservedSeat(), mbed_all.get(0).getMaxParticipant()));
         textview_event_name.setText(mbed_all.get(0).getEventName());
-        textview_event_price.setText(String.format("RM %s", eventprice_value));
+        textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         imageview_user_rank_bronze.setVisibility(View.GONE);
         imageview_user_rank_silver.setVisibility(View.GONE);
@@ -431,7 +439,7 @@ public class MyBookingDetail extends Activity {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, MyBookingDetail.this);
 
                         } else {

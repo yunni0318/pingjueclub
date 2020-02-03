@@ -77,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:maxWidth="180dp"
             android:text="12 May 2019 - 31 May 2019"
             android:textColor="#ffffff"
             android:textSize="10sp" />

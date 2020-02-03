@@ -114,7 +114,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 if (errorCode == 1506) {
                     new DisplayAlertDialog().displayAlertDialogError(1506, this, this);
                 } else {
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                    if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                         new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                     } else {

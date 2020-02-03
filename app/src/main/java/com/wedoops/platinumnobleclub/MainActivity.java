@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private void setupNavigationDrawer() {
         //Navigation Header
 
-        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {
             imagebutton_language.setImageResource(R.drawable.language_china);
@@ -769,7 +769,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     public void button_change_language(View v) {
 
         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
-        if (currentLanguage.equals("en_us")) {
+        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb")) {
             saveLanguage("zh");
         } else {
             saveLanguage("en_us");
@@ -781,7 +781,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     private void loadLanguage() {
         String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
-        if (lang.equals("en_us") || lang.equals("")) {
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
             lang = "en_US";
         } else {
             lang = "zh_cn";

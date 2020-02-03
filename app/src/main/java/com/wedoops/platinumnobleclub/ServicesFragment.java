@@ -401,7 +401,7 @@ public class ServicesFragment extends Fragment {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
@@ -471,7 +471,7 @@ public class ServicesFragment extends Fragment {
                     if (errorCode == 1506) {
                         new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext(), get_activity);
                     } else {
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {

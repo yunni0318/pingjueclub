@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -160,7 +161,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/button_login_style"
                 android:text="@string/edit_profile_save_profile"
-                android:textColor="@color/textview_sidebar"/>
+                android:textColor="@color/textview_sidebar" />
 
         </LinearLayout>
 
@@ -306,7 +307,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/button_login_style"
                 android:text="@string/edit_profile_change_password_button"
-                android:textColor="@color/textview_sidebar"/>
+                android:textColor="@color/textview_sidebar" />
 
         </LinearLayout>
 

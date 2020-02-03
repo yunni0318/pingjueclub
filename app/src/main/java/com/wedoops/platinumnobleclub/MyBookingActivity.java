@@ -206,7 +206,7 @@ public class MyBookingActivity extends Fragment {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
@@ -290,7 +290,7 @@ public class MyBookingActivity extends Fragment {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                             new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {

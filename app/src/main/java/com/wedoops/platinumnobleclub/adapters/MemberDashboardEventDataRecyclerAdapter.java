@@ -2,6 +2,7 @@ package com.wedoops.platinumnobleclub.adapters;
 
 import android.graphics.Typeface;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +37,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         public TextView textview_upfront_payment;
         public TextView textview_event_date;
         public TextView textview_join_trip_amount;
-        public ImageView imageview_user_rank_bronze,imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
+        public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
         public TextView textview_event_name;
         public TextView textview_event_price;
 
@@ -121,8 +122,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         String new_startdate = "";
         String new_enddate = "";
 
-
-        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -131,7 +131,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -146,7 +146,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -163,7 +163,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -179,7 +179,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -210,10 +210,18 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 .apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP)))
                 .into(myViewHolder.imageview_evenetdata_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
-        myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
+
+        if (final_startDate.equals(final_endDate)) {
+            myViewHolder.textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+
+        } else {
+            myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
+
+        }
+
         myViewHolder.textview_join_trip_amount.setText(String.format("%s/%s", ed.get(i).getReservedSeat(), ed.get(i).getMaxParticipant()));
         myViewHolder.textview_event_name.setText(ed.get(i).getEventName());
-        myViewHolder.textview_event_price.setText(String.format("RM %s", eventprice_value));
+        myViewHolder.textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         myViewHolder.imageview_user_rank_bronze.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_silver.setVisibility(View.GONE);
