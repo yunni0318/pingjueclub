@@ -2,24 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        android:orientation="vertical"
-        android:paddingBottom="20dp">
+        android:layout_marginTop="?android:actionBarSize">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_bookingdata"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            app:tabIndicatorColor="#e2ac7f"
+            app:tabSelectedTextColor="#e2ac7f"
+            app:tabTextColor="#808080"
+            android:layout_height="wrap_content" />
 
-
-    </LinearLayout>
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

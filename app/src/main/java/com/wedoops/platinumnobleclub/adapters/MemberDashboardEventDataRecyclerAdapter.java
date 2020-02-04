@@ -122,7 +122,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         String new_startdate = "";
         String new_enddate = "";
 
-        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
+        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -212,10 +212,10 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
 
         if (final_startDate.equals(final_endDate)) {
-            myViewHolder.textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+            myViewHolder.textview_event_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
 
         } else {
-            myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
+            myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate + " (" + splited_startdate[3] + ")", final_endDate + " (" + splited_enddate[3] + ")"));
 
         }
 

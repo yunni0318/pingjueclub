@@ -10,13 +10,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.adapters.BookingPagerAdapter;
 import com.wedoops.platinumnobleclub.adapters.MyBookingAdapter;
 import com.wedoops.platinumnobleclub.database.MyBookingList;
 import com.wedoops.platinumnobleclub.database.UserDetails;
@@ -34,32 +37,15 @@ import java.util.List;
 
 public class MyBookingActivity extends Fragment {
 
+    private static BookingPagerAdapter booking_pager_adapter;
+    private static TabLayout tablayout;
+
     private static Context get_context;
-
-    private static MyBookingAdapter bookinglist_adapter;
-
-
+    private static ViewPager viewpager;
     private static View view;
-    private static RecyclerView recyclerview_bookingdata;
     private static Activity get_activity;
     private static CustomProgressDialog customDialog;
 
-    private static View.OnClickListener onMyBookingItemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-            int position = viewHolder.getAdapterPosition();
-
-            List<MyBookingList> bl = MyBookingList.listAll(MyBookingList.class);
-
-            Intent intent = new Intent(view.getContext(), MyBookingDetail.class);
-            intent.putExtra("eventGUID", bl.get(position).getEventGUID());
-            intent.putExtra("bookingNumber", bl.get(position).getBookingNumber());
-            view.getContext().startActivity(intent);
-
-        }
-    };
 
     @Nullable
     @Override
@@ -70,20 +56,25 @@ public class MyBookingActivity extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        get_activity = getActivity();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         customDialog = new CustomProgressDialog();
 
-        setupViewByID();
         callBookingListWebService();
+        setupViewByID();
 
     }
 
-    private void setupViewByID() {
-        recyclerview_bookingdata = view.findViewById(R.id.recyclerview_bookingdata);
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
+//        get_activity = getActivity();
+//        customDialog = new CustomProgressDialog();
+//
+//        setupViewByID();
+//        setupAdapter();
+//    }
 
     private static void callBookingListWebService() {
 
@@ -105,42 +96,18 @@ public class MyBookingActivity extends Fragment {
 
     }
 
-    private static void callRefreshTokenWebService(int origin) {
-
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
-
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
-
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
-
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
-    }
-
-    private static void setupRecyclerView() {
-
-        List<MyBookingList> mbl = MyBookingList.listAll(MyBookingList.class);
-        bookinglist_adapter = new MyBookingAdapter(mbl);
-
-        RecyclerView.LayoutManager booking_list_mLayoutManager = new LinearLayoutManager(view.getContext());
-        recyclerview_bookingdata.setLayoutManager(booking_list_mLayoutManager);
-
-        recyclerview_bookingdata.setAdapter(bookinglist_adapter);
-
-        bookinglist_adapter.setOnBookingListItemClickListener(onMyBookingItemClickListener);
+    private void setupViewByID() {
+        viewpager = view.findViewById(R.id.viewpager);
+        tablayout = view.findViewById(R.id.tab_layout);
+        tablayout.setupWithViewPager(viewpager);
+        booking_pager_adapter = new BookingPagerAdapter(getChildFragmentManager());
 
     }
 
     private static void displayResult() {
-
-        setupRecyclerView();
-        bookinglist_adapter.notifyDataSetChanged();
-
+        viewpager.setAdapter(booking_pager_adapter);
     }
+
 
     public static void processWSData(JSONObject returnedObject, int command) {
 
@@ -170,7 +137,7 @@ public class MyBookingActivity extends Fragment {
                             mbl.save();
                         }
 
-                        displayResult();
+                     displayResult();
 
                     } else {
 
@@ -306,4 +273,21 @@ public class MyBookingActivity extends Fragment {
         }
     }
 
+
+
+    private static void callRefreshTokenWebService(int origin) {
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
+    }
 }
