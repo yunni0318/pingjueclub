@@ -73,29 +73,6 @@ public class RecordsList extends Fragment {
 //        CustomProgressDialog.showProgressDialog(get_context);
         customDialog.showDialog(get_context);
 
-        if (counter < 4) {
-            counter++;
-            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-
-            String table_name = UserDetails.getTableName(UserDetails.class);
-            String loginid_field = StringUtil.toSQLName("LoginID");
-
-            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
-
-            Bundle b = new Bundle();
-            b.putString("access_token", ud_list.get(0).getAccessToken());
-            b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION_V2);
-
-            new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION_V2, view.getContext(), true).execute(b);
-
-        } else {
-            callRefreshTokenWebService();
-
-        }
-    }
-
-    private static void callRefreshTokenWebService() {
-
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
         String table_name = UserDetails.getTableName(UserDetails.class);
@@ -104,10 +81,33 @@ public class RecordsList extends Fragment {
         List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
         Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+        b.putString("access_token", ud_list.get(0).getAccessToken());
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_CASH_WALLET_TRANSACTION_V2);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
+        new CallWebServices(Api_Constants.API_CASH_WALLET_TRANSACTION_V2, view.getContext(), true).execute(b);
+
+    }
+
+    private static void callRefreshTokenWebService() {
+
+        if (counter < 4) {
+            counter++;
+
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
+
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, RefreshTokenAPI.ORIGIN_CASH_WALLET_TRANSACTION_V2).execute(b);
+        } else {
+            displayResult();
+        }
     }
 
     private static void displayResult() {

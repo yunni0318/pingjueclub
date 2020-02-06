@@ -64,6 +64,8 @@ public class EditProfileActivity extends Fragment {
     private static CustomProgressDialog customDialog;
     private static AlertDialog alert;
 
+    private static int counter = 0;
+
     @Nullable
     @Override
 
@@ -413,18 +415,25 @@ public class EditProfileActivity extends Fragment {
 
     private static void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
+
+        } else {
+            displayResult();
+        }
     }
 
 

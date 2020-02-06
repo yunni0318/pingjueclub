@@ -55,6 +55,8 @@ public class MyBookingDetail extends Activity {
     private static final String KEY_LANG = "key_lang"; // preference key
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private static int counter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,18 +92,25 @@ public class MyBookingDetail extends Activity {
 
     private void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, MyBookingDetail.this, origin).execute(b);
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, MyBookingDetail.this, origin).execute(b);
+
+        } else {
+            displayResult();
+
+        }
     }
 
     private void setupFindById() {

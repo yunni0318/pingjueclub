@@ -57,6 +57,8 @@ public class EventDetailActivity extends Activity {
     private static final String KEY_LANG = "key_lang"; // preference key
     private AlertDialog alert;
 
+    private static int counter = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,18 +108,24 @@ public class EventDetailActivity extends Activity {
 
     private void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, EventDetailActivity.this, EventDetailActivity.this, origin).execute(b);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, EventDetailActivity.this, EventDetailActivity.this, origin).execute(b);
+        } else {
+            displayResult();
+        }
     }
 
     private void setupFindById() {

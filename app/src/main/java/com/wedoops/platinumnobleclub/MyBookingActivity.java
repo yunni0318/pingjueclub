@@ -46,6 +46,7 @@ public class MyBookingActivity extends Fragment {
     private static Activity get_activity;
     private static CustomProgressDialog customDialog;
 
+    private static int counter = 0;
 
     @Nullable
     @Override
@@ -137,7 +138,7 @@ public class MyBookingActivity extends Fragment {
                             mbl.save();
                         }
 
-                     displayResult();
+                        displayResult();
 
                     } else {
 
@@ -274,20 +275,24 @@ public class MyBookingActivity extends Fragment {
     }
 
 
-
     private static void callRefreshTokenWebService(int origin) {
+        if (counter < 4) {
+            counter++;
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
+        } else {
+            displayResult();
+        }
     }
 }
