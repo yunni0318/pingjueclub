@@ -2,6 +2,7 @@ package com.wedoops.platinumnobleclub;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.database.EventDetailBookingData;
 import com.wedoops.platinumnobleclub.database.EventDetailEventData;
+import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
@@ -53,13 +55,15 @@ public class EventDetailActivity extends Activity {
     private SwipeRefreshLayout swipeRefreshLayout;
     public TextView textview_upfront_payment, textview_event_date, textview_join_trip_amount, textview_event_name, textview_event_price, textview_join_trip_payment;
     private static final String KEY_LANG = "key_lang"; // preference key
+    private AlertDialog alert;
+
+    private static int counter = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_detail_activity);
-
 
 
         loadLanguage();
@@ -104,18 +108,24 @@ public class EventDetailActivity extends Activity {
 
     private void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, EventDetailActivity.this, origin).execute(b);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, EventDetailActivity.this, EventDetailActivity.this, origin).execute(b);
+        } else {
+            displayResult();
+        }
     }
 
     private void setupFindById() {
@@ -184,7 +194,9 @@ public class EventDetailActivity extends Activity {
         String new_startdate = "";
         String new_enddate = "";
 
-        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        String lang = this.getResources().getConfiguration().locale.toString().toLowerCase();
+
+        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -193,7 +205,7 @@ public class EventDetailActivity extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -208,7 +220,7 @@ public class EventDetailActivity extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -229,7 +241,7 @@ public class EventDetailActivity extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -244,7 +256,7 @@ public class EventDetailActivity extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -264,10 +276,19 @@ public class EventDetailActivity extends Activity {
 
         Glide.with(this).load(eded_all.get(0).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).into(imageview_eventdetail);
         textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
-        textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
+
+        if (final_startDate.equals(final_endDate)) {
+            textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+
+        } else {
+            textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_enddate[3], final_endDate + " " + splited_enddate[3]));
+
+        }
+
+
         textview_join_trip_amount.setText(String.format("%s/%s", eded_all.get(0).getReservedSeat(), eded_all.get(0).getMaxParticipant()));
         textview_event_name.setText(eded_all.get(0).getEventName());
-        textview_event_price.setText(String.format("RM %s", eventprice_value));
+        textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         imageview_user_rank_bronze.setVisibility(View.GONE);
         imageview_user_rank_silver.setVisibility(View.GONE);
@@ -299,6 +320,9 @@ public class EventDetailActivity extends Activity {
 
         if (edbd_all.get(0).getIsJoined().equals(CONSTANTS_VALUE.EVENT_DETAIL_PAYMENT_JOINED_STATUS)) {
 
+            event_detail_button_jointrip.setText(this.getResources().getString(R.string.event_detail_is_joined));
+            event_detail_button_jointrip.setEnabled(false);
+
             if (edbd_all.get(0).getBookingStatus().equals(CONSTANTS_VALUE.EVENT_DETAIL_PAYMENT_BOOKING_STATUS_NEW)) {
 
                 if (edbd_all.get(0).getPaymentStatus().equals(CONSTANTS_VALUE.EVENT_DETAIL_PAYMENT_STATUS_PARTIAL)) {
@@ -317,11 +341,13 @@ public class EventDetailActivity extends Activity {
                 }
             } else {
                 textview_join_trip_payment.setText(this.getResources().getString(R.string.event_detail_joined_status_false));
+                event_detail_button_jointrip.setEnabled(true);
 
             }
 
         } else {
             textview_join_trip_payment.setText(this.getResources().getString(R.string.event_detail_joined_status_false));
+            event_detail_button_jointrip.setEnabled(true);
 
         }
 
@@ -334,30 +360,66 @@ public class EventDetailActivity extends Activity {
 
     public void button_join_trip(View v) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                this);
-        builder.setTitle(this.getString(R.string.warning_title));
-        builder.setMessage(this.getResources().getString(R.string.event_detail_confirm_join_trip));
-        builder.setPositiveButton(this.getString(R.string.join_trip),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                        dialog.dismiss();
-                        callEventDetailMakeBooking();
+        View customLayout = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText(this.getString(R.string.warning_title));
+        textview_message.setText(this.getResources().getString(R.string.event_detail_confirm_join_trip));
+        button_ok.setText(this.getString(R.string.join_trip));
+
+        builder.setView(customLayout);
+
+        builder.setCancelable(false);
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
 
 
-                    }
-                });
-        builder.setNegativeButton(this.getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dialog.dismiss();
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                callEventDetailMakeBooking();
+            }
+        });
 
-                    }
-                });
-        builder.show();
+        alert = builder.create();
+
+        alert.show();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                this);
+//        builder.setTitle(this.getString(R.string.warning_title));
+//        builder.setMessage(this.getResources().getString(R.string.event_detail_confirm_join_trip));
+//        builder.setPositiveButton(this.getString(R.string.join_trip),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,
+//                                        int which) {
+//
+//                        dialog.dismiss();
+//                        callEventDetailMakeBooking();
+//
+//
+//                    }
+//                });
+//        builder.setNegativeButton(this.getString(R.string.cancel),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,
+//                                        int which) {
+//                        dialog.dismiss();
+//
+//                    }
+//                });
+//        builder.show();
 
     }
 
@@ -402,7 +464,7 @@ public class EventDetailActivity extends Activity {
                     } else {
                         event_detail_button_jointrip.setEnabled(false);
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), EventDetailActivity.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), EventDetailActivity.this, EventDetailActivity.this);
 
                     }
 
@@ -417,7 +479,7 @@ public class EventDetailActivity extends Activity {
                     } else {
                         event_detail_button_jointrip.setEnabled(false);
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this, this);
 
                     }
 
@@ -461,7 +523,7 @@ public class EventDetailActivity extends Activity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this, this);
             }
         } else if (command == Api_Constants.API_EVENT_DETAILS_MAKE_BOOKING) {
             boolean isSuccess = false;
@@ -472,30 +534,40 @@ public class EventDetailActivity extends Activity {
 
                     if (returnedObject.getInt("StatusCode") == 200) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(
-                                this);
-                        builder.setTitle(this.getString(R.string.success_title));
-                        builder.setMessage(this.getResources().getString(R.string.event_detail_trip_confirmed));
-                        builder.setPositiveButton(this.getString(R.string.Ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        dialog.dismiss();
-                                        onBackPressed();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                                    }
-                                });
+                        View customLayout = getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+                        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                        Button button_ok = customLayout.findViewById(R.id.button_ok);
 
-                        builder.show();
+
+                        textview_title.setText(this.getString(R.string.success_title));
+                        textview_message.setText(this.getResources().getString(R.string.event_detail_trip_confirmed));
+
+                        builder.setView(customLayout);
+
+                        builder.setCancelable(false);
+
+                        button_ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alert.dismiss();
+                                onBackPressed();
+                            }
+                        });
+
+                        alert = builder.create();
+
+                        alert.show();
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), EventDetailActivity.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), EventDetailActivity.this, EventDetailActivity.this);
 
                     }
 
                 } else {
-
 
 
                     int errorCode = returnedObject.getInt("StatusCode");
@@ -525,11 +597,11 @@ public class EventDetailActivity extends Activity {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this, this);
 
                         }
                     }
@@ -538,7 +610,7 @@ public class EventDetailActivity extends Activity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this, this);
 
             }
         }
@@ -577,7 +649,7 @@ public class EventDetailActivity extends Activity {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, this);
 
                     }
 
@@ -590,7 +662,7 @@ public class EventDetailActivity extends Activity {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this, this);
 
                     }
                 }

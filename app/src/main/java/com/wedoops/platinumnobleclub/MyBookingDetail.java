@@ -55,6 +55,8 @@ public class MyBookingDetail extends Activity {
     private static final String KEY_LANG = "key_lang"; // preference key
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private static int counter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,18 +92,25 @@ public class MyBookingDetail extends Activity {
 
     private void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_EVENT_BOOKING_DETAIL);
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, origin).execute(b);
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, MyBookingDetail.this, MyBookingDetail.this, origin).execute(b);
+
+        } else {
+            displayResult();
+
+        }
     }
 
     private void setupFindById() {
@@ -166,7 +175,7 @@ public class MyBookingDetail extends Activity {
         String new_startdate = "";
         String new_enddate = "";
 
-        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        if (this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || this.getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -175,7 +184,7 @@ public class MyBookingDetail extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -190,7 +199,7 @@ public class MyBookingDetail extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -209,7 +218,7 @@ public class MyBookingDetail extends Activity {
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -223,7 +232,7 @@ public class MyBookingDetail extends Activity {
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -242,10 +251,18 @@ public class MyBookingDetail extends Activity {
 
         Glide.with(this).load(mbed_all.get(0).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).into(imageview_eventdetail);
         textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
-        textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
+
+        if (final_startDate.equals(final_endDate)) {
+            textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+
+        } else {
+            textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
+
+        }
+
         textview_join_trip_amount.setText(String.format("%s/%s", mbed_all.get(0).getReservedSeat(), mbed_all.get(0).getMaxParticipant()));
         textview_event_name.setText(mbed_all.get(0).getEventName());
-        textview_event_price.setText(String.format("RM %s", eventprice_value));
+        textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         imageview_user_rank_bronze.setVisibility(View.GONE);
         imageview_user_rank_silver.setVisibility(View.GONE);
@@ -346,7 +363,7 @@ public class MyBookingDetail extends Activity {
                         displayResult();
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MyBookingDetail.this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MyBookingDetail.this, MyBookingDetail.this);
 
                     }
 
@@ -359,14 +376,14 @@ public class MyBookingDetail extends Activity {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, this, MyBookingDetail.this);
 
                     }
                 }
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this, MyBookingDetail.this);
             }
         }
     }
@@ -402,7 +419,7 @@ public class MyBookingDetail extends Activity {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, MyBookingDetail.this);
 
                     }
 
@@ -431,11 +448,11 @@ public class MyBookingDetail extends Activity {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, MyBookingDetail.this);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this, MyBookingDetail.this);
 
                         }
                     }

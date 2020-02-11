@@ -124,9 +124,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         String new_enddate = "";
 
 
-        String language = myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString();
-
-        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
+        if (myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || myViewHolder.textview_event_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -135,7 +133,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -149,7 +147,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -169,7 +167,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                 Date new_date_startDate = format.parse(startdate);
                 Date new_date_endDate = format.parse(enddate);
 
-                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                 outFormat.setTimeZone(tz);
                 new_startdate = outFormat.format(new_date_startDate);
                 new_enddate = outFormat.format(new_date_endDate);
@@ -184,7 +182,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                     Date new_date_startDate = format.parse(startdate);
                     Date new_date_endDate = format.parse(enddate);
 
-                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+                    SimpleDateFormat outFormat = new SimpleDateFormat("dd MM yyyy hha", Locale.US);
                     outFormat.setTimeZone(tz);
                     new_startdate = outFormat.format(new_date_startDate);
                     new_enddate = outFormat.format(new_date_endDate);
@@ -204,10 +202,19 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
 
         Glide.with(myViewHolder.imageview_my_booking_detail.getContext()).load(mbl.get(i).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP))).into(myViewHolder.imageview_my_booking_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
-        myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate, final_endDate));
+
+        if (final_startDate.equals(final_endDate)) {
+            myViewHolder.textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
+
+        } else {
+            myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
+
+        }
+
+
         myViewHolder.textview_join_trip_amount.setText(String.format("%s/%s", mbl.get(i).getReservedSeat(), mbl.get(i).getMaxParticipant()));
         myViewHolder.textview_event_name.setText(mbl.get(i).getEventName());
-        myViewHolder.textview_event_price.setText(String.format("RM %s", eventprice_value));
+        myViewHolder.textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         myViewHolder.imageview_user_rank_bronze.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_silver.setVisibility(View.GONE);
@@ -241,6 +248,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
 
     @Override
     public int getItemCount() {
+
         return mbl.size();
     }
 

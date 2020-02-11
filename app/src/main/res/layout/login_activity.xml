@@ -55,13 +55,6 @@
                 android:textSize="35sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Username"
-                android:textColor="@color/textview_sidebar"
-                android:textSize="20sp" />
-
 
             <EditText
                 android:id="@+id/edittext_username"
@@ -76,13 +69,6 @@
                 android:textColorHint="@color/edittext_hint_username"
                 android:theme="@style/CustomEditText" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="Password"
-                android:textColor="@color/textview_sidebar"
-                android:textSize="20sp" />
 
 
             <EditText

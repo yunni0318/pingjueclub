@@ -55,13 +55,16 @@ public class EditProfileActivity extends Fragment {
 
     private static ImageView imageview_user_profile, imageview_user_rank;
     private static TextView textview_user_rank, textview_user_nickname, textview_profile_title, textview_nickname_title, textview_change_password_title, textview_current_password_title, textview_new_password_title, textview_confirm_password;
-    private static EditText  edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
+    private static EditText edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
 
     private static Button button_save_profile, button_change_password;
     private static Context get_context;
     private static final String KEY_LANG = "key_lang"; // preference key
 
     private static CustomProgressDialog customDialog;
+    private static AlertDialog alert;
+
+    private static int counter = 0;
 
     @Nullable
     @Override
@@ -347,11 +350,15 @@ public class EditProfileActivity extends Fragment {
         Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).into(imageview_user_profile);
 
         if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-            imageview_user_rank.setImageResource(R.drawable.user_level_bronze);
+            imageview_user_rank.setImageResource(R.drawable.bronze_medal);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_bronze));
 
+        } else if (ud_list.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+            imageview_user_rank.setImageResource(R.drawable.silver_medal);
+            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_silver));
+
         } else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            imageview_user_rank.setImageResource(R.drawable.user_level_gold);
+            imageview_user_rank.setImageResource(R.drawable.gold_medal);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_gold));
 
         } else {
@@ -408,18 +415,25 @@ public class EditProfileActivity extends Fragment {
 
     private static void callRefreshTokenWebService(int origin) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        if (counter < 4) {
+            counter++;
 
-        String table_name = UserDetails.getTableName(UserDetails.class);
-        String loginid_field = StringUtil.toSQLName("LoginID");
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
 
-        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+            String table_name = UserDetails.getTableName(UserDetails.class);
+            String loginid_field = StringUtil.toSQLName("LoginID");
 
-        Bundle b = new Bundle();
-        b.putString("refresh_token", ud_list.get(0).getRefreshToken());
-        b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-        new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_activity, origin).execute(b);
+            Bundle b = new Bundle();
+            b.putString("refresh_token", ud_list.get(0).getRefreshToken());
+            b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
+
+            new CallRefreshToken(RefreshTokenAPI.API_REFRESH_TOKEN, get_context, get_activity, origin).execute(b);
+
+        } else {
+            displayResult();
+        }
     }
 
 
@@ -470,7 +484,7 @@ public class EditProfileActivity extends Fragment {
                             callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_SETTING);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                         }
                     }
@@ -487,13 +501,13 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, view.getContext(), get_activity);
 
                     }
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
             }
         } else if (command == Api_Constants.API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST) {
             boolean isSuccess = false;
@@ -528,7 +542,7 @@ public class EditProfileActivity extends Fragment {
                             callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                         }
                     }
@@ -545,14 +559,14 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, view.getContext(), get_activity);
 
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         } else if (command == Api_Constants.API_MEMBER_UPDATE_ACCOUNT_NICKNAME) {
@@ -564,21 +578,33 @@ public class EditProfileActivity extends Fragment {
 
                     if (returnedObject.getInt("StatusCode") == 200) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(
-                                view.getContext());
-                        builder.setTitle(view.getContext().getString(R.string.success_title));
-                        builder.setMessage(view.getContext().getResources().getString(R.string.edit_profile_save_profile_success));
-                        builder.setPositiveButton(view.getContext().getString(R.string.Ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        dialog.dismiss();
-//                                        callCountryStateListWebService();
-                                        callMemberAccountSettingWebService();
-                                    }
-                                });
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(get_context);
 
-                        builder.show();
+                        View customLayout = get_activity.getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+                        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                        textview_title.setText(view.getContext().getString(R.string.success_title));
+                        textview_message.setText(view.getContext().getResources().getString(R.string.edit_profile_save_profile_success));
+                        button_ok.setText(view.getContext().getString(R.string.Ok));
+
+                        builder.setView(customLayout);
+
+                        builder.setCancelable(false);
+
+
+                        button_ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alert.dismiss();
+                                callMemberAccountSettingWebService();
+                            }
+                        });
+
+                        alert = builder.create();
+
+                        alert.show();
 
                     } else {
 
@@ -589,7 +615,7 @@ public class EditProfileActivity extends Fragment {
 
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                         }
                     }
@@ -603,14 +629,14 @@ public class EditProfileActivity extends Fragment {
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(statuscode, get_activity);
+                        new DisplayAlertDialog().displayAlertDialogError(statuscode, view.getContext(), get_activity);
 
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         } else if (command == Api_Constants.API_MEMBER_UPDATE_ACCOUNT_SECURITY) {
@@ -628,21 +654,50 @@ public class EditProfileActivity extends Fragment {
                         edittext_new_password.setText("");
                         edittext_confirm_password.setText("");
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(
-                                view.getContext());
-                        builder.setTitle(view.getContext().getString(R.string.success_title));
-                        builder.setMessage(view.getContext().getResources().getString(R.string.edit_profile_change_password_success));
-                        builder.setPositiveButton(view.getContext().getString(R.string.Ok),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        dialog.dismiss();
-//                                        callCountryStateListWebService();
-                                        callMemberAccountSettingWebService();
-                                    }
-                                });
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(get_context);
 
-                        builder.show();
+                        View customLayout = get_activity.getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+                        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                        textview_title.setText(view.getContext().getString(R.string.success_title));
+                        textview_message.setText(view.getContext().getResources().getString(R.string.edit_profile_change_password_success));
+                        button_ok.setText(view.getContext().getString(R.string.Ok));
+
+                        builder.setView(customLayout);
+
+                        builder.setCancelable(false);
+
+
+                        button_ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alert.dismiss();
+                                callMemberAccountSettingWebService();
+                            }
+                        });
+
+                        alert = builder.create();
+
+                        alert.show();
+
+
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                                view.getContext());
+//                        builder.setTitle(view.getContext().getString(R.string.success_title));
+//                        builder.setMessage(view.getContext().getResources().getString(R.string.edit_profile_change_password_success));
+//                        builder.setPositiveButton(view.getContext().getString(R.string.Ok),
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog,
+//                                                        int which) {
+//                                        dialog.dismiss();
+////                                        callCountryStateListWebService();
+//                                        callMemberAccountSettingWebService();
+//                                    }
+//                                });
+//
+//                        builder.show();
 
                     } else {
 
@@ -651,7 +706,7 @@ public class EditProfileActivity extends Fragment {
                             callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                         }
 
@@ -669,14 +724,14 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, view.getContext(), get_activity);
 
                     }
 
                 }
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         }
@@ -727,7 +782,7 @@ public class EditProfileActivity extends Fragment {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -740,7 +795,7 @@ public class EditProfileActivity extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(errorCode, get_activity);
+                        new DisplayAlertDialog().displayAlertDialogError(errorCode, view.getContext(), get_activity);
 
                     }
                 }

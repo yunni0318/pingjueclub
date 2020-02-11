@@ -82,10 +82,10 @@
                 android:paddingBottom="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Make sure the QR code match to the camera hole to scan and pay PINJUE merchant or your friends."
+                    android:gravity="center_horizontal"
+                    android:text="Scan QR code to Pay"
                     android:textColor="@android:color/white"
                     android:textSize="17sp" />
 

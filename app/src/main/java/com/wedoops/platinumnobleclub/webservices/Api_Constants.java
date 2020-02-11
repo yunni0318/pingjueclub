@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wedoops.platinumnobleclub.BookingFragment;
 import com.wedoops.platinumnobleclub.EditProfileActivity;
 import com.wedoops.platinumnobleclub.EventDetailActivity;
 import com.wedoops.platinumnobleclub.ForgotPasswordActivity;
@@ -32,13 +34,21 @@ import java.util.Map;
 
 public class Api_Constants {
 
-    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
-    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
-    private static String url_event = "http://103.198.194.228:54126/api/Event/";
-    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
-    private static String url_member = "http://103.198.194.228:54126/api/Member/";
-    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
-    private static String url_services = "http://103.198.194.228:54126/api/Services/";
+//    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
+//    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
+//    private static String url_event = "http://103.198.194.228:54126/api/Event/";
+//    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
+//    private static String url_member = "http://103.198.194.228:54126/api/Member/";
+//    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
+//    private static String url_services = "http://103.198.194.228:54126/api/Services/";
+
+    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
+    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
+    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
+    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
+    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
+    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
+    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
@@ -91,10 +101,15 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.toString());
-                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(""),API_MEMBER_LOGIN_V2);
 
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+                                    if(error.networkResponse != null){
+                                        ((LoginActivity) context).processWSData(convertResponseToJsonObject(""),API_MEMBER_LOGIN_V2);
+
+                                    }else{
+                                        ((LoginActivity) context).processWSData(null, API_MEMBER_LOGIN_V2);
+
+                                    }
+
 
                                 }
                             }
@@ -130,10 +145,8 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
                                     ((ForgotPasswordActivity) context).processWSData(null);
 
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
                                 }
                             }
@@ -170,16 +183,20 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
 
-                                    if (error.networkResponse.statusCode == 401) {
-                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARDV2);
-                                    } else {
-                                        MemberDashboardActivity.processWSData(null, API_MEMBER_DASHBOARDV2);
+
+                                    if(error.networkResponse != null){
+                                        if (error.networkResponse.statusCode == 401) {
+                                            MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARDV2);
+                                        } else {
+                                            MemberDashboardActivity.processWSData(null, API_MEMBER_DASHBOARDV2);
 
 //                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
-                                    }
+                                        }
+                                    }else{
+                                        MemberDashboardActivity.processWSData(null, API_MEMBER_DASHBOARDV2);
 
+                                    }
                                 }
                             }
                     ) {
@@ -213,10 +230,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
                                     ((EventDetailActivity) context).processWSData(null, API_EVENT_DETAILS);
-
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
                                 }
                             }
@@ -251,10 +265,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
                                     ((EventDetailActivity) context).processWSData(null, API_EVENT_DETAILS_MAKE_BOOKING);
-
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
                                 }
                             }
@@ -296,10 +307,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
                                     EditProfileActivity.processWSData(null, API_MEMBER_ACCOUNT_SETTING);
-
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
                                 }
                             }
@@ -332,8 +340,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     EditProfileActivity.processWSData(null, API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
 
                                 }
@@ -366,8 +372,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
 
                                 }
@@ -416,8 +420,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
 
                                 }
@@ -458,8 +460,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
                                 }
@@ -502,8 +502,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
                                     MyBookingActivity.processWSData(null, API_EVENT_BOOKING_LIST);
 
                                 }
@@ -549,8 +548,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
                                     ((MyBookingDetail) context).processWSData(null, API_EVENT_BOOKING_DETAIL);
 
                                 }
@@ -583,8 +581,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
                                     RecordsList.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
 
                                 }
@@ -601,6 +598,10 @@ public class Api_Constants {
                         }
 
                     };
+                    postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                            20000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     queue.add(postRequest);
 
                     break;
@@ -617,8 +618,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+
                                     ((MainActivity) context).processWSData(null, API_MEMBER_CHANGE_PROFILE_PICTURE);
 
                                 }
@@ -661,15 +661,21 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
 
-                                    if (error.networkResponse.statusCode == 401) {
-                                        MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_QUICK_PROFILE);
-                                    } else {
+                                    if(error.networkResponse != null){
+                                        if (error.networkResponse.statusCode == 401) {
+                                            ((MainActivity) context).processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_QUICK_PROFILE);
+                                        } else {
 //                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
-                                        MemberDashboardActivity.processWSData(null, API_MEMBER_QUICK_PROFILE);
+                                            ((MainActivity) context).processWSData(null, API_MEMBER_QUICK_PROFILE);
+
+                                        }
+                                    }else{
+                                        ((MainActivity) context).processWSData(null, API_MEMBER_QUICK_PROFILE);
 
                                     }
+
+
                                 }
                             }
                     ) {
@@ -715,7 +721,6 @@ public class Api_Constants {
                                     if (error.networkResponse.statusCode == 401) {
                                         ServicesFragment.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_SERVICE_PAGE_DETAILS);
                                     } else {
-//                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                         ServicesFragment.processWSData(null, API_SERVICE_PAGE_DETAILS);
 
                                     }
@@ -750,8 +755,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     PayFragment.processWSData(null, API_MAKE_QR_CODE_PAYMENT);
 
                                 }
@@ -793,8 +796,6 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-//                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                     ((ServiceDetails) currentContext).processWSData(null);
 
                                 }
@@ -837,7 +838,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    Log.e("Error.Response", error.toString());
 
                                 }
                             }
@@ -878,7 +879,7 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
+                                    Log.e("Error.Response", error.toString());
 
                                 }
                             }

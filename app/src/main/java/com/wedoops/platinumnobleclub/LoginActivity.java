@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupLanguage() {
 
-        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us")) {
+        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {
             imagebutton_language.setImageResource(R.drawable.language_china);
@@ -277,7 +277,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, this);
 
                     }
 
@@ -299,11 +299,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this);
+                    if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb")|| currentLanguage.equals("")) {
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this);
+                        new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, this, this);
 
                     }
 
@@ -311,7 +311,7 @@ public class LoginActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, this, this);
             }
         }
 

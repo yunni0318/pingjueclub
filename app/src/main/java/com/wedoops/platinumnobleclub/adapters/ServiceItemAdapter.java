@@ -22,6 +22,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     private Context mContext;
     private List<ServicesListData> mData;
 
+
     public ServiceItemAdapter(Context context, List<ServicesListData> mData) {
         this.mContext = context;
         this.mData = mData;
@@ -75,4 +76,6 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
             imageView = itemView.findViewById(R.id.service_image);
         }
     }
+
+
 }

@@ -4,5 +4,8 @@
         <domain includeSubdomains="true">103.198.194.228</domain>
         <domain includeSubdomains="true">103.244.0.237</domain>
         <domain includeSubdomains="true">www.google.com</domain>
+        <domain includeSubdomains="true">api.platinumnobleclub.com</domain>
+        <domain includeSubdomains="true">web.platinumnobleclub.com</domain>
+        <domain includeSubdomains="true">admin.platinumnobleclub.com</domain>
     </domain-config>
 </network-security-config>

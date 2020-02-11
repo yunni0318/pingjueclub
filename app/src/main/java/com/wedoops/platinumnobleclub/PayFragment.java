@@ -1,5 +1,6 @@
 package com.wedoops.platinumnobleclub;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -41,6 +42,7 @@ public class PayFragment extends Fragment {
     private static int counter;
     private static CustomProgressDialog customDialog;
     private static Context get_context;
+    private static Activity get_activity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class PayFragment extends Fragment {
                 ((MainActivity) getActivity()).loadHomeFragment();
             }
 
-            new DisplayAlertDialog().displayAlertDialogString(0, "Cannot get data from QR Code, please try again!", false, getContext());
+            new DisplayAlertDialog().displayAlertDialogString(0, "Cannot get data from QR Code, please try again!", false, getContext(), getActivity());
 
         }
     }
@@ -121,6 +123,7 @@ public class PayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        get_activity = getActivity();
         customDialog = new CustomProgressDialog();
     }
 
@@ -169,7 +172,7 @@ public class PayFragment extends Fragment {
         b.putString("refresh_token", ud_list.get(0).getRefreshToken());
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.API_REFRESH_TOKEN);
 
-        new CallRefreshToken(RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT, get_context, RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT, get_context, get_activity, RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT).execute(b);
 
     }
 
@@ -191,7 +194,7 @@ public class PayFragment extends Fragment {
                         displayResult(response_object.getString("MessageEN"));
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context, get_activity);
 
                     }
 
@@ -222,11 +225,11 @@ public class PayFragment extends Fragment {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_context, "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context);
+                        if (currentLanguage.equals("en_us")|| currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context, get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context, get_activity);
 
                         }
 
@@ -235,7 +238,7 @@ public class PayFragment extends Fragment {
                 }
 
             } catch (Exception e) {
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context, get_activity);
             }
         } else if (command == RefreshTokenAPI.ORIGIN_MAKE_QR_CODE_PAYMENT) {
 
@@ -263,7 +266,7 @@ public class PayFragment extends Fragment {
                         PayFragment.callWebServices();
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context);
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context, get_activity);
 
                     }
 
@@ -286,13 +289,13 @@ public class PayFragment extends Fragment {
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(get_context, "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, get_context);
+                        new DisplayAlertDialog().displayAlertDialogError(1506, get_context, get_activity);
                     } else {
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context);
+                        if (currentLanguage.equals("en_us")|| currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, get_context, get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context);
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, get_context, get_activity);
 
                         }
                     }
@@ -300,7 +303,7 @@ public class PayFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context);
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context, get_activity);
 
             }
         }

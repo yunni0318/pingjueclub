@@ -1,5 +1,6 @@
 package com.wedoops.platinumnobleclub;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -59,6 +60,7 @@ public class ServicesFragment extends Fragment {
     private static ServicesTopBannerRecyclerAdapter topBanner_adapter;
     private static CustomProgressDialog customDialog;
     private static Context get_context;
+    private static Activity get_activity;
 
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
@@ -115,6 +117,12 @@ public class ServicesFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        get_activity = getActivity();
+    }
+
     private static void callWebService() {
 //        CustomProgressDialog.showProgressDialog(view.getContext());
         customDialog.showDialog(get_context);
@@ -154,7 +162,7 @@ public class ServicesFragment extends Fragment {
         b.putInt(Api_Constants.COMMAND, RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL);
 
 //        new CallWebServices(Api_Constants.API_REFRESH_TOKEN, view.getContext(), true).execute(b);
-        new CallRefreshToken(RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL, view.getContext(), RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL).execute(b);
+        new CallRefreshToken(RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL, view.getContext(), get_activity, RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL).execute(b);
 
     }
 
@@ -220,6 +228,7 @@ public class ServicesFragment extends Fragment {
         }
 
         //Indicator
+
         recyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
         topBanner_adapter.setOnTopBannerItemClickListener(onTopBannerItemClickListener);
     }
@@ -360,7 +369,7 @@ public class ServicesFragment extends Fragment {
 
 
                     } else {
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -392,11 +401,11 @@ public class ServicesFragment extends Fragment {
 
                         String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
 
@@ -406,7 +415,7 @@ public class ServicesFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         } else if (command == RefreshTokenAPI.ORIGIN_SERVICE_PAGE_DETAIL) {
@@ -437,7 +446,7 @@ public class ServicesFragment extends Fragment {
 
                     } else {
 
-                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);
 
                     }
 
@@ -460,13 +469,13 @@ public class ServicesFragment extends Fragment {
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(view.getContext(), "key_lang");
 
                     if (errorCode == 1506) {
-                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext());
+                        new DisplayAlertDialog().displayAlertDialogError(1506, view.getContext(), get_activity);
                     } else {
-                        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext());
+                        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, view.getContext(), get_activity);
 
                         } else {
-                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext());
+                            new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageCN, false, view.getContext(), get_activity);
 
                         }
                     }
@@ -474,7 +483,7 @@ public class ServicesFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
-                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
         }

@@ -1,8 +1,13 @@
 package com.wedoops.platinumnobleclub.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 
 import com.wedoops.platinumnobleclub.EventDetailActivity;
@@ -13,67 +18,144 @@ import com.wedoops.platinumnobleclub.database.UserDetails;
 import java.util.List;
 
 public class DisplayAlertDialog {
+    private static AlertDialog alert;
 
-    public void displayAlertDialogError(final int errorCode, final Context context) {
+    public void displayAlertDialogError(final int errorCode, final Context context,  final Activity activity) {
         String errorMessage = getMessage(errorCode, context);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                context);
-        builder.setTitle(context.getString(R.string.error_title));
-        builder.setMessage(errorMessage);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
+
+        View customLayout = activity.getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText(context.getString(R.string.error_title));
+        textview_message.setText(errorMessage);
+        button_ok.setText(context.getString(R.string.Ok));
+
+        builder.setView(customLayout);
+
         builder.setCancelable(false);
-        builder.setPositiveButton(context.getString(R.string.Ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-
-                        dialog.dismiss();
-
-                        if (errorCode == 1506) {
-
-                            //Logout and clear everything
-                            new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_USERNAME, "");
-                            new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, "");
-
-                            List<UserDetails> ud_all = UserDetails.listAll(UserDetails.class);
-                            if (ud_all.size() > 0) {
-                                UserDetails.deleteAll(UserDetails.class);
-                            }
 
 
-                            Intent intent = new Intent(context, LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                    Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                if (errorCode == 1506) {
 
-                        }
+                    //Logout and clear everything
+                    new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_USERNAME, "");
+                    new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, "");
 
+                    List<UserDetails> ud_all = UserDetails.listAll(UserDetails.class);
+                    if (ud_all.size() > 0) {
+                        UserDetails.deleteAll(UserDetails.class);
                     }
-                });
-        builder.show();
+
+
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+
+                }
+            }
+        });
+
+        alert = builder.create();
+
+        alert.show();
+
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                context);
+//        builder.setTitle(context.getString(R.string.error_title));
+//        builder.setMessage(errorMessage);
+//        builder.setCancelable(false);
+//        builder.setPositiveButton(context.getString(R.string.Ok),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,
+//                                        int which) {
+//
+//                        dialog.dismiss();
+//
+//                        if (errorCode == 1506) {
+//
+//                            //Logout and clear everything
+//                            new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_USERNAME, "");
+//                            new ApplicationClass(context).writeIntoSharedPreferences(context, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, "");
+//
+//                            List<UserDetails> ud_all = UserDetails.listAll(UserDetails.class);
+//                            if (ud_all.size() > 0) {
+//                                UserDetails.deleteAll(UserDetails.class);
+//                            }
+//
+//
+//                            Intent intent = new Intent(context, LoginActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+//                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            context.startActivity(intent);
+//
+//                        }
+//
+//                    }
+//                });
+//        builder.show();
 
     }
 
-    public void displayAlertDialogSuccess(int statusCode, Context context) {
+    public void displayAlertDialogSuccess(int statusCode, Context context, Activity activity) {
         String statusMessage = getMessage(statusCode, context);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                context);
-        builder.setTitle(context.getString(R.string.success_title));
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
+
+        View customLayout = activity.getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText(context.getString(R.string.success_title));
+        textview_message.setText(statusMessage);
+        button_ok.setText(context.getString(R.string.Ok));
+
+        builder.setView(customLayout);
+
         builder.setCancelable(false);
-        builder.setMessage(statusMessage);
-        builder.setPositiveButton(context.getString(R.string.Ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.show();
+
+
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+
+            }
+        });
+
+        alert = builder.create();
+
+        alert.show();
+
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                context);
+//        builder.setTitle(context.getString(R.string.success_title));
+//        builder.setCancelable(false);
+//        builder.setMessage(statusMessage);
+//        builder.setPositiveButton(context.getString(R.string.Ok),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,
+//                                        int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//        builder.show();
     }
 
-    public void displayAlertDialogString(final int errorCode, String errorMessage, boolean success, final Context context) {
+    public void displayAlertDialogString(final int errorCode, String errorMessage, boolean success, final Context context, final Activity activity) {
 
         String titleMessage = "";
         if (success) {
@@ -82,25 +164,57 @@ public class DisplayAlertDialog {
             titleMessage = context.getResources().getString(R.string.error_title);
         }
 
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                context);
-        builder.setTitle(titleMessage);
-        builder.setMessage(errorMessage);
+        View customLayout = activity.getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
+        TextView textview_title = customLayout.findViewById(R.id.textview_title);
+        TextView textview_message = customLayout.findViewById(R.id.textview_message);
+        Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+        textview_title.setText(titleMessage);
+        textview_message.setText(errorMessage);
+        button_ok.setText(context.getString(R.string.Ok));
+
+        builder.setView(customLayout);
+
         builder.setCancelable(false);
-        builder.setPositiveButton(context.getString(R.string.Ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        if (errorCode == 3001) {
-                            ((EventDetailActivity) context).finish();
-                        } else {
-                            dialog.dismiss();
 
-                        }
-                    }
-                });
-        builder.show();
+
+        button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                if (errorCode == 3001) {
+                    ((EventDetailActivity) context).finish();
+                } else {
+                    alert.dismiss();
+
+                }
+            }
+        });
+
+        alert = builder.create();
+
+        alert.show();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(
+//                context);
+//        builder.setTitle(titleMessage);
+//        builder.setMessage(errorMessage);
+//        builder.setCancelable(false);
+//        builder.setPositiveButton(context.getString(R.string.Ok),
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog,
+//                                        int which) {
+//                        if (errorCode == 3001) {
+//                            ((EventDetailActivity) context).finish();
+//                        } else {
+//                            dialog.dismiss();
+//
+//                        }
+//                    }
+//                });
+//        builder.show();
     }
 
     public void displayImageSelectDialog(Context context, final IImagePickerLister imagePickerLister) {
@@ -166,8 +280,8 @@ public class DisplayAlertDialog {
                 break;
 
             }
-            case 200: {
-                message = context.getString(R.string.error_unknown);
+            case 503: {
+                message = "Service Unavailable, Please Try Again Later";
                 break;
             }
             case 2501: {

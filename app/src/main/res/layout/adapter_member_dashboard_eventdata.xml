@@ -72,15 +72,6 @@
         android:background="@drawable/radius_bottom_left_right"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/textview_event_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="12 May 2019 - 31 May 2019"
-            android:textColor="#ffffff"
-            android:textSize="10sp" />
-
         <RelativeLayout
             android:id="@+id/linearlayout_event_detail"
             android:layout_width="wrap_content"
@@ -129,7 +120,19 @@
                 android:src="@drawable/user_level_platinum" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/textview_event_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/relativelayout_group"
+            android:layout_toEndOf="@id/linearlayout_event_detail"
+            android:gravity="center"
+            android:text="12 May 2019 - 31 May 2019"
+            android:textColor="#ffffff"
+            android:textSize="10sp" />
+
         <RelativeLayout
+            android:id="@+id/relativelayout_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true">
@@ -138,6 +141,7 @@
                 android:id="@+id/imageview_group"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginRight="10dp"
                 android:adjustViewBounds="true"
                 android:background="@android:color/transparent"
@@ -149,12 +153,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/imageview_group"
+                android:layout_toEndOf="@id/imageview_group"
                 android:text="0/40"
                 android:textColor="#ffffff"
                 android:textSize="10sp" />
         </RelativeLayout>
-
 
     </RelativeLayout>
 
