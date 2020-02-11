@@ -137,8 +137,8 @@ public class RefreshTokenAPI {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.networkResponse.toString());
-                                    new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
+                                    Log.e("Error.Response", error.toString());
+                                   // new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
 
                                 }
                             }
