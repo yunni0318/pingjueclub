@@ -16,10 +16,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!--Advertisement Data-->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2772663182449117~6667300148" />
+<!--        &lt;!&ndash;Advertisement Data&ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+<!--            android:value="ca-app-pub-2772663182449117~6667300148" />-->
 
 
         <activity android:name=".ServiceDetails" />

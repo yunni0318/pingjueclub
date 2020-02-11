@@ -159,12 +159,8 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             holder.textview_remarks.setText(trd_list_all.get(position).getAdminTitle());
             holder.textview_transaction_id.setText(String.format("(id: %s)", trd_list_all.get(position).getTRederenceCode()));
 
-            if (trd_list_all.get(position).isCashIn()) {
-                holder.textview_points_amount.setText(String.format("+ %d pts", trd_list_all.get(position).getPointAmount()));
+            holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
 
-            } else {
-                holder.textview_points_amount.setText(String.format("- %d pts", trd_list_all.get(position).getPointAmount()));
-            }
 
             holder.textview_currency_amount.setText("");
             holder.textview_transaction_type.setText(trd_list_all.get(position).getType());

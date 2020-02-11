@@ -18,7 +18,6 @@ import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -151,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     private void setupAdvertisement() {
 //        MobileAds.initialize(this, "ca-app-pub-2772663182449117/8882399941");
-        MobileAds.initialize(this, "ca-app-pub-4167585096532227~2561120906");
+//        MobileAds.initialize(this, "ca-app-pub-4167585096532227~2561120906");
 
 //        MobileAds.initialize(this, "ca-app-pub-3940256099942544/2247696110");
 

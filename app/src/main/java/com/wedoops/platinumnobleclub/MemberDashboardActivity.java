@@ -29,7 +29,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.google.android.gms.ads.AdLoader;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
@@ -72,7 +71,6 @@ public class MemberDashboardActivity extends Fragment {
 
     private static CustomProgressDialog customDialog;
 
-    private static AdLoader adLoader;
     private static AlertDialog alert;
 
     private CountDownTimer cdt;
