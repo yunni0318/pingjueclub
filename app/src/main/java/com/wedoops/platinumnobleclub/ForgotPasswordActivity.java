@@ -20,11 +20,14 @@ import org.json.JSONObject;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText edittext_email;
+    private CustomProgressDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot_passowrd_activity);
+
+        customDialog = new CustomProgressDialog();
 
 //        getSupportActionBar().hide();
 
@@ -57,6 +60,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
         if (isValid) {
+            customDialog.showDialog(this);
             callForgotPassword(email);
 
         }
@@ -74,7 +78,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     public void processWSData(JSONObject returnedObject) {
-
+        customDialog.hideDialog();
         boolean isSuccess = false;
         try {
             isSuccess = returnedObject.getBoolean("Success");
@@ -83,10 +87,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 if (returnedObject.getInt("StatusCode") == 200) {
 
-                    JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+                    JSONArray response_array = returnedObject.getJSONArray("ResponseData");
 
 //                    new DisplayAlertDialog().displayAlertDialogSuccess(response_object.getInt("Code"),this);
-                    new DisplayAlertDialog().displayAlertDialogString(0, response_object.getString("MessageEN"), true, this, this);
+                    new DisplayAlertDialog().displayAlertDialogString(0, response_array.getJSONObject(0).getString("MessageEN"), true, this, this);
 
                 } else {
                     new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), this, this);
