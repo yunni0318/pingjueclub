@@ -36,6 +36,7 @@ import com.wedoops.platinumnobleclub.webservices.RefreshTokenAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -165,10 +166,15 @@ public class MyBookingDetail extends Activity {
         List<MyBookingDetailData> mbed_all = MyBookingDetailData.listAll(MyBookingDetailData.class);
 
         Double d_upfrontrate = mbed_all.get(0).getEventUpfrontRate();
-        Double d_eventprice = mbed_all.get(0).getEventPrice();
+//        Double d_eventprice = mbed_all.get(0).getEventPrice();
+
+        BigDecimal bd_event_price = new BigDecimal(mbed_all.get(0).getEventPrice());
+        bd_event_price = bd_event_price.setScale(4, BigDecimal.ROUND_HALF_UP);
+        bd_event_price = bd_event_price.setScale(3, BigDecimal.ROUND_DOWN);
+        bd_event_price = bd_event_price.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         String upfront_value = String.valueOf(d_upfrontrate.intValue());
-        String eventprice_value = String.valueOf(d_eventprice.intValue());
+        String eventprice_value = String.valueOf(bd_event_price.doubleValue());
 
         String startdate = mbed_all.get(0).getEventStartDate();
         String enddate = mbed_all.get(0).getEventEndDate();
@@ -261,7 +267,13 @@ public class MyBookingDetail extends Activity {
         }
 
         textview_join_trip_amount.setText(String.format("%s/%s", mbed_all.get(0).getReservedSeat(), mbed_all.get(0).getMaxParticipant()));
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        textview_event_name.setWidth(displayMetrics.widthPixels / 2);
+
         textview_event_name.setText(mbed_all.get(0).getEventName());
+
         textview_event_price.setText(String.format("%s PTS", eventprice_value));
 
         imageview_user_rank_bronze.setVisibility(View.GONE);

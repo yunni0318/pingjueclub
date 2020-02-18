@@ -5,7 +5,7 @@
     android:layout_marginTop="10dp"
     android:orientation="vertical">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -21,11 +21,13 @@
             android:id="@+id/textview_upfront_payment"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"
             android:background="@drawable/radius_right_top_bottom"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
             android:text="0% UPFRONT PAYMENT"
             android:textColor="#F8B888"
             android:textSize="12sp" />
@@ -33,6 +35,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/textview_upfront_payment"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_marginStart="10dp"
             android:gravity="bottom"
@@ -64,7 +68,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

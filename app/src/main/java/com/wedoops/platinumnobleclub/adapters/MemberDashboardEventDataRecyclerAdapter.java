@@ -6,6 +6,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.MemberDashboardEventData;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +57,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             imageview_user_rank_platinum = v.findViewById(R.id.imageview_user_rank_platinum);
             textview_event_name = v.findViewById(R.id.textview_event_name);
             textview_event_price = v.findViewById(R.id.textview_event_price);
+
 
             Typeface typeface = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/poppins-v6-latin-regular.ttf");
             textview_upfront_payment.setTypeface(typeface);
@@ -100,7 +103,6 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 }
 
                 int containerWidth = myViewHolder.imageview_evenetdata_detail.getWidth();
-
                 int imageViewHeight = containerWidth / 2;
 
                 // set fixed height to the imageView
@@ -108,14 +110,27 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 imgParams.height = imageViewHeight;
                 myViewHolder.imageview_evenetdata_detail.setLayoutParams(imgParams);
 
+                int cWidth = myViewHolder.itemView.getWidth();
+                int textview_width = cWidth / 2;
+
+                ViewGroup.LayoutParams textviewParams = myViewHolder.textview_event_name.getLayoutParams();
+                textviewParams.width = textview_width;
+                myViewHolder.textview_event_name.setLayoutParams(textviewParams);
+
+
             }
         });
 
         Double d_upfrontrate = ed.get(i).getEventUpfrontRate();
-        Double d_eventprice = ed.get(i).getEventPrice();
+//        Double d_eventprice = ed.get(i).getEventPrice();
+
+        BigDecimal bd_event_price = new BigDecimal(ed.get(i).getEventPrice());
+        bd_event_price = bd_event_price.setScale(4, BigDecimal.ROUND_HALF_UP);
+        bd_event_price = bd_event_price.setScale(3, BigDecimal.ROUND_DOWN);
+        bd_event_price = bd_event_price.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         String upfront_value = String.valueOf(d_upfrontrate.intValue());
-        String eventprice_value = String.valueOf(d_eventprice.intValue());
+        String eventprice_value = String.valueOf(bd_event_price.doubleValue());
 
         String startdate = ed.get(i).getEventStartDate();
         String enddate = ed.get(i).getEventEndDate();

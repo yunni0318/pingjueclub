@@ -20,6 +20,7 @@ import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.MyBookingList;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -109,14 +110,26 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
                 imgParams.height = imageViewHeight;
                 myViewHolder.imageview_my_booking_detail.setLayoutParams(imgParams);
 
+                int cWidth = myViewHolder.itemView.getWidth();
+                int textview_width = cWidth / 2;
+
+                ViewGroup.LayoutParams textviewParams = myViewHolder.textview_event_name.getLayoutParams();
+                textviewParams.width = textview_width;
+                myViewHolder.textview_event_name.setLayoutParams(textviewParams);
+
             }
         });
 
         Double d_upfrontrate = mbl.get(i).getEventUpfrontRate();
-        Double d_eventprice = mbl.get(i).getEventPrice();
+//        Double d_eventprice = mbl.get(i).getEventPrice();
+
+        BigDecimal bd_event_price = new BigDecimal(mbl.get(i).getEventPrice());
+        bd_event_price = bd_event_price.setScale(4, BigDecimal.ROUND_HALF_UP);
+        bd_event_price = bd_event_price.setScale(3, BigDecimal.ROUND_DOWN);
+        bd_event_price = bd_event_price.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         String upfront_value = String.valueOf(d_upfrontrate.intValue());
-        String eventprice_value = String.valueOf(d_eventprice.intValue());
+        String eventprice_value = String.valueOf(bd_event_price.doubleValue());
 
         String startdate = mbl.get(i).getEventStartDate();
         String enddate = mbl.get(i).getEventEndDate();
