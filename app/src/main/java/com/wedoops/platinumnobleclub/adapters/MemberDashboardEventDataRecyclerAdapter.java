@@ -222,6 +222,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
 
         Glide.with(myViewHolder.imageview_evenetdata_detail.getContext())
                 .load(ed.get(i).getEventBannerImagePath())
+                .timeout(10000)
                 .apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP)))
                 .into(myViewHolder.imageview_evenetdata_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));

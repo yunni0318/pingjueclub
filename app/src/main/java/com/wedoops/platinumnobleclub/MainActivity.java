@@ -555,7 +555,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
             textview_user_wallet.setText(String.format("%s POINTS", cash_wallet));
 
-            Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).into(imageview_user_profile);
+            Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).timeout(10000).into(imageview_user_profile);
 
             Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-regular.ttf");
             textview_user_nickname.setTypeface(typeface);

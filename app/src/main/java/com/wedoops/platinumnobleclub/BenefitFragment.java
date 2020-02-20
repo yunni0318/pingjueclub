@@ -31,7 +31,7 @@ public class BenefitFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         touchImageView = view.findViewById(R.id.imageViewBenefit);
 
-        Glide.with(this).load("http://web.platinumnobleclub.com/Images/guide.jpg").placeholder(R.drawable.empty_image).into(touchImageView);
+        Glide.with(this).load("http://web.platinumnobleclub.com/Images/guide.jpg").placeholder(R.drawable.empty_image).timeout(10000).into(touchImageView);
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();

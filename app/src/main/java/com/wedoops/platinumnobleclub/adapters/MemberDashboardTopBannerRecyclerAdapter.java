@@ -50,7 +50,7 @@ public class MemberDashboardTopBannerRecyclerAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
-        Glide.with(myViewHolder.imageview.getContext()).load(ud.get(i).getImagePath()).into(myViewHolder.imageview);
+        Glide.with(myViewHolder.imageview.getContext()).load(ud.get(i).getImagePath()).timeout(10000).into(myViewHolder.imageview);
 
     }
 
