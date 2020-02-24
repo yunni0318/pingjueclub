@@ -51,7 +51,7 @@ public class MyBookingDetail extends Activity {
     private ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
     private Button event_detail_button_jointrip;
     private WebView event_detail_webview;
-    public TextView textview_upfront_payment, textview_event_date, textview_join_trip_amount, textview_event_name, textview_event_price, textview_join_trip_payment;
+    public TextView textview_upfront_payment, textview_event_start_date, textview_event_end_date, textview_join_trip_amount, textview_event_name, textview_event_price, textview_join_trip_payment;
     ;
     private static final String KEY_LANG = "key_lang"; // preference key
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -140,14 +140,16 @@ public class MyBookingDetail extends Activity {
         imageview_user_rank_platinum = findViewById(R.id.imageview_user_rank_platinum);
 
         textview_upfront_payment = findViewById(R.id.textview_upfront_payment);
-        textview_event_date = findViewById(R.id.textview_event_date);
+        textview_event_start_date = findViewById(R.id.textview_event_start_date);
+        textview_event_end_date = findViewById(R.id.textview_event_end_date);
         textview_join_trip_amount = findViewById(R.id.textview_join_trip_amount);
         textview_event_name = findViewById(R.id.textview_event_name);
         textview_event_price = findViewById(R.id.textview_event_price);
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/poppins-v6-latin-regular.ttf");
         textview_upfront_payment.setTypeface(typeface);
-        textview_event_date.setTypeface(typeface);
+        textview_event_start_date.setTypeface(typeface);
+        textview_event_end_date.setTypeface(typeface);
         textview_join_trip_amount.setTypeface(typeface);
 
         Typeface typeface_bold_500 = Typeface.createFromAsset(this.getAssets(), "fonts/poppins-v6-latin-500.ttf");
@@ -259,11 +261,11 @@ public class MyBookingDetail extends Activity {
         textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
 
         if (final_startDate.equals(final_endDate)) {
-            textview_event_date.setText(String.format("%s", final_endDate + " " + splited_enddate[3]));
-
+            textview_event_start_date.setText("-");
+            textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
         } else {
-            textview_event_date.setText(String.format("%s - %s", final_startDate + " " + splited_startdate[3], final_endDate + " " + splited_enddate[3]));
-
+            textview_event_start_date.setText(String.format("%s", final_startDate + " (" + splited_startdate[3] + ")"));
+            textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
         }
 
         textview_join_trip_amount.setText(String.format("%s/%s", mbed_all.get(0).getReservedSeat(), mbed_all.get(0).getMaxParticipant()));

@@ -137,15 +137,6 @@
                     android:background="@drawable/radius_bottom_left_right"
                     android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/textview_event_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="12 May 2019 - 31 May 2019"
-                        android:textColor="#ffffff"
-                        android:textSize="10sp" />
-
                     <RelativeLayout
                         android:id="@+id/linearlayout_event_detail"
                         android:layout_width="wrap_content"
@@ -219,19 +210,71 @@
                             android:textColor="#ffffff"
                             android:textSize="10sp" />
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearlayout_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/linearlayout_event_detail"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1.0">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:id="@+id/header_start"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Event Start"
+                                android:textColor="#ffffff"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textview_event_start_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/header_start"
+                                android:text="12 May 2019 - 31 May 2019"
+                                android:textColor="#ffffff"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5">
+
+                            <TextView
+                                android:id="@+id/header_end"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Event End"
+                                android:textColor="#ffffff"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textview_event_end_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/header_end"
+                                android:text="12 May 2019 - 31 May 2019"
+                                android:textColor="#ffffff"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
                 </RelativeLayout>
 
             </LinearLayout>
 
-            <!--            <ListView-->
-            <!--                android:id="@+id/listview_event_detail_timeline"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginStart="10dp"-->
-            <!--                android:layout_marginLeft="10dp"-->
-            <!--                android:layout_marginEnd="10dp"-->
-            <!--                android:layout_marginRight="10dp"-->
-            <!--                android:layout_marginBottom="10dp" />-->
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -356,13 +356,13 @@ public class ServicesFragment extends Fragment {
 
                         }
 
-                        for (int i = 0; i < other_news_array_data.length(); i++) {
-
-                            JSONObject ona = other_news_array_data.getJSONObject(i);
-
-                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getString("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
-                            sond.save();
-                        }
+//                        for (int i = 0; i < other_news_array_data.length(); i++) {
+//
+//                            JSONObject ona = other_news_array_data.getJSONObject(i);
+//
+//                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getString("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
+//                            sond.save();
+//                        }
 
 
                         displayResult();

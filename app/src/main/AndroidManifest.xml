@@ -28,17 +28,20 @@
         <!--            android:value="ca-app-pub-2772663182449117~6667300148" />-->
 
 
-        <activity android:name=".ServiceDetails" />
-
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/splashScreenTheme">
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
 
             <intent-filter android:priority="0">
                 <action android:name="android.intent.action.VIEW" />
@@ -63,6 +66,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ServiceDetails"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ServicesSubActivity"

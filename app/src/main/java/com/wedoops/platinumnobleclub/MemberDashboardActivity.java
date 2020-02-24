@@ -110,12 +110,17 @@ public class MemberDashboardActivity extends Fragment {
                 view.getContext().startActivity(intent);
 
             } else {
+
                 String url = ed.get(position).getRedirectURL();
-                if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    url = "http://" + url;
+
+                if(url.length() > 0){
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "http://" + url;
+                    }
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    view.getContext().startActivity(browserIntent);
                 }
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                view.getContext().startActivity(browserIntent);
+
             }
 
 
