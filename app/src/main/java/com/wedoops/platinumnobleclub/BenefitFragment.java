@@ -38,6 +38,7 @@ public class BenefitFragment extends Fragment {
         Glide.with(this)
                 .asBitmap()
                 .load("http://web.platinumnobleclub.com/Images/guide.jpg")
+                .placeholder(R.drawable.loading)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

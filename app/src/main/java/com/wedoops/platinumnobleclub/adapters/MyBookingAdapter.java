@@ -216,7 +216,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         String final_startDate = String.format(myViewHolder.textview_event_start_date.getContext().getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
         String final_endDate = String.format(myViewHolder.textview_event_start_date.getContext().getString(R.string.member_dashboard_eventenddate), splited_enddate[0], splited_enddate[1], splited_enddate[2]);
 
-        Glide.with(myViewHolder.imageview_my_booking_detail.getContext()).load(mbl.get(i).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP))).timeout(10000).into(myViewHolder.imageview_my_booking_detail);
+        Glide.with(myViewHolder.imageview_my_booking_detail.getContext()).load(mbl.get(i).getEventBannerImagePath()).placeholder(R.drawable.loading).apply(new RequestOptions().transform(new RoundedCornersTransformation(10, 0, RoundedCornersTransformation.CornerType.TOP))).timeout(10000).into(myViewHolder.imageview_my_booking_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
 
         if (final_startDate.equals(final_endDate)) {

@@ -257,7 +257,7 @@ public class MyBookingDetail extends Activity {
         String final_startDate = String.format(this.getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
         String final_endDate = String.format(this.getString(R.string.member_dashboard_eventenddate), splited_enddate[0], splited_enddate[1], splited_enddate[2]);
 
-        Glide.with(this).load(mbed_all.get(0).getEventBannerImagePath()).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).timeout(10000).into(imageview_eventdetail);
+        Glide.with(this).load(mbed_all.get(0).getEventBannerImagePath()).placeholder(R.drawable.loading).apply(new RequestOptions().transform(new RoundedCornersTransformation(100, 0, RoundedCornersTransformation.CornerType.TOP))).timeout(10000).into(imageview_eventdetail);
         textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
 
         if (final_startDate.equals(final_endDate)) {

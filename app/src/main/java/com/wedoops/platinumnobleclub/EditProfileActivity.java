@@ -347,7 +347,7 @@ public class EditProfileActivity extends Fragment {
         List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
 //        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).into(imageview_user_profile);
-        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.default_profile).into(imageview_user_profile);
+        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.loading).into(imageview_user_profile);
 
         if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             imageview_user_rank.setImageResource(R.drawable.bronze_medal);

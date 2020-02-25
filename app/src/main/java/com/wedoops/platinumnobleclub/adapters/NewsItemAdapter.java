@@ -67,7 +67,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.MyView
 //        myViewHolder.like_button.setIcon(IconType.Thumb);
 //        myViewHolder.like_button.setLikeDrawableRes(R.drawable.like_icon);
 
-        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getEventBannerImagePath()).timeout(10000).into(myViewHolder.imageView);
+        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getEventBannerImagePath()).placeholder(R.drawable.loading).timeout(10000).into(myViewHolder.imageView);
 //        myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

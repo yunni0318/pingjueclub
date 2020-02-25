@@ -45,7 +45,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
 
-        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getMainServiceImagePath()).timeout(10000).into(myViewHolder.imageView);
+        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getMainServiceImagePath()).placeholder(R.drawable.loading).timeout(10000).into(myViewHolder.imageView);
         myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
