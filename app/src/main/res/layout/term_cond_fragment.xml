@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:paddingTop="?android:actionBarSize">-->
+
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="?android:actionBarSize">
+        android:paddingTop="20dp"
+        android:layout_marginTop="?android:actionBarSize"
+        android:background="#ffffff" />
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="120dp"
-            android:background="#ffffff" />
-
-    </LinearLayout>
+    <!--    </LinearLayout>-->
 </androidx.core.widget.NestedScrollView>
