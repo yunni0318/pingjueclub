@@ -31,7 +31,7 @@
     <string name="event_detail_trip_detail_title">EVENT DETAILS</string>
     <string name="event_detail_join_trip">JOIN EVENT</string>
     <string name="event_detail_joined_status_false">Press \'JOIN EVENT\' to make your payment.</string>
-    <string name="event_detail_confirm_join_trip">Confirm to join this event?</string>
+    <string name="event_detail_confirm_join_trip">Confirm to join this event?\n You will be spending %s PTS for this booking</string>
     <string name="event_detail_is_joined">YOU\'VE JOINED</string>
     <string name="event_detail_trip_confirmed">JOIN EVENT CONFIRMED!</string>
 

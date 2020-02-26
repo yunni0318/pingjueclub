@@ -294,7 +294,6 @@ public class EventDetailActivity extends Activity {
         }
 
 
-
         textview_join_trip_amount.setText(String.format("%s/%s", eded_all.get(0).getReservedSeat(), eded_all.get(0).getMaxParticipant()));
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -383,7 +382,24 @@ public class EventDetailActivity extends Activity {
         Button button_ok = customLayout.findViewById(R.id.button_ok);
 
         textview_title.setText(this.getString(R.string.warning_title));
-        textview_message.setText(this.getResources().getString(R.string.event_detail_confirm_join_trip));
+
+        List<EventDetailEventData> eded_all = EventDetailEventData.listAll(EventDetailEventData.class);
+
+        BigDecimal bd_upfrontrate = new BigDecimal(eded_all.get(0).getEventUpfrontRate());
+
+        BigDecimal bd_event_price = new BigDecimal(eded_all.get(0).getEventPrice());
+        bd_event_price = bd_event_price.setScale(4, BigDecimal.ROUND_HALF_UP);
+        bd_event_price = bd_event_price.setScale(3, BigDecimal.ROUND_DOWN);
+        bd_event_price = bd_event_price.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        BigDecimal upfrontpayment_bd = bd_event_price.multiply(bd_upfrontrate.divide(new BigDecimal(100)));
+        upfrontpayment_bd = upfrontpayment_bd.setScale(4, BigDecimal.ROUND_HALF_UP);
+        upfrontpayment_bd = upfrontpayment_bd.setScale(3, BigDecimal.ROUND_DOWN);
+        upfrontpayment_bd = upfrontpayment_bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        String textConfirmation = String.format(this.getResources().getString(R.string.event_detail_confirm_join_trip), String.valueOf(upfrontpayment_bd.doubleValue()));
+
+        textview_message.setText(textConfirmation);
         button_ok.setText(this.getString(R.string.join_trip));
 
         builder.setView(customLayout);

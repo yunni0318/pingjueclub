@@ -41,7 +41,7 @@
     <string name="event_detail_join_trip">加入行程</string>
     <string name="event_detail_joined_status_false">加入行程后将自动支付费用。</string>
     <string name="event_detail_is_joined">已加入 </string>
-    <string name="event_detail_confirm_join_trip">确认加入此行程？</string>
+    <string name="event_detail_confirm_join_trip">确认加入此行程？您将会消耗 %s PTS 预订行程</string>
     <string name="event_detail_trip_confirmed">行程确定加入！</string>
 
     <!-- Edit Profile Activity -->
