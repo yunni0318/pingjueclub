@@ -57,6 +57,12 @@ public class MyBookingActivity extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        get_activity = getActivity();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         customDialog = new CustomProgressDialog();
@@ -188,6 +194,7 @@ public class MyBookingActivity extends Fragment {
 
             } catch (Exception e) {
                 Log.e("Error", e.toString());
+
                 new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }

@@ -37,7 +37,6 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
 
         public ImageView imageview_evenetdata_detail;
         public TextView textview_upfront_payment;
-        public TextView textview_event_start_date;
         public TextView textview_event_end_date;
         public TextView textview_join_trip_amount;
         public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
@@ -50,7 +49,6 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             v.setOnClickListener(mOnItemClickListener);
             imageview_evenetdata_detail = v.findViewById(R.id.imageview_evenetdata_detail);
             textview_upfront_payment = v.findViewById(R.id.textview_upfront_payment);
-            textview_event_start_date = v.findViewById(R.id.textview_event_start_date);
             textview_event_end_date = v.findViewById(R.id.textview_event_end_date);
             textview_join_trip_amount = v.findViewById(R.id.textview_join_trip_amount);
             imageview_user_rank_bronze = v.findViewById(R.id.imageview_user_rank_bronze);
@@ -63,7 +61,6 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
 
             Typeface typeface = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/poppins-v6-latin-regular.ttf");
             textview_upfront_payment.setTypeface(typeface);
-            textview_event_start_date.setTypeface(typeface);
             textview_event_end_date.setTypeface(typeface);
             textview_join_trip_amount.setTypeface(typeface);
 
@@ -140,7 +137,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         String new_startdate = "";
         String new_enddate = "";
 
-        if (myViewHolder.textview_event_start_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_start_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || myViewHolder.textview_event_start_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
+        if (myViewHolder.textview_event_end_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || myViewHolder.textview_event_end_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || myViewHolder.textview_event_end_date.getContext().getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             try {
                 TimeZone tz = TimeZone.getTimeZone("SGT");
 
@@ -211,7 +208,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         String[] splited_startdate = new_startdate.split(" ");
         String[] splited_enddate = new_enddate.split(" ");
 
-        String final_startDate = String.format(myViewHolder.textview_event_start_date.getContext().getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
+//        String final_startDate = String.format(myViewHolder.textview_event_start_date.getContext().getString(R.string.member_dashboard_eventstartdate), splited_startdate[0], splited_startdate[1], splited_startdate[2]);
         String final_endDate = String.format(myViewHolder.textview_event_end_date.getContext().getString(R.string.member_dashboard_eventenddate), splited_enddate[0], splited_enddate[1], splited_enddate[2]);
 
 
@@ -230,21 +227,17 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
                 .into(myViewHolder.imageview_evenetdata_detail);
         myViewHolder.textview_upfront_payment.setText(String.format("%s%% UPFRONT", upfront_value));
 
+
 //        if (final_startDate.equals(final_endDate)) {
-//            myViewHolder.textview_event_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
-//
+//            myViewHolder.textview_event_start_date.setText("-");
+//            myViewHolder.textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
 //        } else {
-//            myViewHolder.textview_event_date.setText(String.format("%s - %s", final_startDate + " (" + splited_startdate[3] + ")", final_endDate + " (" + splited_enddate[3] + ")"));
-//
+//            myViewHolder.textview_event_start_date.setText(String.format("%s", final_startDate + " (" + splited_startdate[3] + ")"));
+//            myViewHolder.textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
 //        }
 
-        if (final_startDate.equals(final_endDate)) {
-            myViewHolder.textview_event_start_date.setText("-");
-            myViewHolder.textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
-        } else {
-            myViewHolder.textview_event_start_date.setText(String.format("%s", final_startDate + " (" + splited_startdate[3] + ")"));
-            myViewHolder.textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_enddate[3] + ")"));
-        }
+        myViewHolder.textview_event_end_date.setText(String.format("%s", final_endDate + " (" + splited_startdate[3] + " - " + splited_enddate[3] + ")"));
+
 
         myViewHolder.textview_join_trip_amount.setText(String.format("%s/%s", ed.get(i).getReservedSeat(), ed.get(i).getMaxParticipant()));
         myViewHolder.textview_event_name.setText(ed.get(i).getEventName());
