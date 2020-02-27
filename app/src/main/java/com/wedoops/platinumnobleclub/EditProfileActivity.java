@@ -2,18 +2,26 @@ package com.wedoops.platinumnobleclub;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,18 +43,29 @@ import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;
+import com.wedoops.platinumnobleclub.helper.IImagePickerLister;
+import com.wedoops.platinumnobleclub.helper.ImagePickerEnum;
 import com.wedoops.platinumnobleclub.webservices.Api_Constants;
 import com.wedoops.platinumnobleclub.webservices.CallRefreshToken;
 import com.wedoops.platinumnobleclub.webservices.CallWebServices;
 import com.wedoops.platinumnobleclub.webservices.RefreshTokenAPI;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.app.Activity.RESULT_OK;
+import static com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
 public class EditProfileActivity extends Fragment {
 
@@ -65,6 +84,9 @@ public class EditProfileActivity extends Fragment {
     private static AlertDialog alert;
 
     private static int counter = 0;
+
+    private String currentPhotoPath = "";
+
 
     @Nullable
     @Override
@@ -91,7 +113,7 @@ public class EditProfileActivity extends Fragment {
         callMemberAccountSettingWebService();
     }
 
-    private static void setupViewById() {
+    private void setupViewById() {
         imageview_user_profile = view.findViewById(R.id.imageview_user_profile);
         imageview_user_rank = view.findViewById(R.id.imageview_user_rank);
 
@@ -149,6 +171,31 @@ public class EditProfileActivity extends Fragment {
         });
 
         button_change_password = view.findViewById(R.id.button_change_password);
+
+
+        imageview_user_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (new ApplicationClass().checkSelfPermissions(get_activity)) {
+                        new DisplayAlertDialog().displayImageSelectDialog(get_context, new IImagePickerLister() {
+                            @Override
+                            public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
+
+                                if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
+                                    openCamera();
+                                else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
+                                    openImagesDocument();
+                            }
+                        });
+
+                    }
+                }
+
+            }
+        });
+
     }
 
     private static void setupEditText() {
@@ -175,6 +222,25 @@ public class EditProfileActivity extends Fragment {
         new CallWebServices(Api_Constants.API_MEMBER_ACCOUNT_SETTING, view.getContext(), true).execute(b);
 
     }
+
+    private void callChangeProfilePictureWebService(String base64_string) {
+        customDialog.showDialog(get_context);
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("access_token", ud_list.get(0).getAccessToken());
+        b.putString("ProfilePictureBase64", base64_string);
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE);
+
+        new CallWebServices(Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE, get_activity, true).execute(b);
+
+    }
+
 
 //    private static void callCountryStateListWebService() {
 //
@@ -717,7 +783,6 @@ public class EditProfileActivity extends Fragment {
                     int errorCode = returnedObject.getInt("StatusCode");
 
                     if (errorCode == 401) {
-//                        CustomProgressDialog.showProgressDialog(get_context);
                         customDialog.showDialog(get_context);
 
                         callRefreshTokenWebService(RefreshTokenAPI.ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
@@ -733,6 +798,72 @@ public class EditProfileActivity extends Fragment {
                 Log.e("Error", e.toString());
                 new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
+            }
+        }else if (command == Api_Constants.API_MEMBER_CHANGE_PROFILE_PICTURE) {
+            boolean isSuccess = false;
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+                    if (returnedObject.getInt("StatusCode") == 200) {
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+                        JSONObject success_object = response_object.getJSONObject("SuccessMessage");
+                        JSONObject profile_object = response_object.getJSONObject("UserQuickProfile");
+
+                        String Srno = String.valueOf(profile_object.getInt("Srno"));
+                        String LoginID = profile_object.getString("LoginID");
+                        String Name = profile_object.getString("Name");
+                        String DOB = profile_object.getString("DOB");
+                        String Email = profile_object.getString("Email");
+                        String Phone = profile_object.getString("Phone");
+                        String CountryCode = profile_object.getString("CountryCode");
+                        String StateCode = profile_object.getString("StateCode");
+                        String Address = profile_object.getString("Address");
+                        String Gender = profile_object.getString("Gender");
+                        String ProfilePictureImagePath = profile_object.getString("ProfilePictureImagePath");
+                        String UserLevelCode = profile_object.getString("UserLevelCode");
+                        String JoinedDate = profile_object.getString("JoinedDate");
+                        String CashWallet = String.valueOf(profile_object.getString("CashWallet"));
+
+                        List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
+
+                        String table_name = UserDetails.getTableName(UserDetails.class);
+                        String loginid_field = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud_listall.get(0).getLoginID());
+
+                        UserDetails ud = UserDetails.find(UserDetails.class, loginid_field + " = ?", ud_listall.get(0).getLoginID()).get(0);
+
+                        ud.setAccessToken(ud_list.get(0).getAccessToken());
+                        ud.setRefreshToken(ud_list.get(0).getRefreshToken());
+                        ud.setSrno(Srno);
+                        ud.setLoginID(LoginID);
+                        ud.setName(Name);
+                        ud.setDOB(DOB);
+                        ud.setEmail(Email);
+                        ud.setPhone(Phone);
+                        ud.setCountryCode(CountryCode);
+                        ud.setStateCode(StateCode);
+                        ud.setAddress(Address);
+                        ud.setGender(Gender);
+                        ud.setProfilePictureImagePath(ProfilePictureImagePath);
+                        ud.setUserLevelCode(UserLevelCode);
+                        ud.setJoinedDate(JoinedDate);
+                        ud.setCashWallet(CashWallet);
+                        ud.save();
+
+                        new DisplayAlertDialog().displayAlertDialogSuccess(success_object.getInt("Code"), get_context, get_activity);
+
+
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_context, get_activity);
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, get_context, get_activity);
             }
         }
     }
@@ -806,6 +937,116 @@ public class EditProfileActivity extends Fragment {
         }
     }
 
+    private void openCamera() {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file;
+        try {
+            file = getImageFile(); // 1
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) // 2
+            uri = FileProvider.getUriForFile(get_context, BuildConfig.APPLICATION_ID.concat(".provider"), file);
+        else
+            uri = Uri.fromFile(file); // 3
+        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 4
+        startActivityForResult(pictureIntent, CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE);
+    }
+
+    private void openImagesDocument() {
+        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pictureIntent.setType("image/*");
+        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
+            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }
+        startActivityForResult(Intent.createChooser(pictureIntent, "Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);
+    }
+
+    private File getImageFile() throws IOException {
+        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+
+        System.out.println(storageDir.getAbsolutePath());
+        if (storageDir.exists()) {
+            System.out.println("File exists");
+        } else {
+            System.out.println("File not exists");
+            storageDir.mkdirs();
+        }
+        File file = File.createTempFile(
+                imageFileName, ".jpg", storageDir
+        );
+        currentPhotoPath = "file:" + file.getAbsolutePath();
+        return file;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = Uri.parse(currentPhotoPath);
+            openCropActivity(uri, uri);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri uri = UCrop.getOutput(data);
+                showImage(uri);
+            }
+        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            try {
+                Uri sourceUri = data.getData();
+                File file = getImageFile();
+                Uri destinationUri = Uri.fromFile(file);
+                openCropActivity(sourceUri, destinationUri);
+            } catch (Exception e) {
+                Log.e("Error Image", e.toString());
+            }
+        }
+    }
+
+    private void showImage(Uri imageUri) {
+        try {
+            File file;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                file = com.wedoops.platinumnobleclub.helper.FileUtils.getFile(get_context, imageUri);
+            } else {
+                file = new File(currentPhotoPath);
+            }
+
+            InputStream inputStream = new FileInputStream(file);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//            imageView.setImageBitmap(bitmap);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            callChangeProfilePictureWebService(encoded);
+
+        } catch (Exception e) {
+            Log.e("Error", e.toString());
+        }
+    }
+
+    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true);
+        options.setDimmedLayerColor(Color.parseColor("#50ffffff"));
+        options.setHideBottomControls(true);
+        options.setShowCropGrid(false);
+        options.setCropFrameStrokeWidth(5);
+        options.setCropFrameColor(Color.WHITE);
+        options.setShowCropFrame(false);
+        UCrop.of(sourceUri, destinationUri).withOptions(options)
+                .withAspectRatio(1, 1)
+                .withMaxResultSize(300, 300)
+                .start(get_activity);
+    }
+
     private static boolean isValidPassword(final String password) {
 
         Pattern pattern;
@@ -829,4 +1070,5 @@ public class EditProfileActivity extends Fragment {
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
     }
+
 }

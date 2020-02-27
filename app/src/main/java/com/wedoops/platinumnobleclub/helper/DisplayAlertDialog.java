@@ -222,7 +222,7 @@ public class DisplayAlertDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 context);
         builder.setTitle(context.getString(R.string.change_profile_title));
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         builder.setItems(R.array.imagePicker, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
