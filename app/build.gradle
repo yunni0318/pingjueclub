@@ -15,8 +15,8 @@ android {
         applicationId 'com.wedoops.platinumnobleclub'
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 13
-        versionName "1.0.13"
+        versionCode 14
+        versionName "1.0.14"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
