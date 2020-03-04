@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,21 +27,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.orm.StringUtil;
-import com.wedoops.platinumnobleclub.adapters.NewsItemAdapter;
 import com.wedoops.platinumnobleclub.adapters.ServiceItemAdapter;
-import com.wedoops.platinumnobleclub.adapters.ServicesTopBannerRecyclerAdapter;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.ServicesListData;
-import com.wedoops.platinumnobleclub.database.ServicesOtherNewsData;
-import com.wedoops.platinumnobleclub.database.ServicesTopBannerData;
 import com.wedoops.platinumnobleclub.database.SubServicesListData;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;
-import com.wedoops.platinumnobleclub.helper.LinePagerIndicatorDecoration;
 import com.wedoops.platinumnobleclub.webservices.Api_Constants;
 import com.wedoops.platinumnobleclub.webservices.CallRefreshToken;
 import com.wedoops.platinumnobleclub.webservices.CallWebServices;
@@ -55,12 +56,13 @@ public class ServicesFragment extends Fragment {
     private static int counter = 0;
     public static int position = 0;
     private static View view;
-    private static RecyclerView recyclerView, recyclerViewServices, recyclerViewNews;
+    private static RecyclerView recyclerViewServices;
     private static Runnable runnable;
-    private static ServicesTopBannerRecyclerAdapter topBanner_adapter;
     private static CustomProgressDialog customDialog;
     private static Context get_context;
     private static Activity get_activity;
+    private static CardView cardview_customer_service;
+    private static AlertDialog alert;
 
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
@@ -84,21 +86,6 @@ public class ServicesFragment extends Fragment {
             }
         }
     };
-
-    private static void setupAutoScroll() {
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (position == 3) {
-                    position = 0;
-                }
-                recyclerView.smoothScrollToPosition(position);
-                position++;
-                handler.postDelayed(this, 2000);
-            }
-        };
-        handler.postDelayed(runnable, 2000);
-    }
 
     @Nullable
     @Override
@@ -168,71 +155,9 @@ public class ServicesFragment extends Fragment {
 
 
     private void setupDeclaration(View view) {
-        recyclerView = view.findViewById(R.id.recyclerview_service_top_banner);
         recyclerViewServices = view.findViewById(R.id.recyclerview_service_list);
-        recyclerViewNews = view.findViewById(R.id.recyclerview_service_new);
+        cardview_customer_service = view.findViewById(R.id.cardview_customer_service);
     }
-
-    private static void setupRecyclerView() {
-
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-
-        List<ServicesTopBannerData> stbd_all = ServicesTopBannerData.listAll(ServicesTopBannerData.class);
-
-        topBanner_adapter = new ServicesTopBannerRecyclerAdapter(stbd_all);
-        RecyclerView.LayoutManager top_banner_mLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
-            @Override
-            public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-                LinearSmoothScroller smoothScroller = new LinearSmoothScroller(view.getContext()) {
-                    private static final float SPEED = 100f;// Change this value (default=25f)
-
-                    @Override
-                    protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                        return SPEED / displayMetrics.densityDpi;
-                    }
-                };
-                smoothScroller.setTargetPosition(position);
-                startSmoothScroll(smoothScroller);
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        setupAutoScroll();
-        recyclerView.setLayoutManager(top_banner_mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(topBanner_adapter);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    try {
-                        position = ((LinearLayoutManager) recyclerView.getLayoutManager())
-                                .findFirstVisibleItemPosition();
-                    } catch (Exception e) {
-                        position = 0;
-                    }
-                }
-            }
-        });
-
-        //Paging Feature
-        if (recyclerView.getOnFlingListener() == null) {
-            SnapHelper helper = new LinearSnapHelper();
-            helper.attachToRecyclerView(recyclerView);
-        }
-
-        //Indicator
-
-        recyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
-        topBanner_adapter.setOnTopBannerItemClickListener(onTopBannerItemClickListener);
-    }
-
 
     @Override
     public void onPause() {
@@ -250,40 +175,57 @@ public class ServicesFragment extends Fragment {
 
     private static void displayResult() {
 
-        setupRecyclerView();
-
         ViewCompat.setNestedScrollingEnabled(recyclerViewServices, false);
-        ViewCompat.setNestedScrollingEnabled(recyclerViewNews, false);
 
         List<ServicesListData> sld_all = ServicesListData.listAll(ServicesListData.class);
-        List<ServicesOtherNewsData> son_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
 
         ServiceItemAdapter serviceItemAdapter = new ServiceItemAdapter(view.getContext(), sld_all);
-        final NewsItemAdapter newsItemAdapter = new NewsItemAdapter(view.getContext(), son_all);
 
         recyclerViewServices.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         recyclerViewServices.setNestedScrollingEnabled(false);
         recyclerViewServices.setAdapter(serviceItemAdapter);
 
-        new Handler().postDelayed(new Runnable() {
+        cardview_customer_service.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
-                    @Override
-                    public boolean canScrollVertically() {
-                        return false;
-                    }
+            public void onClick(View v) {
 
+                View askDialog = get_activity.getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+                TextView textview_title = askDialog.findViewById(R.id.textview_title);
+                TextView textview_message = askDialog.findViewById(R.id.textview_message);
+                Button button_cancel = askDialog.findViewById(R.id.button_cancel);
+                Button button_ok = askDialog.findViewById(R.id.button_ok);
+
+                textview_title.setText("ATTENTION");
+                textview_message.setText("This will open an url to message Administrator via Whatsapp.");
+                builder.setView(askDialog);
+
+                builder.setCancelable(false);
+
+                button_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean canScrollHorizontally() {
-                        return true;
+                    public void onClick(View v) {
+                        alert.dismiss();
                     }
-                };
-                recyclerViewNews.setLayoutManager(layoutManager);
-                recyclerViewNews.setNestedScrollingEnabled(false);
-                recyclerViewNews.setAdapter(newsItemAdapter);
+                });
+
+
+                button_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        alert.dismiss();
+
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/60129211738"));
+                        view.getContext().startActivity(browserIntent);
+                    }
+                });
+
+                alert = builder.create();
+                alert.show();
             }
-        }, 1000);
+        });
 
 
     }
@@ -304,13 +246,8 @@ public class ServicesFragment extends Fragment {
 
                         JSONObject response_object = returnedObject.getJSONObject("ResponseData");
                         JSONArray service_list_array = response_object.getJSONArray("ServiceList");
-                        JSONArray banner_data_array = response_object.getJSONArray("BannerData");
-                        JSONArray other_news_array_data = response_object.getJSONArray("OtherNewsData");
-
-                        List<ServicesTopBannerData> stbd_all = ServicesTopBannerData.listAll(ServicesTopBannerData.class);
-                        if (stbd_all.size() > 0) {
-                            ServicesTopBannerData.deleteAll(ServicesTopBannerData.class);
-                        }
+//                        JSONArray banner_data_array = response_object.getJSONArray("BannerData");
+//                        JSONArray other_news_array_data = response_object.getJSONArray("OtherNewsData");
 
                         List<ServicesListData> mded_all = ServicesListData.listAll(ServicesListData.class);
                         if (mded_all.size() > 0) {
@@ -322,18 +259,6 @@ public class ServicesFragment extends Fragment {
                             SubServicesListData.deleteAll(SubServicesListData.class);
                         }
 
-                        List<ServicesOtherNewsData> sond_all = ServicesOtherNewsData.listAll(ServicesOtherNewsData.class);
-                        if (sond_all.size() > 0) {
-                            ServicesOtherNewsData.deleteAll(ServicesOtherNewsData.class);
-                        }
-
-                        for (int i = 0; i < banner_data_array.length(); i++) {
-
-                            JSONObject bd = banner_data_array.getJSONObject(i);
-
-                            ServicesTopBannerData stbd = new ServicesTopBannerData(String.valueOf(bd.getInt("Srno")), bd.getString("ImagePath"), bd.getString("RedirectURL"), bd.getString("AnnouncementType"), bd.getString("AdminRemarks"), bd.getString("PublishDate"), bd.getBoolean("Active"), bd.getString("CreatedBy"), bd.getString("CreatedDate"));
-                            stbd.save();
-                        }
 
                         for (int i = 0; i < service_list_array.length(); i++) {
 
@@ -356,15 +281,6 @@ public class ServicesFragment extends Fragment {
 
                         }
 
-//                        for (int i = 0; i < other_news_array_data.length(); i++) {
-//
-//                            JSONObject ona = other_news_array_data.getJSONObject(i);
-//
-//                            ServicesOtherNewsData sond = new ServicesOtherNewsData(String.valueOf(ona.getString("EventGUID")), String.valueOf(ona.getString("EventName")), String.valueOf(ona.getString("EventCategoryCode")), String.valueOf(ona.getString("EventBannerImagePath")), String.valueOf(ona.getDouble("EventPrice")), String.valueOf(ona.getString("EventDescription")), String.valueOf(ona.getInt("TOTALCOUNT")));
-//                            sond.save();
-//                        }
-
-
                         displayResult();
 
 
@@ -382,8 +298,6 @@ public class ServicesFragment extends Fragment {
                         callRefreshTokenWebService();
 
                     } else {
-//                        JSONObject errorCode_object = returnedObject.getJSONObject("ErrorCode");
-//                        new DisplayAlertDialog().displayAlertDialogError(errorCode_object.getInt("Code"), view.getContext());
 
                         JSONArray errorCode_array = returnedObject.getJSONArray("ErrorCode");
 

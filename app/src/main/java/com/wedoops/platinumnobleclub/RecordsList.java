@@ -183,11 +183,11 @@ public class RecordsList extends Fragment {
 
                                 //Merchant Payment
                                 double actualamount = 0;
-                                int discountrate = 0;
+                                double discountrate = 0;
                                 double discountamount = 0;
 
                                 //Payment-
-                                int pointamount;
+                                double pointamount;
                                 boolean iscashin;
 
                                 String remarks;
@@ -204,7 +204,7 @@ public class RecordsList extends Fragment {
 
                                 } else if (bd_type.getString("Type").equals(DATA_TYPE_ADMIN_TOPUP)) {
                                     TStatus = bd_type.getString("TStatus");
-                                    pointamount = bd_type.getInt("PointAmount");
+                                    pointamount = bd_type.getDouble("PointAmount");
                                     iscashin = bd_type.getBoolean("IsCashIn");
                                     remarks = bd_type.getString("Remarks");
                                     TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode").toUpperCase(), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, null);
@@ -212,7 +212,7 @@ public class RecordsList extends Fragment {
 
                                 } else if (bd_type.getString("Type").contains(DATA_TYPE_ADMIN_DEDUCT)) {
                                     TStatus = bd_type.getString("TStatus");
-                                    pointamount = bd_type.getInt("PointAmount");
+                                    pointamount = bd_type.getDouble("PointAmount");
                                     iscashin = bd_type.getBoolean("IsCashIn");
                                     remarks = bd_type.getString("Remarks");
                                     TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode").toUpperCase(), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, null);
@@ -220,14 +220,14 @@ public class RecordsList extends Fragment {
 
                                 } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT_PARTIAL)) {
                                     TStatus = bd_type.getString("TStatus");
-                                    pointamount = bd_type.getInt("PointAmount");
+                                    pointamount = bd_type.getDouble("PointAmount");
                                     iscashin = bd_type.getBoolean("IsCashIn");
                                     remarks = bd_type.getString("Remarks");
                                     TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode").toUpperCase(), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, bd_type.getString("EventTitle"));
                                     trd.save();
                                 } else if (bd_type.getString("Type").contains(DATA_TYPE_PAYMENT_FULL)) {
                                     TStatus = bd_type.getString("TStatus");
-                                    pointamount = bd_type.getInt("PointAmount");
+                                    pointamount = bd_type.getDouble("PointAmount");
                                     iscashin = bd_type.getBoolean("IsCashIn");
                                     remarks = bd_type.getString("Remarks");
                                     TransactionsReportData trd = new TransactionsReportData(bd.getString("TRederenceCode").toUpperCase(), bd_type.getString("Type"), 0, 0, 0, remarks, bd.getString("TDate"), TStatus, pointamount, iscashin, bd_type.getString("EventTitle"));

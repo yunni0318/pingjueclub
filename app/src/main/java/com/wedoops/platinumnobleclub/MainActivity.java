@@ -553,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
             String cash_wallet = decimalFormat.format(Double.parseDouble(ud.get(0).getCashWallet()));
 
-            textview_user_wallet.setText(String.format("%s POINTS", cash_wallet));
+            textview_user_wallet.setText(String.format("%s PTS", cash_wallet));
 
             Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).timeout(10000).into(imageview_user_profile);
 

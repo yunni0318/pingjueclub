@@ -414,6 +414,11 @@ public class MemberDashboardActivity extends Fragment {
                     protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                         return SPEED / displayMetrics.densityDpi;
                     }
+
+                    @Override
+                    protected int getHorizontalSnapPreference() {
+                        return LinearSmoothScroller.SNAP_TO_START;
+                    }
                 };
                 smoothScroller.setTargetPosition(position);
                 try {
@@ -422,6 +427,7 @@ public class MemberDashboardActivity extends Fragment {
                     setupRecyclerView();
                 }
             }
+
 
         };
 

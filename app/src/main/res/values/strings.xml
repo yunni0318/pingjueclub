@@ -73,7 +73,7 @@
     <string name="warning_title">Warning</string>
 
     <!-- Error Message-->
-    <string name="error_title">Error</string>
+    <string name="error_title">NOTICE</string>
     <string name="error_unknown">Unknown Error</string>
     <string name="logout_confirmation">Are you sure to logout?</string>
 

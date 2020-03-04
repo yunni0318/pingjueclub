@@ -6,12 +6,12 @@ public class TransactionsReportData extends SugarRecord {
     private String TRederenceCode;
     private String Type;
     private double ActualAmount;
-    private int DiscountRate;
+    private double DiscountRate;
     private double DiscountAmount;
     private String Remarks;
     private String TDate;
     private String TStatus;
-    private int PointAmount;
+    private double PointAmount;
     private boolean IsCashIn;
     private String AdminTitle;
 
@@ -19,7 +19,7 @@ public class TransactionsReportData extends SugarRecord {
 
     }
 
-    public TransactionsReportData(String TRederenceCode, String Type, double ActualAmount, int DiscountRate, double DiscountAmount, String Remarks, String TDate, String TStatus, int PointAmount, boolean IsCashIn, String AdminTitle) {
+    public TransactionsReportData(String TRederenceCode, String Type, double ActualAmount, double DiscountRate, double DiscountAmount, String Remarks, String TDate, String TStatus, double PointAmount, boolean IsCashIn, String AdminTitle) {
         this.TRederenceCode = TRederenceCode;
         this.Type = Type;
         this.ActualAmount = ActualAmount;
@@ -45,7 +45,7 @@ public class TransactionsReportData extends SugarRecord {
         return ActualAmount;
     }
 
-    public int getDiscountRate() {
+    public double getDiscountRate() {
         return DiscountRate;
     }
 
@@ -65,7 +65,7 @@ public class TransactionsReportData extends SugarRecord {
         return TStatus;
     }
 
-    public int getPointAmount() {
+    public double getPointAmount() {
         return PointAmount;
     }
 
