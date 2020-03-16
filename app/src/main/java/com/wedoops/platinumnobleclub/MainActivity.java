@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private static final String TAG_MY_BOOKING = "MYBOOKING";
     private static final String TAG_TRANSACTION_REPORT = "TRANSACTIONREPORT";
     private static final String TAG_SERVICE = "SERVICE";
+    private static final String TAG_BUTLER_SERVICE = "BUTLER_SERVICE";
     private static final String TAG_GUIDE = "GUIDE";
     private static final String TAG_BENEFIT = "BENEFIT";
     private static final String TAG_TERMNCOND = "TERMCONDITIONS";
@@ -450,21 +451,26 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         navItemIndex = 4;
                         CURRENT_TAG = TAG_SERVICE;
                         break;
+                    case R.id.menu_butler_services:
+
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_BUTLER_SERVICE;
+                        break;
 
                     case R.id.menu_guide:
-                        navItemIndex = 5;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_GUIDE;
 
                         break;
 
                     case R.id.menu_benefit:
-                        navItemIndex = 6;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_BENEFIT;
 
                         break;
 
                     case R.id.menu_termNCond:
-                        navItemIndex = 7;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_TERMNCOND;
 
                         break;
@@ -727,17 +733,24 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Butler Service");
+                ButlerServiceFragment butler_service = new ButlerServiceFragment();
+                return butler_service;
+            case 6:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Guide");
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
-            case 6:
+            case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText("Benefit");
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
-            case 7:
+            case 8:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);

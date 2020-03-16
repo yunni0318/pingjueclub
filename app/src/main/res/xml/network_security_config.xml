@@ -7,5 +7,6 @@
         <domain includeSubdomains="true">api.platinumnobleclub.com</domain>
         <domain includeSubdomains="true">web.platinumnobleclub.com</domain>
         <domain includeSubdomains="true">admin.platinumnobleclub.com</domain>
+        <domain includeSubdomains="true">platinumnobleclub.com</domain>
     </domain-config>
 </network-security-config>

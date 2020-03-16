@@ -21,55 +21,55 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/navigation_header"
-            android:id="@+id/headerrr" />
+            android:id="@+id/headerrr"
+            layout="@layout/navigation_header" />
 
         <com.google.android.material.navigation.NavigationView
-            android:gravity="center"
-            android:fitsSystemWindows="true"
-            android:background="#B3000000"
-            android:theme="@style/NavigationTheme"
             android:id="@+id/navigationview"
-            app:itemIconPadding="15dp"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="0dp"
             android:layout_gravity="start"
+            android:layout_weight="1"
+            android:background="#B3000000"
+            android:fitsSystemWindows="true"
+            android:gravity="center"
+            android:theme="@style/NavigationTheme"
+            app:itemBackground="@android:color/transparent"
+            app:itemIconPadding="15dp"
             app:itemIconTint="@drawable/selector_navigation_color"
             app:itemTextColor="@drawable/selector_navigation_color"
-            app:itemBackground="@android:color/transparent"
             app:menu="@menu/menu">
 
         </com.google.android.material.navigation.NavigationView>
 
         <LinearLayout
             android:id="@+id/navFooter"
-            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="#B3000000"
             android:clickable="true"
-            android:gravity="center"
             android:focusable="true"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
 
             <ImageView
-                android:layout_gravity="center_vertical"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logout" />
 
             <TextView
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 android:text="Logout"
-                android:textSize="15sp"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>

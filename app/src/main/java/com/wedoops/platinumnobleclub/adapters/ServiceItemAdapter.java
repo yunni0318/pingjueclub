@@ -26,6 +26,7 @@ import java.util.List;
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.MyViewHolder> {
     private Context mContext;
     private List<ServicesListData> mData;
+    private View.OnClickListener mOnItemClickListener;
 
 
     public ServiceItemAdapter(Context context, List<ServicesListData> mData) {
@@ -69,33 +70,38 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
                     }
                 });
 
-        myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
 //                Intent intent = new Intent(mContext, ServicesSubActivity.class);
-                Intent intent = new Intent(mContext, ServiceDetails.class);
-                intent.putExtra("main_services_id", mData.get(i).getMainServicesID());
-                intent.putExtra("main_services_name", mData.get(i).getMainServiceName());
-
-                mContext.startActivity(intent);
-            }
-        });
+//                Intent intent = new Intent(mContext, ServiceDetails.class);
+//                intent.putExtra("main_services_id", mData.get(i).getMainServicesID());
+//                intent.putExtra("main_services_name", mData.get(i).getMainServiceName());
+//
+//                mContext.startActivity(intent);
+//            }
+//        });
     }
+
+    public void setOnServiceItemClickListener(View.OnClickListener itemClickListener) {
+        mOnItemClickListener = itemClickListener;
+    }
+
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        //        TextView title;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-//        CardView cardView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-//            cardView=(CardView)itemView.findViewById(R.id.cardview_id);
-//            title=(TextView)itemView.findViewById(R.id.service_title);
+
+            itemView.setTag(this);
+            itemView.setOnClickListener(mOnItemClickListener);
+
             imageView = itemView.findViewById(R.id.service_image);
         }
     }

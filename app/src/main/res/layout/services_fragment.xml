@@ -46,9 +46,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contact Administrator"
+                android:text="Contact Us"
                 android:textColor="@color/textview_sidebar"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="If you have specific request which didn’t list in our services, you may contact our butler for enquiry."
+                android:textColor="@color/textview_sidebar"
+                android:textSize="13sp" />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -56,9 +65,9 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardview_customer_service"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -72,8 +81,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/administrator_services_icon"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/administrator_services_icon" />
 
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>

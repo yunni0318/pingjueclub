@@ -33,6 +33,7 @@ import android.widget.VideoView;
 
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.adapters.ServiceItemAdapter;
+import com.wedoops.platinumnobleclub.database.MemberDashboardEventData;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.ServicesListData;
 import com.wedoops.platinumnobleclub.database.SubServicesListData;
@@ -86,6 +87,25 @@ public class ServicesFragment extends Fragment {
             }
         }
     };
+
+    private static View.OnClickListener onServiceItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+
+            List<ServicesListData> sld_all = ServicesListData.listAll(ServicesListData.class);
+
+            Intent intent = new Intent(get_activity, ServiceDetails.class);
+            intent.putExtra("main_services_id", sld_all.get(position).getMainServicesID());
+            intent.putExtra("main_services_name", sld_all.get(position).getMainServiceName());
+
+            get_activity.startActivity(intent);
+
+        }
+    };
+
 
     @Nullable
     @Override
@@ -181,6 +201,7 @@ public class ServicesFragment extends Fragment {
 
         ServiceItemAdapter serviceItemAdapter = new ServiceItemAdapter(view.getContext(), sld_all);
 
+        serviceItemAdapter.setOnServiceItemClickListener(onServiceItemClickListener);
         recyclerViewServices.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         recyclerViewServices.setNestedScrollingEnabled(false);
         recyclerViewServices.setAdapter(serviceItemAdapter);
@@ -217,7 +238,7 @@ public class ServicesFragment extends Fragment {
 
                         alert.dismiss();
 
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/60129211738"));
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/601117938935"));
                         view.getContext().startActivity(browserIntent);
                     }
                 });
@@ -243,7 +264,7 @@ public class ServicesFragment extends Fragment {
                 if (isSuccess) {
 
                     if (returnedObject.getInt("StatusCode") == 200) {
-
+                        counter = 0;
                         JSONObject response_object = returnedObject.getJSONObject("ResponseData");
                         JSONArray service_list_array = response_object.getJSONArray("ServiceList");
 //                        JSONArray banner_data_array = response_object.getJSONArray("BannerData");

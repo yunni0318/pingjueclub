@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.database.CountryList;
 import com.wedoops.platinumnobleclub.database.StateList;
@@ -412,9 +415,23 @@ public class EditProfileActivity extends Fragment {
 
         List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
 
-//        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).into(imageview_user_profile);
-        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.loading).into(imageview_user_profile);
+//        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.default_profile).into(imageview_user_profile);
+        Glide.with(view.getContext())
+                .asBitmap()
+                .load(ud_list.get(0).getProfilePictureImagePath())
+                .timeout(10000)
+                .placeholder(R.drawable.default_profile)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        imageview_user_profile.setImageBitmap(resource);
 
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
         if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             imageview_user_rank.setImageResource(R.drawable.bronze_medal);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_bronze));

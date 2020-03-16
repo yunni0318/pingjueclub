@@ -23,6 +23,10 @@
             android:icon="@drawable/services"
             android:title="Services" />
         <item
+            android:id="@+id/menu_butler_services"
+            android:icon="@drawable/butler_services"
+            android:title="Butler Services" />
+        <item
             android:id="@+id/menu_guide"
             android:icon="@drawable/guide"
             android:title="Guide" />
