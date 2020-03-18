@@ -37,7 +37,7 @@ public class BenefitFragment extends Fragment {
 
         Glide.with(this)
                 .asBitmap()
-                .load("http://web.platinumnobleclub.com/Images/guide.jpg")
+                .load("http://web.platinumnobleclub.com/Images/guide_en.jpg")
                 .placeholder(R.drawable.loading)
                 .timeout(10000)
                 .into(new CustomTarget<Bitmap>() {

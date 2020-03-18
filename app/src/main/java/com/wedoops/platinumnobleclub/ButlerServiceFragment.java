@@ -46,7 +46,7 @@ public class ButlerServiceFragment extends Fragment {
         webView = view.findViewById(R.id.webView);
 
         webView.setBackgroundColor(Color.parseColor("#191919"));
-        webView.loadUrl("http://platinumnobleclub.com/PJ_Services.html");
+        webView.loadUrl("http://platinumnobleclub.com/PJ_Services_EN.html");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
 

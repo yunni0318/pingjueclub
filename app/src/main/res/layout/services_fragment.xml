@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="If you have specific request which didn’t list in our services, you may contact our butler for enquiry."
-                android:textColor="@color/textview_sidebar"
+                android:textColor="#ffffff"
                 android:textSize="13sp" />
 
 

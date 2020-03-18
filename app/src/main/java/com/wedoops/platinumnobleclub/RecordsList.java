@@ -482,13 +482,13 @@ public class RecordsList extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
-                String referencecode_field = StringUtil.toSQLName("TRederenceCode");
+                String remarks_field = StringUtil.toSQLName("Remarks");
                 String tdate_field = StringUtil.toSQLName("TDate");
 
 
                 List<TransactionsReportData> trd_list_all;
                 if (dateType.getText().equals("All")) {
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
                 } else if (dateType.getText().equals("Weekly")) {
                     Calendar cl = Calendar.getInstance();
                     cl.setFirstDayOfWeek(1);
@@ -502,7 +502,7 @@ public class RecordsList extends Fragment {
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
                 } else if (dateType.getText().equals("Monthly")) {
@@ -518,7 +518,7 @@ public class RecordsList extends Fragment {
                     cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
                 } else if (dateType.getText().equals("Yearly")) {
@@ -532,10 +532,10 @@ public class RecordsList extends Fragment {
                     cl.set(Calendar.DAY_OF_YEAR, cl.getActualMaximum(Calendar.DAY_OF_YEAR));
                     String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
 
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
                 } else {
-                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + referencecode_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
+                    trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '" + textinputedittext_filter.getText().toString() + "%'");
 
                 }
 

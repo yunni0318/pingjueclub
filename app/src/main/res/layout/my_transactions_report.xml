@@ -43,7 +43,7 @@
                     android:drawableEnd="@drawable/ic_search_black_24dp"
                     android:drawableRight="@drawable/ic_search_black_24dp"
                     android:drawablePadding="10dp"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:hint="Key in id no. to search"
                     android:inputType="text"
                     android:maxLines="1"

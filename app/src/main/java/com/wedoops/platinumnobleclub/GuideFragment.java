@@ -61,7 +61,7 @@ public class GuideFragment extends Fragment {
     private void displayResult() {
 
         guide_webview.setBackgroundColor(Color.parseColor("#191919"));
-        guide_webview.loadUrl("https://www.platinumnobleclub.com/PJ_FAQ.html");
+        guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ.html");
         guide_webview.getSettings().setJavaScriptEnabled(true);
         guide_webview.getSettings().setUseWideViewPort(true);
 

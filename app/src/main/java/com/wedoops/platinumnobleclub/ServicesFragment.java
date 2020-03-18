@@ -237,8 +237,9 @@ public class ServicesFragment extends Fragment {
                     public void onClick(View v) {
 
                         alert.dismiss();
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/601117938935"));
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/601117938935?text=Welcome%20to%20Platinum%20Noble%20Club%2C%20thanks%20for%20contacting%20our%20butler%20service.%20How%20may%20I%20assist%20you%3F%20(%20Services%20)"));
 
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/601117938935"));
                         view.getContext().startActivity(browserIntent);
                     }
                 });
@@ -250,7 +251,6 @@ public class ServicesFragment extends Fragment {
 
 
     }
-
 
     public static void processWSData(JSONObject returnedObject, int command) {
 //        CustomProgressDialog.closeProgressDialog();
