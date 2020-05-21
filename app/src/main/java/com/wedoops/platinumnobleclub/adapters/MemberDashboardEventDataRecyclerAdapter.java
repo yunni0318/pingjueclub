@@ -248,21 +248,25 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         myViewHolder.imageview_user_rank_gold.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_platinum.setVisibility(View.GONE);
 
-        if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-            myViewHolder.imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+        if(ed.get(i).getUserLevelCode() != null){
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+                myViewHolder.imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+            }
+
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+                myViewHolder.imageview_user_rank_silver.setVisibility(View.VISIBLE);
+            }
+
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+                myViewHolder.imageview_user_rank_gold.setVisibility(View.VISIBLE);
+            }
+
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+                myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
+            }
         }
 
-        if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
-            myViewHolder.imageview_user_rank_silver.setVisibility(View.VISIBLE);
-        }
 
-        if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            myViewHolder.imageview_user_rank_gold.setVisibility(View.VISIBLE);
-        }
-
-        if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
-            myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
-        }
 
     }
 

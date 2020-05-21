@@ -308,20 +308,22 @@ public class EventDetailActivity extends Activity {
         imageview_user_rank_gold.setVisibility(View.GONE);
         imageview_user_rank_platinum.setVisibility(View.GONE);
 
-        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-            imageview_user_rank_bronze.setVisibility(View.VISIBLE);
-        }
+        if (eded_all.get(0).getUserLevelCode() != null) {
+            if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+                imageview_user_rank_bronze.setVisibility(View.VISIBLE);
+            }
 
-        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
-            imageview_user_rank_silver.setVisibility(View.VISIBLE);
-        }
+            if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_SILVER)) {
+                imageview_user_rank_silver.setVisibility(View.VISIBLE);
+            }
 
-        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
-            imageview_user_rank_gold.setVisibility(View.VISIBLE);
-        }
+            if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
+                imageview_user_rank_gold.setVisibility(View.VISIBLE);
+            }
 
-        if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
-            imageview_user_rank_platinum.setVisibility(View.VISIBLE);
+            if (eded_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
+                imageview_user_rank_platinum.setVisibility(View.VISIBLE);
+            }
         }
 
 //        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_eventdate_upfront_payment);
