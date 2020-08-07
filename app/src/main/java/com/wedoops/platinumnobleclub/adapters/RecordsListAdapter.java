@@ -1,5 +1,6 @@
 package com.wedoops.platinumnobleclub.adapters;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.TransactionsReportData;
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -27,7 +29,8 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
     private static String DATA_TYPE_ADMIN_DEDUCT = "ADMIN-DEDUCT";
     private static String DATA_TYPE_PAYMENT_PARTIAL = "PAYMENT-PARTIAL";
     private static String DATA_TYPE_PAYMENT_FULL = "PAYMENT-FULL";
-
+    private static final String KEY_LANG = "key_lang";
+    private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -67,7 +70,8 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 //        this.trd_list_all = trd;
 //    }
 
-    public RecordsListAdapter() {
+    public RecordsListAdapter(Context context) {
+        this.mContext = context;
     }
 
     public void UpdateRecordListAdapter(List<TransactionsReportData> trd) {
@@ -89,6 +93,8 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+        String lang = new ApplicationClass().readFromSharedPreferences(mContext, KEY_LANG);
+
         if (trd_list_all.get(position).getType().equals(DATA_TYPE_MERCHANT_PAYMENT)) {
 
             holder.textview_transaction_id.setText(String.format("ID: %s", trd_list_all.get(position).getTRederenceCode()));
@@ -102,8 +108,13 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             holder.textview_points_amount.setText(String.format("- %s pts", discount_amount_bd.toString()));
 
             holder.textview_currency_amount.setText("");
-            holder.textview_transaction_type.setText(DATA_TYPE_MERCHANT_PAYMENT);
-            holder.textview_transaction_type_amount.setText(String.format("Discount %.2f%% out of %.2f pts", trd_list_all.get(position).getDiscountRate(),trd_list_all.get(position).getActualAmount()));
+            holder.textview_transaction_type.setText(mContext.getResources().getString(R.string.merchant_payment));
+            if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                holder.textview_transaction_type_amount.setText(String.format("Discount %.2f%% out of %.2f pts", trd_list_all.get(position).getDiscountRate(),trd_list_all.get(position).getActualAmount()));
+
+            } else {
+                lang = "zh"; holder.textview_transaction_type_amount.setText(String.format(" %.2f 数额折扣 %.2f%%", trd_list_all.get(position).getActualAmount(), trd_list_all.get(position).getDiscountRate()));
+            }
 
             holder.textview_currency_amount.setVisibility(View.GONE);
             holder.textview_transaction_type.setVisibility(View.VISIBLE);
@@ -122,7 +133,7 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             }
 
             holder.textview_currency_amount.setText("");
-            holder.textview_transaction_type.setText(DATA_TYPE_ADMIN_TOPUP);
+            holder.textview_transaction_type.setText(mContext.getResources().getString(R.string.admin_topup));
 
 
             holder.textview_currency_amount.setVisibility(View.GONE);
@@ -168,7 +179,13 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             String [] remarks_split = trd_list_all.get(position).getRemarks().split("\\|");
 
             if(remarks_split.length > 1){
-                holder.textview_transaction_type_amount.setText(remarks_split[0]);
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    holder.textview_transaction_type_amount.setText(remarks_split[0]);
+                } else {
+                    String [] split_fullpayment = remarks_split[0].split("\\.");
+                    holder.textview_transaction_type_amount.setText("预定 ID."+split_fullpayment[1]+"已全额付款");
+                }
+
                 holder.textview_remarks.setText(String.format("%s", remarks_split[1]));
             }else{
                 holder.textview_transaction_type_amount.setText("");
@@ -187,12 +204,18 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
 
 
             holder.textview_currency_amount.setText("");
-            holder.textview_transaction_type.setText(DATA_TYPE_PAYMENT_FULL);
+            holder.textview_transaction_type.setText(mContext.getResources().getString(R.string.payment_full));
 
             String [] remarks_split = trd_list_all.get(position).getRemarks().split("\\|");
 
             if(remarks_split.length > 1){
-                holder.textview_transaction_type_amount.setText(remarks_split[0]);
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    holder.textview_transaction_type_amount.setText(remarks_split[0]);
+                } else {
+                    String [] split_fullpayment = remarks_split[0].split("\\.");
+                    holder.textview_transaction_type_amount.setText("预定 ID."+split_fullpayment[1]+"已全额付款");
+                }
+
                 holder.textview_remarks.setText(String.format("%s", remarks_split[1]));
             }else{
                 holder.textview_transaction_type_amount.setText("");
@@ -213,7 +236,9 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM, yyyy hh:mm a", Locale.US);
             String new_startdate = outFormat.format(new_date_startDate);
 
-            holder.textview_date.setText(String.format("Date: %s", new_startdate));
+            String d = mContext.getResources().getString(R.string.transaction_date);
+
+            holder.textview_date.setText(String.format(d+": %s", new_startdate));
 
 
         } catch (Exception e) {
@@ -224,7 +249,9 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
                 SimpleDateFormat outFormat = new SimpleDateFormat("dd MMM, yyyy hh:mm a", Locale.US);
                 String new_startdate = outFormat.format(new_date_startDate);
 
-                holder.textview_date.setText(String.format("Date: %s", new_startdate));
+                String d = mContext.getResources().getString(R.string.transaction_date);
+
+                holder.textview_date.setText(String.format(d+": %s", new_startdate));
 
             } catch (Exception ex) {
                 holder.textview_date.setText(trd_list_all.get(position).getTDate());

@@ -1,5 +1,7 @@
 package com.wedoops.platinumnobleclub.adapters;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -8,11 +10,15 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.wedoops.platinumnobleclub.BookingExpiredFragment;
 import com.wedoops.platinumnobleclub.BookingFragment;
+import com.wedoops.platinumnobleclub.R;
 
 public class BookingPagerAdapter extends FragmentStatePagerAdapter {
 
-    public BookingPagerAdapter(FragmentManager fm){
+    private Context mContext;
+
+    public BookingPagerAdapter(FragmentManager fm, Context context){
         super(fm);
+        this.mContext = context;
     }
 
 
@@ -41,10 +47,13 @@ public class BookingPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
+        String mybooking = mContext.getResources().getString(R.string.my_booking_title);
+        String expiredBooking = mContext.getResources().getString(R.string.my_expired_booking_title);
+
         if(position == 0){
-            return "MY BOOKING";
+            return mybooking;
         }else{
-            return "EXPIRED BOOKING";
+            return expiredBooking;
         }
 
     }

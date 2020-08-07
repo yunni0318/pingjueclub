@@ -21,23 +21,23 @@
         <item
             android:id="@+id/menu_services"
             android:icon="@drawable/services"
-            android:title="Services" />
+            android:title="@string/nav_menu_service" />
         <item
             android:id="@+id/menu_butler_services"
             android:icon="@drawable/butler_services"
-            android:title="Butler Services" />
+            android:title="@string/nav_menu_butler_service" />
         <item
             android:id="@+id/menu_guide"
             android:icon="@drawable/guide"
-            android:title="Guide" />
+            android:title="@string/nav_menu_guide" />
         <item
             android:id="@+id/menu_benefit"
             android:icon="@drawable/benefit"
-            android:title="Benefit" />
+            android:title="@string/nav_menu_benefit" />
         <item
             android:id="@+id/menu_termNCond"
             android:icon="@drawable/termcond"
-            android:title="Term &amp; Conditions" />
+            android:title="@string/nav_menu_term_condition" />
     </group>
 
 </menu>

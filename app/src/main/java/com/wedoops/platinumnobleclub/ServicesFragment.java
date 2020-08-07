@@ -64,6 +64,7 @@ public class ServicesFragment extends Fragment {
     private static Activity get_activity;
     private static CardView cardview_customer_service;
     private static AlertDialog alert;
+    private static final String KEY_LANG = "key_lang";
 
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
         @Override
@@ -94,13 +95,20 @@ public class ServicesFragment extends Fragment {
 
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-
+            String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
             List<ServicesListData> sld_all = ServicesListData.listAll(ServicesListData.class);
 
             Intent intent = new Intent(get_activity, ServiceDetails.class);
             intent.putExtra("main_services_id", sld_all.get(position).getMainServicesID());
-            intent.putExtra("main_services_name", sld_all.get(position).getMainServiceName());
+            String[] service_split = sld_all.get(position).getMainServiceName().split("\\|");
 
+            if (service_split.length > 1) {
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    intent.putExtra("main_services_name", service_split[0]);
+                } else {
+                    intent.putExtra("main_services_name", service_split[1]);
+                }
+            }
             get_activity.startActivity(intent);
 
         }

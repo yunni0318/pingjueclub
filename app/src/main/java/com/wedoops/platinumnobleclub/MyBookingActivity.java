@@ -107,7 +107,7 @@ public class MyBookingActivity extends Fragment {
         viewpager = view.findViewById(R.id.viewpager);
         tablayout = view.findViewById(R.id.tab_layout);
         tablayout.setupWithViewPager(viewpager);
-        booking_pager_adapter = new BookingPagerAdapter(getChildFragmentManager());
+        booking_pager_adapter = new BookingPagerAdapter(getChildFragmentManager(), get_context);
 
     }
 

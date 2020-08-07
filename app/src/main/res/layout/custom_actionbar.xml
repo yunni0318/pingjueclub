@@ -174,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp"
-                    android:text="Home"
+                    android:text="@string/bottom_nav_home"
                     android:textColor="@android:color/white"
                     android:textSize="13sp" />
 
@@ -201,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp"
-                    android:text="Records"
+                    android:text="@string/bottom_nav_record"
                     android:textColor="@android:color/white"
                     android:textSize="13sp" />
 

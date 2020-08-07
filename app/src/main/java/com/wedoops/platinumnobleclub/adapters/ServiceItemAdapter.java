@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.ServiceDetails;
 import com.wedoops.platinumnobleclub.database.ServicesListData;
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     private Context mContext;
     private List<ServicesListData> mData;
     private View.OnClickListener mOnItemClickListener;
-
+    private static final String KEY_LANG = "key_lang";
 
     public ServiceItemAdapter(Context context, List<ServicesListData> mData) {
         this.mContext = context;
@@ -52,6 +54,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
 
 //        Glide.with(myViewHolder.imageView.getContext()).load(mData.get(i).getMainServiceImagePath()).placeholder(R.drawable.loading).timeout(10000).into(myViewHolder.imageView);
+        String lang = new ApplicationClass().readFromSharedPreferences(mContext, KEY_LANG);
 
         Glide.with(myViewHolder.imageView.getContext())
                 .asBitmap()
@@ -70,19 +73,16 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
                     }
                 });
 
-//        myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, ServicesSubActivity.class);
-//                Intent intent = new Intent(mContext, ServiceDetails.class);
-//                intent.putExtra("main_services_id", mData.get(i).getMainServicesID());
-//                intent.putExtra("main_services_name", mData.get(i).getMainServiceName());
-//
-//                mContext.startActivity(intent);
-//            }
-//        });
-    }
+        String[] service_split = mData.get(i).getMainServiceName().split("\\|");
 
+        if (service_split.length > 1) {
+            if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                myViewHolder.serviceName.setText(service_split[0]);
+            } else {
+                myViewHolder.serviceName.setText(service_split[1]);
+            }
+        }
+    }
     public void setOnServiceItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;
     }
@@ -95,6 +95,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView serviceName;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +104,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
             itemView.setOnClickListener(mOnItemClickListener);
 
             imageView = itemView.findViewById(R.id.service_image);
+            serviceName = itemView.findViewById(R.id.service_name);
         }
     }
 

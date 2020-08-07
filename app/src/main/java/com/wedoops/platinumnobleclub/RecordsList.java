@@ -3,13 +3,6 @@ package com.wedoops.platinumnobleclub;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,9 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.orm.StringUtil;
@@ -53,9 +51,8 @@ public class RecordsList extends Fragment {
     private static String DATA_TYPE_ADMIN_DEDUCT = "ADMIN-DEDUCT";
     private static String DATA_TYPE_PAYMENT_PARTIAL = "PAYMENT-PARTIAL";
     private static String DATA_TYPE_PAYMENT_FULL = "PAYMENT-FULL";
-
-    private static RecordsListAdapter adapter = new RecordsListAdapter();
-
+    private static final String KEY_LANG = "key_lang";
+    private static RecordsListAdapter records_list_adapter;
 
     private static Handler handler;
 
@@ -147,7 +144,7 @@ public class RecordsList extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerview_transaction.setLayoutManager(layoutManager);
-        recyclerview_transaction.setAdapter(adapter);
+        recyclerview_transaction.setAdapter(records_list_adapter);
 
         dateAll.performClick();
 
@@ -466,7 +463,7 @@ public class RecordsList extends Fragment {
                 }
             }
         });
-
+        records_list_adapter = new RecordsListAdapter(get_context);
 
         textinputedittext_filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -487,9 +484,9 @@ public class RecordsList extends Fragment {
 
 
                 List<TransactionsReportData> trd_list_all;
-                if (dateType.getText().equals("All")) {
+                if (dateType.getText().equals("All") || dateType.getText().equals("均")) {
                     trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '%" + textinputedittext_filter.getText().toString() + "%'");
-                } else if (dateType.getText().equals("Weekly")) {
+                } else if (dateType.getText().equals("Weekly") || dateType.getText().equals("每星期")) {
                     Calendar cl = Calendar.getInstance();
                     cl.setFirstDayOfWeek(1);
 
@@ -505,7 +502,7 @@ public class RecordsList extends Fragment {
                     trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '%" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
-                } else if (dateType.getText().equals("Monthly")) {
+                } else if (dateType.getText().equals("Monthly") || dateType.getText().equals("每个月")) {
 
                     Calendar cl = Calendar.getInstance();
 
@@ -521,7 +518,7 @@ public class RecordsList extends Fragment {
                     trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '%" + textinputedittext_filter.getText().toString() + "%' AND " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
 
 
-                } else if (dateType.getText().equals("Yearly")) {
+                } else if (dateType.getText().equals("Yearly") || dateType.getText().equals("每年")) {
                     Calendar cl = Calendar.getInstance();
 
                     //first day of year
@@ -539,15 +536,23 @@ public class RecordsList extends Fragment {
 
                 }
 
-                adapter.UpdateRecordListAdapter(trd_list_all);
+                records_list_adapter.UpdateRecordListAdapter(trd_list_all);
 
             }
         });
 
+        final String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+
         dateAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateType.setText("All");
+
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("All");
+                } else {
+                    dateType.setText("均");
+                }
+
                 dateChoices.setVisibility(View.GONE);
 
                 customDialog.showDialog(get_context);
@@ -557,7 +562,7 @@ public class RecordsList extends Fragment {
                     public void run() {
                         List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
 
-                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
 
                         recyclerview_transaction.post(new Runnable() {
                             @Override
@@ -574,7 +579,11 @@ public class RecordsList extends Fragment {
         weekly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dateType.setText("Weekly");
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                dateType.setText("Weekly");}
+                else{
+                    dateType.setText("每星期");
+                }
 
                 Calendar cl = Calendar.getInstance();
                 cl.setFirstDayOfWeek(1);
@@ -599,7 +608,7 @@ public class RecordsList extends Fragment {
                     @Override
                     public void run() {
 
-                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
 
                         recyclerview_transaction.post(new Runnable() {
                             @Override
@@ -616,8 +625,11 @@ public class RecordsList extends Fragment {
         monthly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dateType.setText("Monthly");
-
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("Monthly");}
+                else{
+                    dateType.setText("每个月");
+                }
                 Calendar cl = Calendar.getInstance();
 
                 //first day of month
@@ -642,7 +654,7 @@ public class RecordsList extends Fragment {
                     @Override
                     public void run() {
 
-                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
                         recyclerview_transaction.post(new Runnable() {
                             @Override
                             public void run() {
@@ -659,7 +671,11 @@ public class RecordsList extends Fragment {
         yearly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dateType.setText("Yearly");
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("Yearly");}
+                else{
+                    dateType.setText("每年");
+                }
 
                 Calendar cl = Calendar.getInstance();
 
@@ -684,7 +700,7 @@ public class RecordsList extends Fragment {
                     @Override
                     public void run() {
 
-                        adapter.UpdateRecordListAdapter(trd_list_all);
+                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
                         recyclerview_transaction.post(new Runnable() {
                             @Override
                             public void run() {

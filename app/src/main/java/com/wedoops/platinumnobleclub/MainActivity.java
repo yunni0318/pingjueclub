@@ -520,8 +520,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     private void setupNavigationDrawer() {
         //Navigation Header
-
-        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
+        String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {
             imagebutton_language.setImageResource(R.drawable.language_china);
@@ -705,56 +705,56 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Account");
+                toolbar_title.setText(getString(R.string.nav_menu_account));
                 EditProfileActivity accountFragment = new EditProfileActivity();
                 return accountFragment;
             case 2:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("My Booking");
+                toolbar_title.setText(getString(R.string.nav_menu_my_booking));
                 MyBookingActivity bookingFragment = new MyBookingActivity();
                 return bookingFragment;
             case 3:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("My Transaction Report");
+                toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
                 RecordsList transactionsReportFragment = new RecordsList();
                 return transactionsReportFragment;
             case 4:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Services");
+                toolbar_title.setText(getString(R.string.nav_menu_service));
                 ServicesFragment servicesFragment = new ServicesFragment();
                 return servicesFragment;
             case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Butler Service");
+                toolbar_title.setText(getString(R.string.nav_menu_butler_service));
                 ButlerServiceFragment butler_service = new ButlerServiceFragment();
                 return butler_service;
             case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Guide");
+                toolbar_title.setText(getString(R.string.nav_menu_guide));
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
             case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Benefit");
+                toolbar_title.setText(getString(R.string.nav_menu_benefit));
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
             case 8:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Term & Conditions");
+                toolbar_title.setText(getString(R.string.nav_menu_term_condition));
                 TermNCondFragment termNCondFragment = new TermNCondFragment();
                 return termNCondFragment;
 
@@ -794,9 +794,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private void loadLanguage() {
         String lang = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
-            lang = "en_US";
+            lang = "en_us";
         } else {
-            lang = "zh_cn";
+            lang = "zh";
         }
         Locale myLocale = new Locale(lang);
         Resources res = getResources();

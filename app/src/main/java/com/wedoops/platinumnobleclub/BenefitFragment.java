@@ -17,11 +17,12 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
 public class BenefitFragment extends Fragment {
 
     private SubsamplingScaleImageView imageview_benefit;
-
+    private static final String KEY_LANG = "key_lang";
 
     @Nullable
     @Override
@@ -35,24 +36,45 @@ public class BenefitFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         imageview_benefit = view.findViewById(R.id.imageview_benefit);
 
-        Glide.with(this)
-                .asBitmap()
-                .load("http://web.platinumnobleclub.com/Images/guide_en.jpg")
-                .placeholder(R.drawable.loading)
-                .timeout(10000)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        imageview_benefit.setImage(ImageSource.bitmap(resource));
+        String lang = new ApplicationClass().readFromSharedPreferences(getContext(), KEY_LANG);
 
-                    }
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            Glide.with(this)
+                    .asBitmap()
+                    .load("http://web.platinumnobleclub.com/Images/guide_en.jpg")
+                    .placeholder(R.drawable.loading)
+                    .timeout(10000)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            imageview_benefit.setImage(ImageSource.bitmap(resource));
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
+                        }
 
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
 
+        }
+        else{
+            Glide.with(this)
+                    .asBitmap()
+                    .load("http://web.platinumnobleclub.com/Images/guide_cn.jpg")
+                    .placeholder(R.drawable.loading)
+                    .timeout(10000)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            imageview_benefit.setImage(ImageSource.bitmap(resource));
+
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+        }
     }
 
 }
