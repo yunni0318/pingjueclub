@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupLanguage() {
 
-        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
+        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")  || getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {
             imagebutton_language.setImageResource(R.drawable.language_china);
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     public void imagebutton_change_language_onclick(View v) {
 
         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
-        if (currentLanguage.equals("en_us")) {
+        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
             saveLanguage("zh");
         } else {
             saveLanguage("en_us");
@@ -299,7 +299,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb")|| currentLanguage.equals("")) {
+                    if (currentLanguage.equals("en_us") ||  currentLanguage.equals("en_gb")|| currentLanguage.equals("")) {
                         new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                     } else {

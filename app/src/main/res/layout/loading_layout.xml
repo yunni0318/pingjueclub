@@ -23,6 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/custom_loading_imageView"
         android:layout_centerHorizontal="true"
-        android:text="Loading"
+        android:text="@string/loading_dialog"
         android:textColor="@color/textview_sidebar" />
 </RelativeLayout>

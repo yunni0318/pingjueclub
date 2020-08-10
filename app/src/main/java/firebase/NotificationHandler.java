@@ -34,21 +34,26 @@ public class NotificationHandler extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-        if (ud.size() > 0) {
-            String table_name = UserDetails.getTableName(UserDetails.class);
-            String loginid_field = StringUtil.toSQLName("LoginID");
+        try {
+            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+            if (ud.size() > 0) {
+                String table_name = UserDetails.getTableName(UserDetails.class);
+                String loginid_field = StringUtil.toSQLName("LoginID");
 
-            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+                List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
 
-            if (ud_list.size() > 0) {
-                Bundle b = new Bundle();
-                b.putString("access_token", ud_list.get(0).getAccessToken());
-                b.putString("device_id", token);
-                b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
+                if (ud_list.size() > 0) {
+                    Bundle b = new Bundle();
+                    b.putString("access_token", ud_list.get(0).getAccessToken());
+                    b.putString("device_id", token);
+                    b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
 
-                new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
+                    new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
+                }
             }
+        }
+        catch (Exception ex){
+
         }
     }
 

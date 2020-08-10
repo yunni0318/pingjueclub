@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My Balance"
+                android:text="@string/my_balance"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
 
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Scan QR code to Pay"
+                    android:text="@string/scan_qr_pay"
                     android:textColor="@android:color/white"
                     android:textSize="17sp" />
 

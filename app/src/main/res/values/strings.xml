@@ -79,6 +79,10 @@
     <string name="merchant_payment">MERCHANT-PAYMENT</string>
     <string name="payment_full">PAYMENT-FULL</string>
 
+    <!-- I scan them-->
+    <string name="my_balance">My Balance</string>
+    <string name="scan_qr_pay">Scan QR code to pay</string>
+
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">Dashboard</string>
     <string name="nav_menu_account">Account</string>
@@ -97,10 +101,13 @@
     <string name="warning_title">Warning</string>
 
     <!-- Error Message-->
+    <string name="close_app_msg">Please click BACK again to exit</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
     <string name="error_title">NOTICE</string>
     <string name="error_unknown">Unknown Error</string>
     <string name="logout_confirmation">Are you sure to logout?</string>
-
+    <string name="logout_title">LOGOUT</string>
     <string name="edittext_nickname_empty_error">Please Enter your Nickname!</string>
 
     <string name="edit_profile_change_password_empty_error">Please enter your password.</string>
@@ -167,5 +174,5 @@
     </string-array>
     <string name="pay_confirmation_msg">Pay to %1$s Package</string>
     <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
-
+    <string name="loading_dialog">Loading</string>
 </resources>

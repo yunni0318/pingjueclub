@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 Button button_cancel = customLayout.findViewById(R.id.button_cancel);
                 Button button_ok = customLayout.findViewById(R.id.button_ok);
 
-                textview_title.setText("LOGOUT");
+                textview_title.setText(getString(R.string.logout_title));
                 textview_message.setText(MainActivity.this.getString(R.string.logout_confirmation));
                 builder.setView(customLayout);
 
@@ -650,7 +650,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         };
 
         if (mPendingRunnable != null) {
-            toolbar_title.setText("I Scan Them");
+            toolbar_title.setVisibility(View.GONE);
+            toolbar_logo.setVisibility(View.VISIBLE);
             mHandler.post(mPendingRunnable);
 
         }
@@ -781,11 +782,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     public void button_change_language(View v) {
 
         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
-        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb")) {
+        if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
             saveLanguage("zh");
-        } else {
+        }
+        else {
             saveLanguage("en_us");
-
         }
 
     }
@@ -840,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                     finish();
                 } else {
                     this.doubleBackToExitPressedOnce = true;
-                    Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.close_app_msg), Toast.LENGTH_SHORT).show();
 
                     new Handler().postDelayed(new Runnable() {
 

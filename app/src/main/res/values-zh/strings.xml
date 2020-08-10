@@ -93,7 +93,14 @@
     <string name="merchant_payment">商户付款</string>
     <string name="payment_full">全额付款</string>
 
+    <!-- I scan them-->
+    <string name="my_balance">我的余额</string>
+    <string name="scan_qr_pay">扫描二维码付款</string>
+
     <!-- Error Message-->
+    <string name="close_app_msg">再按一次退出</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
     <string name="login_username_error">请输入您的用户名</string>
     <string name="login_password_error">请输入您的密码</string>
 
@@ -101,7 +108,7 @@
     <string name="forgotpassword_email_invalid_error">邮件格式无效！</string>
 
     <string name="logout_confirmation">确定登出？</string>
-
+    <string name="logout_title">注意</string>
     <string name="edittext_nickname_empty_error">请输入您的昵称！ </string>
 
     <string name="edit_profile_change_password_empty_error">请输入您的密码。 </string>
@@ -164,5 +171,5 @@
     <string name="userrank_platinum">铂级</string>
     <string name="pay_confirmation_msg">Pay to %1$s Package</string>
     <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
-
+    <string name="loading_dialog">加载中</string>
 </resources>

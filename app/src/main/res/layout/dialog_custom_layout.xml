@@ -49,7 +49,7 @@
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:background="@android:color/transparent"
-            android:text="Cancel"
+            android:text="@string/dialog_cancel"
             android:textColor="#c49a6c"
             android:textSize="12sp" />
 
@@ -59,7 +59,7 @@
             android:layout_height="30dp"
             android:background="@drawable/button_dialog_ok_style"
             android:onClick="button_login_onclick"
-            android:text="OK"
+            android:text="@string/dialog_ok"
             android:textColor="#ffffff"
             android:textSize="12sp" />
 
