@@ -318,7 +318,7 @@ public class MyBookingDetail extends Activity {
 
                 } else {
                     String paidAmount_decimal = String.format("%.2f", Double.parseDouble(mbbd_all.get(0).getPaidAmount()));
-                    textview_join_trip_payment.setText(String.format("Booking No. %s You have paid %s", mbbd_all.get(0).getBookingNumber(), paidAmount_decimal));
+                    textview_join_trip_payment.setText(getString(R.string.booking_id) + mbbd_all.get(0).getBookingNumber() + getString(R.string.you_have_paid) + paidAmount_decimal);
 
                 }
             } else {

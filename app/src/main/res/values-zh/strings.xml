@@ -72,6 +72,8 @@
     <string name="my_expired_booking_title">已过期预定</string>
     <string name="my_booking_eventstartdate">%s %s月 %s</string>
     <string name="my_booking_eventenddate">%s %s月 %s</string>
+    <string name="booking_id">ID.</string>
+    <string name="you_have_paid">&#160;您已付款&#160;</string>
 
     <!-- Services Fragment -->
     <string name="contact_us">联系我们</string>
@@ -96,6 +98,12 @@
     <!-- I scan them-->
     <string name="my_balance">我的余额</string>
     <string name="scan_qr_pay">扫描二维码付款</string>
+
+    <!-- Pay Fragment -->
+    <string name="success_pay_msg">完成，谢谢你！</string>
+    <string name="success_transfer_msg">点已转移至</string>
+    <string name="confirm_pay">确定</string>
+    <string name="cancel_pay">取消</string>
 
     <!-- Error Message-->
     <string name="close_app_msg">再按一次退出</string>

@@ -43,6 +43,7 @@ public class PayFragment extends Fragment {
     private static CustomProgressDialog customDialog;
     private static Context get_context;
     private static Activity get_activity;
+    private static final String KEY_LANG = "key_lang"; // preference key
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,6 +132,12 @@ public class PayFragment extends Fragment {
         payConfirmation.setVisibility(View.GONE);
         linearlayout_paySuccess.setVisibility(View.VISIBLE);
         paySuccessMessage.setText(message);
+//        String [] remarks_split = message.split("\\|");
+//        String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+//        if(remarks_split.length > 1) {
+//            paySuccessMessage.setText(remarks_split[0] + get_context.getResources().getString(R.string.success_transfer_msg) + remarks_split[2]);
+//        }
+
     }
 
 

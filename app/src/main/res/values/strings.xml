@@ -58,6 +58,8 @@
     <string name="my_expired_booking_title">EXPIRED BOOKING</string>
     <string name="my_booking_eventstartdate">%s %s %</string>
     <string name="my_booking_eventenddate">%s %s %</string>
+    <string name="booking_id">Booking No.</string>
+    <string name="you_have_paid">&#160;you have paid&#160;</string>
 
     <!-- Services Fragment -->
     <string name="contact_us">Contact Us</string>
@@ -82,6 +84,12 @@
     <!-- I scan them-->
     <string name="my_balance">My Balance</string>
     <string name="scan_qr_pay">Scan QR code to pay</string>
+    <string name="confirm_pay">Confirm</string>
+    <string name="cancel_pay">Cancel</string>
+
+    <!-- Pay Fragment -->
+    <string name="success_pay_msg">Success, Thank You!</string>
+    <string name="success_transfer_msg">Points Have Been Transfer To </string>
 
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">Dashboard</string>
