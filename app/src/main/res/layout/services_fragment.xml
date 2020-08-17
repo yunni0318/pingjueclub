@@ -21,7 +21,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Services"
+                android:text="@string/nav_menu_service"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"
                 android:textColor="@color/textview_sidebar"
                 android:textSize="15sp" />
 
@@ -41,12 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contact Us"
+                android:text="@string/contact_us"
                 android:textColor="@color/textview_sidebar"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -54,9 +58,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="If you have specific request which didn’t list in our services, you may contact our butler for enquiry."
+                android:text="@string/contact_us_desc"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="#ffffff"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
 
             <RelativeLayout

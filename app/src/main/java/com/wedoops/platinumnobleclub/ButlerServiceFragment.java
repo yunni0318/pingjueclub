@@ -1,9 +1,13 @@
 package com.wedoops.platinumnobleclub;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +23,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
+
+import java.util.Locale;
+
 public class ButlerServiceFragment extends Fragment {
 
     private View view;
     private WebView webView;
     private static AlertDialog alert;
+    private Context get_context;
+    private static final String KEY_LANG = "key_lang";
+    private String lang;
 
     @Nullable
     @Override
@@ -36,17 +47,40 @@ public class ButlerServiceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        get_context = getContext();
         this.view = view;
-
+        loadLanguage();
         setupDeclaration();
+        displayResult();
     }
 
     private void setupDeclaration() {
         webView = view.findViewById(R.id.webView);
+    }
+
+    private void loadLanguage() {
+        lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            lang = "en_us";
+        } else {
+            lang = "zh";
+        }
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+    }
+
+    private void displayResult() {
 
         webView.setBackgroundColor(Color.parseColor("#191919"));
-        webView.loadUrl("http://platinumnobleclub.com/PJ_Services_EN.html");
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            webView.loadUrl("http://platinumnobleclub.com/PJ_Services_EN.html");
+        } else {
+            webView.loadUrl("http://platinumnobleclub.com/PJ_Services_CN.html");
+        }
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
 
@@ -93,25 +127,7 @@ public class ButlerServiceFragment extends Fragment {
                 alert = builder.create();
 
                 alert.show();
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Dialog_Alert);
-//                builder.setTitle("Warning");
-//                builder.setMessage("something went wrong, please try again later");
-//                builder.setCancelable(false);
-//                builder.setPositiveButton("OK",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog,
-//                                                int which) {
-//
-//                                dialog.dismiss();
-//
-//                            }
-//                        });
-//                builder.show();
             }
         });
-
-
     }
-
 }

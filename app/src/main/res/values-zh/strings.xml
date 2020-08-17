@@ -11,8 +11,13 @@
     <string name="login_activity_button_forgot_password_clickhere">点击这里</string>
 
     <!-- Forgot Password Activity-->
+    <string name="forgotpassword_activity_email">电子邮件</string>
     <string name="forgotpassword_activity_edittext_email">邮件</string>
     <string name="forgotpassword_activity_button_submit">提交</string>
+
+    <!-- Bottom Navigation -->
+    <string name="bottom_nav_home">主页</string>
+    <string name="bottom_nav_record">交易记录</string>
 
     <!-- Member Dashboard Activity-->
     <string name="member_dashboard_textview_popular_trip">热门旅行</string>
@@ -20,10 +25,15 @@
     <string name="member_dashboard_eventenddate">%s %s月 %s</string>
 
     <!-- Navigation Drawer Menu -->
-    <string name="nav_menu_dashboard">仪表板</string>
-    <string name="nav_menu_account">账户</string>
+    <string name="nav_menu_dashboard">主页</string>
+    <string name="nav_menu_account">户口</string>
     <string name="nav_menu_my_booking">我的预定</string>
     <string name="nav_menu_transactions_report">我的交易报告</string>
+    <string name="nav_menu_service">服务</string>
+    <string name="nav_menu_butler_service">管家服务</string>
+    <string name="nav_menu_guide">指南</string>
+    <string name="nav_menu_benefit">益处</string>
+    <string name="nav_menu_term_condition">规则与效率</string>
     <string name="nav_menu_logout">登出</string>
     <string name="change_profile_title">选择头像</string>
     <string-array name="imagePicker">
@@ -45,30 +55,60 @@
     <string name="event_detail_trip_confirmed">行程确定加入！</string>
 
     <!-- Edit Profile Activity -->
-    <string name="edit_profile_profile_title">用户资料</string>
+    <string name="edit_profile_profile_title">个人资料</string>
     <string name="edit_profile_fullname_title">全名</string>
     <string name="edit_profile_nickname_title">昵称</string>
 
-    <string name="edit_profile_save_profile">保存用户配置文件</string>
+    <string name="edit_profile_save_profile">保存个人信息</string>
     <string name="edit_profile_save_profile_success">用户资料更新成功!</string>
     <string name="edit_profile_change_password_current_password_title">当前密码</string>
     <string name="edit_profile_change_password_new_password_title">新密码</string>
     <string name="edit_profile_change_password_confirm_password_title">确认新密码</string>
-    <string name="edit_profile_change_password_button">修改密码</string>
+    <string name="edit_profile_change_password_button">更换密码</string>
     <string name="edit_profile_change_password_success">用户密码更新成功!</string>
 
     <!-- My Booking List-->
     <string name="my_booking_title">我的预订</string>
+    <string name="my_expired_booking_title">已过期预定</string>
     <string name="my_booking_eventstartdate">%s %s月 %s</string>
     <string name="my_booking_eventenddate">%s %s月 %s</string>
+    <string name="booking_id">ID.</string>
+    <string name="you_have_paid">&#160;您已付款&#160;</string>
+
+    <!-- Services Fragment -->
+    <string name="contact_us">联系我们</string>
+    <string name="contact_us_desc">如果您的需求未能在我们的特定服务中列出，则可以联系我们的管家进行查询</string>
 
     <!-- My Transactions Report -->
     <string name="transaction_report_title">我的交易报告</string>
     <string name="transaction_report_type_title">类型</string>
     <string name="transaction_report_amount_title">金额T</string>
     <string name="transaction_report_remarks_title">备注</string>
+    <string name="search_bar_hint">输入ID 号进行收索</string>
+    <string name="filter_all">均</string>
+    <string name="filter_weekly">每星期</string>
+    <string name="filter_monthly">每个月</string>
+    <string name="filter_yearly">每年</string>
+    <string name="transaction_date">日期</string>
+    <string name="admin_topup">管理员充值</string>
+    <string name="member_topup">会员充值</string>
+    <string name="merchant_payment">商户付款</string>
+    <string name="payment_full">全额付款</string>
+
+    <!-- I scan them-->
+    <string name="my_balance">我的余额</string>
+    <string name="scan_qr_pay">扫描二维码付款</string>
+
+    <!-- Pay Fragment -->
+    <string name="success_pay_msg">完成，谢谢你！</string>
+    <string name="success_transfer_msg">点已转移至</string>
+    <string name="confirm_pay">确定</string>
+    <string name="cancel_pay">取消</string>
 
     <!-- Error Message-->
+    <string name="close_app_msg">再按一次退出</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
     <string name="login_username_error">请输入您的用户名</string>
     <string name="login_password_error">请输入您的密码</string>
 
@@ -76,7 +116,7 @@
     <string name="forgotpassword_email_invalid_error">邮件格式无效！</string>
 
     <string name="logout_confirmation">确定登出？</string>
-
+    <string name="logout_title">注意</string>
     <string name="edittext_nickname_empty_error">请输入您的昵称！ </string>
 
     <string name="edit_profile_change_password_empty_error">请输入您的密码。 </string>
@@ -133,11 +173,11 @@
     <string name="join_trip">加入行程</string>
     <!-- Others -->
     <string name="loading_please_wait">加载中。。。</string>
-    <string name="userrank_bronze">青铜级</string>
-    <string name="userrank_silver">银级</string>
+    <string name="userrank_bronze">铜级</string>
+    <string name="userrank_silver">白金级</string>
     <string name="userrank_gold">金级</string>
     <string name="userrank_platinum">铂级</string>
     <string name="pay_confirmation_msg">Pay to %1$s Package</string>
     <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
-
+    <string name="loading_dialog">加载中</string>
 </resources>

@@ -33,8 +33,7 @@
                 android:adjustViewBounds="true"
                 android:onClick="imagebutton_change_language_onclick"
                 android:scaleType="center"
-                android:src="@drawable/language_usa"
-                android:visibility="gone" />
+                android:src="@drawable/language_usa" />
 
             <ImageView
                 android:layout_width="230dp"

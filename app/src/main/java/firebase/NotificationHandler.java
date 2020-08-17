@@ -14,6 +14,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.UserDetails;
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
+import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 import com.wedoops.platinumnobleclub.webservices.Api_Constants;
 import com.wedoops.platinumnobleclub.webservices.CallWebServices;
 
@@ -34,22 +36,28 @@ public class NotificationHandler extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
 
-        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
-        if (ud.size() > 0) {
-            String table_name = UserDetails.getTableName(UserDetails.class);
-            String loginid_field = StringUtil.toSQLName("LoginID");
+        new ApplicationClass(getApplicationContext()).writeIntoSharedPreferences(getApplicationContext(), CONSTANTS_VALUE.SHAREDPREFECENCE_NEW_TOKEN, token);
 
-            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
-
-            if (ud_list.size() > 0) {
-                Bundle b = new Bundle();
-                b.putString("access_token", ud_list.get(0).getAccessToken());
-                b.putString("device_id", token);
-                b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
-
-                new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
-            }
-        }
+//        try {
+//            List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+//            if (ud.size() > 0) {
+//                String table_name = UserDetails.getTableName(UserDetails.class);
+//                String loginid_field = StringUtil.toSQLName("LoginID");
+//
+//                List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+//
+//                if (ud_list.size() > 0) {
+//                    Bundle b = new Bundle();
+//                    b.putString("access_token", ud_list.get(0).getAccessToken());
+//                    b.putString("device_id", token);
+//                    b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
+//
+//                    new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
+//                }
+//            }
+//        } catch (Exception ex) {
+//
+//        }
     }
 
     @Override

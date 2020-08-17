@@ -1,6 +1,7 @@
 package com.wedoops.platinumnobleclub.helper;
 
 public class CONSTANTS_VALUE {
+    public static final String SHAREDPREFECENCE_NEW_TOKEN = "NEWTOKEN";
     public static final String SHAREDPREFECENCE_MEMBER_LOGIN_USERNAME = "username";
     public static final String SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD = "password";
     public static final String USER_LEVEL_CODE_BRONZE = "BRONZE";

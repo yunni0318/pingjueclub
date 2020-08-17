@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
@@ -33,6 +34,7 @@ import com.wedoops.platinumnobleclub.webservices.CallWebServices;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Locale;
 
 
@@ -108,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupLanguage() {
 
-        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb")) {
+        if (getResources().getConfiguration().locale.toString().toLowerCase().equals("en_us") || getResources().getConfiguration().locale.toString().toLowerCase().equals("en_gb") || getResources().getConfiguration().locale.toString().toLowerCase().equals("")) {
             imagebutton_language.setImageResource(R.drawable.language_usa);
         } else {
             imagebutton_language.setImageResource(R.drawable.language_china);
@@ -118,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     public void imagebutton_change_language_onclick(View v) {
 
         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
-        if (currentLanguage.equals("en_us")) {
+        if (currentLanguage.equals("en_us") || currentLanguage.equals("")) {
             saveLanguage("zh");
         } else {
             saveLanguage("en_us");
@@ -265,10 +267,27 @@ public class LoginActivity extends AppCompatActivity {
                         boolean gotnewtopup = user_profile_object.getBoolean("GotNewTopUp");
 
 
-                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet,gotnewtopup);
+                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet, gotnewtopup);
                         ud.save();
 
                         new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());
+
+                        List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
+                        if (ud_listall.size() > 0) {
+                            String table_name = UserDetails.getTableName(UserDetails.class);
+                            String loginid_field = StringUtil.toSQLName("LoginID");
+
+                            List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud_listall.get(0).getLoginID());
+
+                            if (ud_list.size() > 0) {
+                                Bundle b = new Bundle();
+                                b.putString("access_token", ud_list.get(0).getAccessToken());
+                                b.putString("device_id", new ApplicationClass().readFromSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_NEW_TOKEN));
+                                b.putInt(Api_Constants.COMMAND, Api_Constants.API_UPDATE_DEVICE_ID);
+
+                                new CallWebServices(Api_Constants.API_UPDATE_DEVICE_ID, this, false).execute(b);
+                            }
+                        }
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -299,7 +318,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, "key_lang");
 
-                    if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb")|| currentLanguage.equals("")) {
+                    if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
                         new DisplayAlertDialog().displayAlertDialogString(errorCode, errorMessageEN, false, this, this);
 
                     } else {

@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email Address"
+                android:text="@string/forgotpassword_activity_email"
                 android:textColor="@color/textview_sidebar"
                 android:textSize="20sp" />
 

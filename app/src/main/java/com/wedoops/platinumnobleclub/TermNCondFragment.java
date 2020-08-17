@@ -1,7 +1,10 @@
 package com.wedoops.platinumnobleclub;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +25,18 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.wedoops.platinumnobleclub.helper.ApplicationClass;
+
+import java.util.Locale;
+
 public class TermNCondFragment extends Fragment {
 
+    private Context get_context;
     private View view;
     private WebView webView;
+    private static final String KEY_LANG = "key_lang";
     private static AlertDialog alert;
+    private String lang;
 
     @Nullable
     @Override
@@ -38,17 +49,40 @@ public class TermNCondFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        get_context = getContext();
         this.view = view;
-
+        loadLanguage();
         setupDeclaration();
+        displayResult();
+    }
+
+    private void loadLanguage() {
+        lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            lang = "en_us";
+        } else {
+            lang = "zh";
+        }
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
     }
 
     private void setupDeclaration() {
         webView = view.findViewById(R.id.webView);
+    }
+
+    private void displayResult() {
 
         webView.setBackgroundColor(Color.parseColor("#191919"));
-        webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        } else {
+            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        }
 //        webView.loadUrl("http://103.198.194.228:54153/tnc");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
@@ -116,8 +150,9 @@ public class TermNCondFragment extends Fragment {
 //                builder.show();
             }
         });
-
-
     }
+
+
+
 
 }
