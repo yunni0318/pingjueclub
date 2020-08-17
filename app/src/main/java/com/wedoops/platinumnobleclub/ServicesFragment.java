@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -63,7 +64,9 @@ public class ServicesFragment extends Fragment {
     private static Context get_context;
     private static Activity get_activity;
     private static CardView cardview_customer_service;
+    private static ImageView contact_butler_image;
     private static AlertDialog alert;
+    private static String lang;
     private static final String KEY_LANG = "key_lang";
 
     private static View.OnClickListener onTopBannerItemClickListener = new View.OnClickListener() {
@@ -95,7 +98,6 @@ public class ServicesFragment extends Fragment {
 
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-            String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
             List<ServicesListData> sld_all = ServicesListData.listAll(ServicesListData.class);
 
             Intent intent = new Intent(get_activity, ServiceDetails.class);
@@ -127,6 +129,7 @@ public class ServicesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         customDialog = new CustomProgressDialog();
         get_context = view.getContext();
+        lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
         callWebService();
         setupDeclaration(view);
 
@@ -185,6 +188,12 @@ public class ServicesFragment extends Fragment {
     private void setupDeclaration(View view) {
         recyclerViewServices = view.findViewById(R.id.recyclerview_service_list);
         cardview_customer_service = view.findViewById(R.id.cardview_customer_service);
+        contact_butler_image = view.findViewById(R.id.imageview_customer_service);
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            contact_butler_image.setImageResource(R.drawable.administrator_services_icon);
+        } else {
+            contact_butler_image.setImageResource(R.drawable.administrator_services_chinese_icon);
+        }
     }
 
     @Override

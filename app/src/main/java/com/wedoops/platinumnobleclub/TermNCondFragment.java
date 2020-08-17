@@ -36,6 +36,7 @@ public class TermNCondFragment extends Fragment {
     private WebView webView;
     private static final String KEY_LANG = "key_lang";
     private static AlertDialog alert;
+    private String lang;
 
     @Nullable
     @Override
@@ -50,12 +51,13 @@ public class TermNCondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         get_context = getContext();
         this.view = view;
-        setupDeclaration();
         loadLanguage();
+        setupDeclaration();
+        displayResult();
     }
 
     private void loadLanguage() {
-        String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+        lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
             lang = "en_us";
         } else {
@@ -71,9 +73,16 @@ public class TermNCondFragment extends Fragment {
 
     private void setupDeclaration() {
         webView = view.findViewById(R.id.webView);
+    }
+
+    private void displayResult() {
 
         webView.setBackgroundColor(Color.parseColor("#191919"));
-        webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        } else {
+            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+        }
 //        webView.loadUrl("http://103.198.194.228:54153/tnc");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUseWideViewPort(true);
@@ -141,8 +150,6 @@ public class TermNCondFragment extends Fragment {
 //                builder.show();
             }
         });
-
-
     }
 
 

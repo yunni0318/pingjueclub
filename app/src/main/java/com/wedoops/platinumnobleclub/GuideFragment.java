@@ -37,6 +37,7 @@ public class GuideFragment extends Fragment {
     private static final String KEY_LANG = "key_lang";
     private WebView guide_webview;
     private AlertDialog alert;
+    private String lang;
 
     @Nullable
     @Override
@@ -52,8 +53,9 @@ public class GuideFragment extends Fragment {
         get_context = getContext();
 
         setupDeclaration();
-        displayResult();
         loadLanguage();
+        displayResult();
+
     }
 
     @Override
@@ -63,7 +65,7 @@ public class GuideFragment extends Fragment {
     }
 
     private void loadLanguage() {
-        String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+        lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
             lang = "en_us";
         } else {
@@ -84,7 +86,11 @@ public class GuideFragment extends Fragment {
     private void displayResult() {
 
         guide_webview.setBackgroundColor(Color.parseColor("#191919"));
-        guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ.html");
+        if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_EN.html");
+        } else {
+            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_CN.html");
+        }
         guide_webview.getSettings().setJavaScriptEnabled(true);
         guide_webview.getSettings().setUseWideViewPort(true);
 
