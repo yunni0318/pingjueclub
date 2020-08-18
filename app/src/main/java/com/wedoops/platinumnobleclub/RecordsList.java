@@ -484,7 +484,7 @@ public class RecordsList extends Fragment {
 
 
                 List<TransactionsReportData> trd_list_all;
-                if (dateType.getText().equals("All") || dateType.getText().equals("均")) {
+                if (dateType.getText().equals("All") || dateType.getText().equals("全部")) {
                     trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + remarks_field + " LIKE '%" + textinputedittext_filter.getText().toString() + "%'");
                 } else if (dateType.getText().equals("Weekly") || dateType.getText().equals("每星期")) {
                     Calendar cl = Calendar.getInstance();
@@ -550,7 +550,7 @@ public class RecordsList extends Fragment {
                 if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
                     dateType.setText("All");
                 } else {
-                    dateType.setText("均");
+                    dateType.setText("全部");
                 }
 
                 dateChoices.setVisibility(View.GONE);
