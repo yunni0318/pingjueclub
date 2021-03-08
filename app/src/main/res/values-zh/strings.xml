@@ -85,7 +85,7 @@
     <string name="transaction_report_amount_title">金额T</string>
     <string name="transaction_report_remarks_title">备注</string>
     <string name="search_bar_hint">输入ID 号进行收索</string>
-    <string name="filter_all">均</string>
+    <string name="filter_all">全部</string>
     <string name="filter_weekly">每星期</string>
     <string name="filter_monthly">每个月</string>
     <string name="filter_yearly">每年</string>
