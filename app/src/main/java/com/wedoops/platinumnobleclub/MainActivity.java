@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.BuildConfig;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
