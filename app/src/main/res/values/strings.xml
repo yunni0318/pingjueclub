@@ -127,7 +127,8 @@
     <string name="edit_profile_change_password_confirm_password_error">Confirm new password are not match with the new password field</string>
     <string name="error_1502">Incorrect username or password.</string>
 
-    <string name="error_1503">This account has been temporarily suspended due to too many incorrect login attempts. Please try again after an hour.</string>'
+    <string name="error_1503">This account has been temporarily suspended due to too many incorrect login attempts. Please try again after an hour.</string>
+    '
     <string name="error_1504">Your account has been temporarily suspended. Suspicious activity has been detected on your account and it has been suspended as a security precaution. Please contact support to unlock your account.</string>
     <string name="error_1506">Session expired. Please login again.</string>
     <string name="error_1509">A reset password link has been sent to you via email. You can follow that link to configure your new password. If the email does not arrive, please contact support.</string>
@@ -184,4 +185,8 @@
     <string name="pay_confirmation_msg">Pay to %1$s Package</string>
     <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
     <string name="loading_dialog">Loading</string>
+    <string name="nav_menu_my_reservation">Reservation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_menu_Notification">Notification</string>
 </resources>
