@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_radius_backgroud_white">
+
+        <RelativeLayout
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/clear_icon"
+             />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/memberDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/qr_user_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:adjustViewBounds="true"
+                android:onClick="button_change_profile_image"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_profile"
+                app:riv_border_color="#ffffff"
+                app:riv_border_width="2dp"
+                app:riv_corner_radius="50dp"
+                app:riv_mutate_background="true"
+                app:riv_oval="true" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/qr_user_profile"
+                android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/member_ID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:visibility="gone"
+                android:layout_below="@id/member_name"
+                android:textColor="@color/edittext_hint_username"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/QRCode_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:layout_below="@id/memberDetail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qr_code_text"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/QRCode_image"
+            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:layout_marginBottom="15dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

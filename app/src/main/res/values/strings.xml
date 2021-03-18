@@ -52,6 +52,7 @@
     <string name="edit_profile_change_password_confirm_password_title">Confirm New Password</string>
     <string name="edit_profile_change_password_button">CHANGE PASSWORD</string>
     <string name="edit_profile_change_password_success">PASSWORD UPDATED!</string>
+    <string name="qr_code_text">Scan This QR Code</string>
 
     <!-- My Booking List-->
     <string name="my_booking_title">MY BOOKING</string>

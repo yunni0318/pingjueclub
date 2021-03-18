@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -41,6 +42,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
 import com.wedoops.platinumnobleclub.database.CountryList;
 import com.wedoops.platinumnobleclub.database.StateList;
 import com.wedoops.platinumnobleclub.database.UserDetails;
@@ -76,7 +78,7 @@ public class EditProfileActivity extends Fragment {
     private static View view;
     public static Activity get_activity;
 
-    private static ImageView imageview_user_profile, imageview_user_rank;
+    private static ImageView imageview_user_profile, imageview_user_rank, qr_code;
     private static TextView textview_user_rank, textview_user_nickname, textview_profile_title, textview_nickname_title, textview_change_password_title, textview_current_password_title, textview_new_password_title, textview_confirm_password;
     private static EditText edittext_nickname, edittext_current_password, edittext_new_password, edittext_confirm_password;
 
@@ -125,7 +127,6 @@ public class EditProfileActivity extends Fragment {
         textview_user_nickname = view.findViewById(R.id.textview_user_nickname);
         textview_profile_title = view.findViewById(R.id.textview_profile_title);
         textview_nickname_title = view.findViewById(R.id.textview_nickname_title);
-
         edittext_nickname = view.findViewById(R.id.edittext_nickname);
 
         button_save_profile = view.findViewById(R.id.button_save_profile);
