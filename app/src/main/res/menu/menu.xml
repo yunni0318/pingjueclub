@@ -10,10 +10,21 @@
             android:id="@+id/menu_account"
             android:icon="@drawable/account"
             android:title="@string/nav_menu_account" />
+
+        <item
+            android:id="@+id/menu_notification"
+            android:icon="@drawable/notification"
+            android:title="@string/nav_menu_Notification" />
+
         <item
             android:id="@+id/menu_my_booking"
             android:icon="@drawable/booking"
             android:title="@string/nav_menu_my_booking" />
+
+        <item
+            android:id="@+id/menu_my_reservation"
+            android:icon="@drawable/reservation"
+            android:title="@string/nav_menu_my_reservation" />
         <item
             android:id="@+id/menu_my_transactions_report"
             android:icon="@drawable/records"

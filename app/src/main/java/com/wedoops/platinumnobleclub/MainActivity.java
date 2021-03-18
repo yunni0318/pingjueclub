@@ -1,6 +1,7 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.BuildConfig;
@@ -95,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
     private static final String TAG_DASHBOARD = "DASHBOARD";
     private static final String TAG_ACCOUNT = "ACCOUNT";
+    private static final String TAG_NOTIFICATION = "NOTIFICATION";
     private static final String TAG_MY_BOOKING = "MYBOOKING";
+    private static final String TAG_MY_RESERVATION = "MYRESERVATION";
     private static final String TAG_TRANSACTION_REPORT = "TRANSACTIONREPORT";
     private static final String TAG_SERVICE = "SERVICE";
     private static final String TAG_BUTLER_SERVICE = "BUTLER_SERVICE";
@@ -135,15 +139,15 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupAdvertisement();
         setContentView(R.layout.activity_main);
 
-        if (checkAndRequestPermissions()) {
-            mHandler = new Handler();
-            setupViewByID();
-            setupToolbar();
-            setupNavigationDrawer();
 
-            navigationView.getMenu().getItem(0).setChecked(true);
-            navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
-        }
+        mHandler = new Handler();
+        setupViewByID();
+        setupToolbar();
+        setupNavigationDrawer();
+
+        checkAndRequestPermissions();
+        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
     }
 
     private void setupProgressDialog() {
@@ -164,12 +168,20 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         int networkStatePermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE);
         int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+        int readcalPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR);
+        int writecalPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR);
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (networkStatePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_NETWORK_STATE);
         }
         if (internetPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.INTERNET);
+        }
+        if (writecalPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_CALENDAR);
+        }
+        if (readcalPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CALENDAR);
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
@@ -189,12 +201,18 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
                 perms.put(Manifest.permission.ACCESS_NETWORK_STATE, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.INTERNET, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.WRITE_CALENDAR, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_CALENDAR, PackageManager.PERMISSION_GRANTED);
+
 
                 if (grantResults.length > 0) {
                     for (int i = 0; i < permissions.length; i++)
                         perms.put(permissions[i], grantResults[i]);
                     if (perms.get(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED
-                            && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+                            && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+
 
                         mHandler = new Handler();
 
@@ -206,20 +224,23 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
 
                     } else {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_NETWORK_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_NETWORK_STATE) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CALENDAR) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALENDAR)) {
 
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(
                                     this);
                             builder.setTitle(this.getString(R.string.error_title));
-                            builder.setMessage("Internet and Mobile Data Permission required for this app");
+                            builder.setMessage("Calendar Permission required for this app");
                             builder.setCancelable(false);
                             builder.setPositiveButton(this.getString(R.string.Ok),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog,
                                                             int which) {
                                             dialog.dismiss();
-                                            checkAndRequestPermissions();
+//                                            checkAndRequestPermissions();
                                         }
                                     });
                             builder.show();
@@ -232,8 +253,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 }
             }
             case CONSTANTS_VALUE.CAMERA_STORAGE_REQUEST_CODE: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                }
+//                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
                 else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, R.string.storage_access_required, Toast.LENGTH_SHORT).show();
                 } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -384,8 +406,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             public void onClick(View view) {
                 Menu menu = navigationView.getMenu();
 
-                if (!menu.getItem(3).isChecked()) {
-                    navigationView.getMenu().getItem(3).setChecked(true);
+                if (!menu.getItem(5).isChecked()) {
+                    navigationView.getMenu().getItem(5).setChecked(true);
                     navigationView.getMenu().performIdentifierAction(R.id.menu_my_transactions_report, 0);
                 }
 
@@ -438,41 +460,53 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         CURRENT_TAG = TAG_ACCOUNT;
 
                         break;
-                    case R.id.menu_my_booking:
+
+
+                    case R.id.menu_notification:
                         navItemIndex = 2;
+                        CURRENT_TAG = TAG_NOTIFICATION;
+
+                        break;
+                    case R.id.menu_my_booking:
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_MY_BOOKING;
 
                         break;
+                    case R.id.menu_my_reservation:
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_MY_RESERVATION;
+
+                        break;
                     case R.id.menu_my_transactions_report:
-                        navItemIndex = 3;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_TRANSACTION_REPORT;
 
                         break;
                     case R.id.menu_services:
 
-                        navItemIndex = 4;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_SERVICE;
                         break;
                     case R.id.menu_butler_services:
 
-                        navItemIndex = 5;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_BUTLER_SERVICE;
                         break;
 
                     case R.id.menu_guide:
-                        navItemIndex = 6;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_GUIDE;
 
                         break;
 
                     case R.id.menu_benefit:
-                        navItemIndex = 7;
+                        navItemIndex = 9;
                         CURRENT_TAG = TAG_BENEFIT;
 
                         break;
 
                     case R.id.menu_termNCond:
-                        navItemIndex = 8;
+                        navItemIndex = 10;
                         CURRENT_TAG = TAG_TERMNCOND;
 
                         break;
@@ -715,45 +749,60 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText(getString(R.string.nav_menu_Notification));
+                NotificationFragment notificationFragment = new NotificationFragment();
+                return notificationFragment;
+            case 3:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_my_booking));
                 MyBookingActivity bookingFragment = new MyBookingActivity();
                 return bookingFragment;
-            case 3:
+
+            case 4:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText(getString(R.string.nav_menu_my_reservation));
+                ReservationFragment reservationFragment = new ReservationFragment();
+                return reservationFragment;
+            case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
                 RecordsList transactionsReportFragment = new RecordsList();
                 return transactionsReportFragment;
-            case 4:
+            case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_service));
                 ServicesFragment servicesFragment = new ServicesFragment();
                 return servicesFragment;
-            case 5:
+            case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_butler_service));
                 ButlerServiceFragment butler_service = new ButlerServiceFragment();
                 return butler_service;
-            case 6:
+            case 8:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_guide));
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
-            case 7:
+            case 9:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_benefit));
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
-            case 8:
+            case 10:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -786,8 +835,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         String currentLanguage = new ApplicationClass().readFromSharedPreferences(this, KEY_LANG);
         if (currentLanguage.equals("en_us") || currentLanguage.equals("en_gb") || currentLanguage.equals("")) {
             saveLanguage("zh");
-        }
-        else {
+        } else {
             saveLanguage("en_us");
         }
 
