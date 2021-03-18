@@ -113,6 +113,7 @@
                     android:text="@string/edit_profile_profile_title"
                     android:textColor="#ffffff"
                     android:textSize="18sp" />
+
             </TableRow>
 
             <TableRow

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -60,6 +61,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
@@ -395,12 +397,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Menu menu = navigationView.getMenu();
-
-                if (!menu.getItem(0).isChecked()) {
-                    navigationView.getMenu().getItem(0).setChecked(true);
-                    navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
-                }
+                QRcodeDialog qRcodeDialog = new QRcodeDialog(MainActivity.this);
+                qRcodeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                qRcodeDialog.show();
             }
         });
 

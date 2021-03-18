@@ -49,6 +49,7 @@ public class Api_Constants {
     private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
     private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
     private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
+    private static String url_internat = "http://api.platinumnobleclub.com/api/Internet/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";

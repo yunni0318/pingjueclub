@@ -66,6 +66,7 @@
     <string name="edit_profile_change_password_confirm_password_title">确认新密码</string>
     <string name="edit_profile_change_password_button">更换密码</string>
     <string name="edit_profile_change_password_success">用户密码更新成功!</string>
+    <string name="qr_code_text">扫描二维码</string>
 
     <!-- My Booking List-->
     <string name="my_booking_title">我的预订</string>
