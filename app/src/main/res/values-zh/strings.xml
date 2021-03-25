@@ -106,6 +106,10 @@
     <string name="confirm_pay">确定</string>
     <string name="cancel_pay">取消</string>
 
+    <!-- News Fragment -->
+    <string name="news_notification">通知</string>
+    <string name="news_reminder">提醒</string>
+
     <!-- Error Message-->
     <string name="close_app_msg">再按一次退出</string>
     <string name="dialog_ok">确定</string>

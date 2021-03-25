@@ -12,11 +12,6 @@
             android:title="@string/nav_menu_account" />
 
         <item
-            android:id="@+id/menu_notification"
-            android:icon="@drawable/notification"
-            android:title="@string/nav_menu_Notification" />
-
-        <item
             android:id="@+id/menu_my_booking"
             android:icon="@drawable/booking"
             android:title="@string/nav_menu_my_booking" />
@@ -49,6 +44,12 @@
             android:id="@+id/menu_termNCond"
             android:icon="@drawable/termcond"
             android:title="@string/nav_menu_term_condition" />
+
+        <item
+            android:id="@+id/menu_notification"
+            android:icon="@drawable/notification"
+            android:title="@string/nav_menu_Notification" />
+
     </group>
 
 </menu>

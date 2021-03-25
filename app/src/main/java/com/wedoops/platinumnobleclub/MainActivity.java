@@ -1,7 +1,6 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,38 +9,14 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.BuildConfig;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Base64;
@@ -59,12 +34,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.bumptech.glide.BuildConfig;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
+import com.wedoops.platinumnobleclub.database.MemberIDEncryted;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
@@ -89,7 +82,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 
 import static com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
@@ -460,55 +452,56 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
                         break;
 
-
-                    case R.id.menu_notification:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_NOTIFICATION;
-
-                        break;
                     case R.id.menu_my_booking:
-                        navItemIndex = 3;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_MY_BOOKING;
 
                         break;
                     case R.id.menu_my_reservation:
-                        navItemIndex = 4;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_MY_RESERVATION;
 
                         break;
                     case R.id.menu_my_transactions_report:
-                        navItemIndex = 5;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_TRANSACTION_REPORT;
 
                         break;
                     case R.id.menu_services:
 
-                        navItemIndex = 6;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_SERVICE;
                         break;
                     case R.id.menu_butler_services:
 
-                        navItemIndex = 7;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_BUTLER_SERVICE;
                         break;
 
                     case R.id.menu_guide:
-                        navItemIndex = 8;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_GUIDE;
 
                         break;
 
                     case R.id.menu_benefit:
-                        navItemIndex = 9;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_BENEFIT;
 
                         break;
 
                     case R.id.menu_termNCond:
-                        navItemIndex = 10;
+                        navItemIndex = 9;
                         CURRENT_TAG = TAG_TERMNCOND;
 
                         break;
+
+                    case R.id.menu_notification:
+                        navItemIndex = 10;
+                        CURRENT_TAG = TAG_NOTIFICATION;
+
+                        break;
+
                     default:
                         navItemIndex = 0;
                 }
@@ -744,14 +737,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setText(getString(R.string.nav_menu_account));
                 EditProfileActivity accountFragment = new EditProfileActivity();
                 return accountFragment;
+
             case 2:
-                toolbar_title.setVisibility(View.VISIBLE);
-                toolbar_logo.setVisibility(View.GONE);
-                toolbar_camera.setVisibility(View.VISIBLE);
-                toolbar_title.setText(getString(R.string.nav_menu_Notification));
-                NotificationFragment notificationFragment = new NotificationFragment();
-                return notificationFragment;
-            case 3:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -759,55 +746,64 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 MyBookingActivity bookingFragment = new MyBookingActivity();
                 return bookingFragment;
 
-            case 4:
+            case 3:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_my_reservation));
                 ReservationFragment reservationFragment = new ReservationFragment();
                 return reservationFragment;
-            case 5:
+            case 4:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
                 RecordsList transactionsReportFragment = new RecordsList();
                 return transactionsReportFragment;
-            case 6:
+            case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_service));
                 ServicesFragment servicesFragment = new ServicesFragment();
                 return servicesFragment;
-            case 7:
+            case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_butler_service));
                 ButlerServiceFragment butler_service = new ButlerServiceFragment();
                 return butler_service;
-            case 8:
+            case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_guide));
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
-            case 9:
+            case 8:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_benefit));
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
-            case 10:
+            case 9:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_term_condition));
                 TermNCondFragment termNCondFragment = new TermNCondFragment();
                 return termNCondFragment;
+
+            case 10:
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText(getString(R.string.nav_menu_Notification));
+                NewsFragment newsFragment = new NewsFragment();
+                return newsFragment;
+
 
             default:
                 toolbar_title.setVisibility(View.GONE);
@@ -1059,6 +1055,20 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         ud.save();
 
                         setupNavigationDrawer();
+                        List<UserDetails> userd = UserDetails.listAll(UserDetails.class);
+
+                        String table_name2 = UserDetails.getTableName(UserDetails.class);
+                        String loginid = StringUtil.toSQLName("LoginID");
+
+                        List<UserDetails> ud_list2 = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name2 + " where " + loginid + " = ?", userd.get(0).getLoginID());
+
+                        Bundle b = new Bundle();
+                        b.putString("access_token", ud_list2.get(0).getAccessToken());
+                        b.putString("memberID", "1234567890"); //put memberID to process encryption
+                        b.putInt(Api_Constants.COMMAND, Api_Constants.API_GET_ENCRYPTED_STRING);
+
+                        new CallWebServices(Api_Constants.API_GET_ENCRYPTED_STRING, MainActivity.this, true).execute(b);
+
 
                     } else {
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this, MainActivity.this);
@@ -1069,9 +1079,41 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
-        }
 
+        } else if (command == Api_Constants.API_GET_ENCRYPTED_STRING) {
+
+            boolean isSuccess = false;
+
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+
+                        List<MemberIDEncryted> mem = MemberIDEncryted.listAll(MemberIDEncryted.class);
+                        if (mem.size() > 0) {
+                            MemberIDEncryted.deleteAll(MemberIDEncryted.class);
+                        }
+
+                        String response_object = returnedObject.getString("ResponseData");
+
+                        MemberIDEncryted memberIDEncryted = new MemberIDEncryted(response_object);
+                        memberIDEncryted.save();
+
+                    } else {
+                        new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), MainActivity.this, MainActivity.this);
+
+                    }
+
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+            }
+
+        }
     }
+
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent objEvent) {

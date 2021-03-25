@@ -7,6 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,16 +27,6 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardEventDataRecyclerAdapter;
@@ -113,7 +112,7 @@ public class MemberDashboardActivity extends Fragment {
 
                 String url = ed.get(position).getRedirectURL();
 
-                if(url.length() > 0){
+                if (url.length() > 0) {
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
                         url = "http://" + url;
                     }
@@ -738,6 +737,7 @@ public class MemberDashboardActivity extends Fragment {
                 new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
 
             }
+
         } else if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
 
             boolean isSuccess = false;
