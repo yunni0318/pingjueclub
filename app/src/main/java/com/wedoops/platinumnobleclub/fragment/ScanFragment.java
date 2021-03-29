@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -30,6 +30,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.wedoops.platinumnobleclub.MainActivity;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.CurrencyList;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 

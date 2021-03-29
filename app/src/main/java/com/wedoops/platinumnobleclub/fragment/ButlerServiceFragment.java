@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
 import java.util.Locale;

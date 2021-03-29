@@ -62,6 +62,12 @@
     <string name="booking_id">Booking No.</string>
     <string name="you_have_paid">&#160;you have paid&#160;</string>
 
+    <!-- My Reservation List-->
+    <string name="my_reservation_title">MY RESERVATION</string>
+    <string name="reservation_title">RESERVATION</string>
+    <string name="reservation_history_title">RESERVATION HISTORY</string>
+
+
     <!-- Services Fragment -->
     <string name="contact_us">Contact Us</string>
     <string name="contact_us_desc">If you have specific request which didn’t list in our services, you may contact our butler for enquiry.</string>
@@ -87,6 +93,16 @@
     <string name="scan_qr_pay">Scan QR code to pay</string>
     <string name="confirm_pay">Confirm</string>
     <string name="cancel_pay">Cancel</string>
+
+    <!-- Reservation Fragment-->
+    <string name="Reservation_username_error">Username must be filled!</string>
+    <string name="Reservation_username_Length_error">The length of Username should be at least 6 characters.</string>
+    <string name="Reservation_name_error">Name must be filled!</string>
+    <string name="Reservation_name_Length_error">The length of Name should be at least 6 characters.</string>
+    <string name="Reservation_date_error">Date must be filled!</string>
+    <string name="Reservation_time_error">Time must be filled!</string>
+    <string name="Reservation_contact_error">Please user Malaysia phone number format!</string>
+    <string name="Reservation_contact_Length_error">Incorrect contact number format!</string>
 
     <!-- Pay Fragment -->
     <string name="success_pay_msg">Success, Thank You!</string>
@@ -160,7 +176,7 @@
     <string name="error_3001">This trip is no longer available. It may have expired or been fully booked.</string>
     <string name="error_3501">You are not allow to join this trip due because it is only for {0} members.</string>
     <string name="error_3502">You have already joined this trip.</string>
-    <string name="error_3503">You have succesfully join the trip.</string>
+    <string name="error_3503">You have successfully join the trip.</string>
     <string name="error_3504">Insufficient balance for this trip. Required: {0} (Available: {1}). Please contact support to topup your wallet.</string>
     <string name="error_3505">Payment failed. Your cash wallet has been frozen for security reason. Please contact support to activate your cash wallet.</string>
     <string name="success_title">Success</string>
@@ -185,7 +201,7 @@
     <string name="pay_confirmation_msg">Pay to %1$s Package</string>
     <string name="pay_success_msg">%1$s PTS Have Been Transfer To %2$s Wallet.</string>
     <string name="loading_dialog">Loading</string>
-    <string name="nav_menu_my_reservation">Reservation</string>
+    <string name="nav_menu_my_reservation">My Reservation</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_menu_Notification">Notification</string>

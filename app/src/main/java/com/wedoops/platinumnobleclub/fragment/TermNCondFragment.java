@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +26,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
 import java.util.Locale;

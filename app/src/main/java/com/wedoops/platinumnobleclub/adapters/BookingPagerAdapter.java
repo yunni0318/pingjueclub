@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.wedoops.platinumnobleclub.BookingExpiredFragment;
-import com.wedoops.platinumnobleclub.BookingFragment;
+import com.wedoops.platinumnobleclub.fragment.BookingExpiredFragment;
+import com.wedoops.platinumnobleclub.fragment.BookingFragment;
 import com.wedoops.platinumnobleclub.R;
 
 public class BookingPagerAdapter extends FragmentStatePagerAdapter {

@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.MyBookingDetail;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.MyBookingAdapter;
 import com.wedoops.platinumnobleclub.database.MyBookingList;
 

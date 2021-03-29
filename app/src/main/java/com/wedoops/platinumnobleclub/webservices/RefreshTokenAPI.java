@@ -11,15 +11,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.wedoops.platinumnobleclub.BookingFragment;
-import com.wedoops.platinumnobleclub.EditProfileActivity;
+import com.wedoops.platinumnobleclub.fragment.EditProfileFragment;
 import com.wedoops.platinumnobleclub.EventDetailActivity;
-import com.wedoops.platinumnobleclub.MemberDashboardActivity;
-import com.wedoops.platinumnobleclub.MyBookingActivity;
+import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
+import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
-import com.wedoops.platinumnobleclub.PayFragment;
-import com.wedoops.platinumnobleclub.RecordsList;
-import com.wedoops.platinumnobleclub.ServicesFragment;
+import com.wedoops.platinumnobleclub.fragment.PayFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
+import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;
 
 import org.json.JSONObject;
@@ -73,15 +72,15 @@ public class RefreshTokenAPI {
                         @Override
                         public void onResponse(String response) {
                             if (origin == ORIGIN_MEMBER_DASHBOARD) {
-                                MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
+                                MemberDashboardFragment.processWSData(convertResponseToJsonObject(response), API_REFRESH_TOKEN);
                             }
 
                             if (origin == ORIGIN_MEMBER_ACCOUNT_SETTING) {
-                                EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_ACCOUNT_SETTING);
+                                EditProfileFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_ACCOUNT_SETTING);
                             }
 
                             if (origin == ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST) {
-                                EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
+                                EditProfileFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
 
                             }
 
@@ -90,24 +89,24 @@ public class RefreshTokenAPI {
 //
 //                                    }
                             if (origin == ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME) {
-                                EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME);
+                                EditProfileFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_NICKNAME);
 
                             }
 
                             if (origin == ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY) {
-                                EditProfileActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
+                                EditProfileFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
                             }
 
                             if (origin == ORIGIN_EVENT_BOOKING_LIST) {
-                                MyBookingActivity.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_BOOKING_LIST);
+                                MyBookingFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_BOOKING_LIST);
                             }
 
                             if (origin == ORIGIN_EVENT_BOOKING_DETAIL) {
                                 ((MyBookingDetail) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_BOOKING_DETAIL);
                             }
                             if (origin == ORIGIN_CASH_WALLET_TRANSACTION) {
-                                RecordsList.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
+                                RecordsListFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
                             }
                             if (origin == ORIGIN_EVENT_DETAILS) {
                                 ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS);
@@ -123,7 +122,7 @@ public class RefreshTokenAPI {
                             }
 
                             if (origin == ORIGIN_CASH_WALLET_TRANSACTION_V2) {
-                                RecordsList.processWSData(convertResponseToJsonObject(response), ORIGIN_CASH_WALLET_TRANSACTION_V2);
+                                RecordsListFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_CASH_WALLET_TRANSACTION_V2);
                             }
 
 

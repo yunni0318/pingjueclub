@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.MainActivity;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;

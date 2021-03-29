@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.RecordsListAdapter;
 import com.wedoops.platinumnobleclub.database.TransactionsReportData;
 import com.wedoops.platinumnobleclub.database.UserDetails;
@@ -38,7 +40,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.List;
 
-public class RecordsList extends Fragment {
+public class RecordsListFragment extends Fragment {
 
     private static RecyclerView recyclerview_transaction;
     private static View view;
@@ -376,7 +378,7 @@ public class RecordsList extends Fragment {
                         ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
 
                         ud_list.get(0).save();
-                        RecordsList.callCashWalletTransactionWebService();
+                        RecordsListFragment.callCashWalletTransactionWebService();
                     } else {
 
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext(), get_activity);

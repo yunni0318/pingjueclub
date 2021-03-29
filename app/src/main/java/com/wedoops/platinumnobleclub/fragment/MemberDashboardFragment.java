@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,12 +24,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.EventDetailActivity;
+import com.wedoops.platinumnobleclub.LoginActivity;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
 import com.wedoops.platinumnobleclub.database.CurrencyList;
@@ -50,7 +55,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MemberDashboardActivity extends Fragment {
+public class MemberDashboardFragment extends Fragment {
 
     private static View view;
     private static RecyclerView recyclerview_top_banner, recyclerview_eventdata;
@@ -144,10 +149,9 @@ public class MemberDashboardActivity extends Fragment {
         setupViewByID();
         setupListener();
         setupAdvertisement();
-
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
-
-
     }
 
 

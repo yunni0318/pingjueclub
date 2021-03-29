@@ -12,19 +12,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.wedoops.platinumnobleclub.BookingFragment;
-import com.wedoops.platinumnobleclub.EditProfileActivity;
+import com.wedoops.platinumnobleclub.fragment.EditProfileFragment;
 import com.wedoops.platinumnobleclub.EventDetailActivity;
 import com.wedoops.platinumnobleclub.ForgotPasswordActivity;
 import com.wedoops.platinumnobleclub.LoginActivity;
 import com.wedoops.platinumnobleclub.MainActivity;
-import com.wedoops.platinumnobleclub.MemberDashboardActivity;
-import com.wedoops.platinumnobleclub.MyBookingActivity;
+import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
+import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
-import com.wedoops.platinumnobleclub.PayFragment;
-import com.wedoops.platinumnobleclub.RecordsList;
+import com.wedoops.platinumnobleclub.fragment.PayFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
 import com.wedoops.platinumnobleclub.ServiceDetails;
-import com.wedoops.platinumnobleclub.ServicesFragment;
+import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 
 import org.json.JSONObject;
 
@@ -178,7 +177,7 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    MemberDashboardActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_DASHBOARDV2);
+                                    MemberDashboardFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_DASHBOARDV2);
                                 }
                             },
                             new Response.ErrorListener() {
@@ -188,14 +187,14 @@ public class Api_Constants {
 
                                     if(error.networkResponse != null){
                                         if (error.networkResponse.statusCode == 401) {
-                                            MemberDashboardActivity.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARDV2);
+                                            MemberDashboardFragment.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARDV2);
                                         } else {
-                                            MemberDashboardActivity.processWSData(null, API_MEMBER_DASHBOARDV2);
+                                            MemberDashboardFragment.processWSData(null, API_MEMBER_DASHBOARDV2);
 
 //                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                         }
                                     }else{
-                                        MemberDashboardActivity.processWSData(null, API_MEMBER_DASHBOARDV2);
+                                        MemberDashboardFragment.processWSData(null, API_MEMBER_DASHBOARDV2);
 
                                     }
                                 }
@@ -302,13 +301,13 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_ACCOUNT_SETTING);
+                                    EditProfileFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_ACCOUNT_SETTING);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    EditProfileActivity.processWSData(null, API_MEMBER_ACCOUNT_SETTING);
+                                    EditProfileFragment.processWSData(null, API_MEMBER_ACCOUNT_SETTING);
 
                                 }
                             }
@@ -335,13 +334,13 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
+                                    EditProfileFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    EditProfileActivity.processWSData(null, API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
+                                    EditProfileFragment.processWSData(null, API_MEMBER_ACCOUNT_COUNTRY_STATE_LIST);
 
                                 }
                             }
@@ -367,13 +366,13 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
+                                    EditProfileFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
+                                    EditProfileFragment.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_PROFILE_VALIDATION);
 
                                 }
                             }
@@ -415,13 +414,13 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
+                                    EditProfileFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
+                                    EditProfileFragment.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_NICKNAME);
 
                                 }
                             }
@@ -455,13 +454,13 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    EditProfileActivity.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_SECURITY);
+                                    EditProfileFragment.processWSData(convertResponseToJsonObject(response), API_MEMBER_UPDATE_ACCOUNT_SECURITY);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    EditProfileActivity.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_SECURITY);
+                                    EditProfileFragment.processWSData(null, API_MEMBER_UPDATE_ACCOUNT_SECURITY);
 
                                 }
                             }
@@ -497,14 +496,14 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    MyBookingActivity.processWSData(convertResponseToJsonObject(response), API_EVENT_BOOKING_LIST);
+                                    MyBookingFragment.processWSData(convertResponseToJsonObject(response), API_EVENT_BOOKING_LIST);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    MyBookingActivity.processWSData(null, API_EVENT_BOOKING_LIST);
+                                    MyBookingFragment.processWSData(null, API_EVENT_BOOKING_LIST);
 
                                 }
                             }
@@ -576,14 +575,14 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    RecordsList.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    RecordsList.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
 
                                 }
                             }

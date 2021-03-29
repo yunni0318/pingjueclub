@@ -1,7 +1,6 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,7 +18,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.BuildConfig;
@@ -66,6 +64,20 @@ import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.UserDetails;
+import com.wedoops.platinumnobleclub.fragment.BenefitFragment;
+import com.wedoops.platinumnobleclub.fragment.ButlerServiceFragment;
+import com.wedoops.platinumnobleclub.fragment.EditProfileFragment;
+import com.wedoops.platinumnobleclub.fragment.GuideFragment;
+import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
+import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
+import com.wedoops.platinumnobleclub.fragment.MyReservationFragment;
+import com.wedoops.platinumnobleclub.fragment.NotificationFragment;
+import com.wedoops.platinumnobleclub.fragment.PayFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
+import com.wedoops.platinumnobleclub.fragment.ReservationFragment;
+import com.wedoops.platinumnobleclub.fragment.ScanFragment;
+import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
+import com.wedoops.platinumnobleclub.fragment.TermNCondFragment;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 import com.wedoops.platinumnobleclub.helper.CustomTypefaceSpan;
@@ -147,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupToolbar();
         setupNavigationDrawer();
 
-        checkAndRequestPermissions();
+
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
     }
@@ -735,14 +747,15 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                MemberDashboardActivity dashboardFragment = new MemberDashboardActivity();
+                MemberDashboardFragment dashboardFragment = new MemberDashboardFragment();
+                checkAndRequestPermissions();
                 return dashboardFragment;
             case 1:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_account));
-                EditProfileActivity accountFragment = new EditProfileActivity();
+                EditProfileFragment accountFragment = new EditProfileFragment();
                 return accountFragment;
             case 2:
                 toolbar_title.setVisibility(View.VISIBLE);
@@ -756,7 +769,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_my_booking));
-                MyBookingActivity bookingFragment = new MyBookingActivity();
+                MyBookingFragment bookingFragment = new MyBookingFragment();
                 return bookingFragment;
 
             case 4:
@@ -764,14 +777,14 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_my_reservation));
-                ReservationFragment reservationFragment = new ReservationFragment();
+                MyReservationFragment reservationFragment = new MyReservationFragment();
                 return reservationFragment;
             case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
-                RecordsList transactionsReportFragment = new RecordsList();
+                RecordsListFragment transactionsReportFragment = new RecordsListFragment();
                 return transactionsReportFragment;
             case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
@@ -813,7 +826,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);
                 toolbar_camera.setVisibility(View.VISIBLE);
-                return new MemberDashboardActivity();
+
+                return new MemberDashboardFragment();
         }
     }
 

@@ -63,4 +63,14 @@
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
 
-</resources>
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/bg_spinner</item>
+        <item name="android:paddingLeft">16dp</item>
+
+    </style>
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary_dark</item>
+
+    </style>
+
+    </resources>

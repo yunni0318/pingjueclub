@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -43,7 +43,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
 import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.CountryList;
 import com.wedoops.platinumnobleclub.database.StateList;
 import com.wedoops.platinumnobleclub.database.UserDetails;
@@ -74,7 +76,7 @@ import java.util.regex.Pattern;
 import static android.app.Activity.RESULT_OK;
 import static com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
-public class EditProfileActivity extends Fragment {
+public class EditProfileFragment extends Fragment {
 
     private static View view;
     public static Activity get_activity;
