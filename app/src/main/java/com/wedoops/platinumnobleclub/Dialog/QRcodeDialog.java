@@ -28,6 +28,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.CountryList;
+import com.wedoops.platinumnobleclub.database.MemberIDEncryted;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
@@ -91,13 +92,14 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
 
     private void genQRcode() {
 
-        String qrvalue = "memberID 1234567890 :D";
+        List<MemberIDEncryted> memID = MemberIDEncryted.listAll(MemberIDEncryted.class);
+        String s = memID.get(0).getEncryptedString();
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             Map<EncodeHintType, Object> hintMap = new HashMap<EncodeHintType, Object>();
             hintMap.put(EncodeHintType.MARGIN, new Integer(1));
-            BitMatrix bitMatrix = multiFormatWriter.encode(qrvalue, BarcodeFormat.QR_CODE, 800, 800, hintMap);
+            BitMatrix bitMatrix = multiFormatWriter.encode(s, BarcodeFormat.QR_CODE, 800, 800, hintMap);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             qrcode.setImageBitmap(bitmap);

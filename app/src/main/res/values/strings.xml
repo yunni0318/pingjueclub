@@ -108,6 +108,10 @@
     <string name="success_pay_msg">Success, Thank You!</string>
     <string name="success_transfer_msg">Points Have Been Transfer To </string>
 
+    <!-- News Fragment -->
+    <string name="news_notification">Notification</string>
+    <string name="news_reminder">Reminder</string>
+
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">Dashboard</string>
     <string name="nav_menu_account">Account</string>
