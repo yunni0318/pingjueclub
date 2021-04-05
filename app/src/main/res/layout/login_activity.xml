@@ -28,11 +28,11 @@
             <ImageButton
                 android:id="@+id/imagebutton_language"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_gravity="end"
                 android:adjustViewBounds="true"
                 android:onClick="imagebutton_change_language_onclick"
-                android:scaleType="center"
+                android:scaleType="fitCenter"
                 android:src="@drawable/language_usa" />
 
             <ImageView

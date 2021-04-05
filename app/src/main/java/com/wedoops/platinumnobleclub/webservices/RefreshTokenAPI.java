@@ -17,7 +17,7 @@ import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
-import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;
 
@@ -106,7 +106,7 @@ public class RefreshTokenAPI {
                                 ((MyBookingDetail) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_BOOKING_DETAIL);
                             }
                             if (origin == ORIGIN_CASH_WALLET_TRANSACTION) {
-                                RecordsListFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
+                                RecordsListPtsFragment.processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_CASH_WALLET_TRANSACTION);
                             }
                             if (origin == ORIGIN_EVENT_DETAILS) {
                                 ((EventDetailActivity) context).processRefreshToken(convertResponseToJsonObject(response), API_REFRESH_TOKEN, ORIGIN_EVENT_DETAILS);
@@ -122,7 +122,7 @@ public class RefreshTokenAPI {
                             }
 
                             if (origin == ORIGIN_CASH_WALLET_TRANSACTION_V2) {
-                                RecordsListFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_CASH_WALLET_TRANSACTION_V2);
+                                RecordsListPtsFragment.processWSData(convertResponseToJsonObject(response), ORIGIN_CASH_WALLET_TRANSACTION_V2);
                             }
 
 

@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.BookingPagerAdapter;
 import com.wedoops.platinumnobleclub.adapters.NewsPagerAdapter;
 

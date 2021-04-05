@@ -37,8 +37,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.Spannable;
@@ -73,10 +71,10 @@ import com.wedoops.platinumnobleclub.fragment.GuideFragment;
 import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.fragment.MyReservationFragment;
-import com.wedoops.platinumnobleclub.fragment.NotificationFragment;
+import com.wedoops.platinumnobleclub.fragment.NewsFragment;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
-import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
-import com.wedoops.platinumnobleclub.fragment.ReservationFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.fragment.ScanFragment;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 import com.wedoops.platinumnobleclub.fragment.TermNCondFragment;
@@ -781,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
-                RecordsListFragment transactionsReportFragment = new RecordsListFragment();
+                RecordsFragment transactionsReportFragment = new RecordsFragment();
                 return transactionsReportFragment;
             case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
