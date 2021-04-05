@@ -21,7 +21,7 @@ import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
-import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.ServiceDetails;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 
@@ -575,14 +575,14 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    RecordsListFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListPtsFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    RecordsListFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListPtsFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
 
                                 }
                             }

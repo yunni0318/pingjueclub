@@ -9,14 +9,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.wedoops.platinumnobleclub.R;
-import com.wedoops.platinumnobleclub.fragment.ReminderFragment;
 import com.wedoops.platinumnobleclub.fragment.NotificationFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListCreditFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
+import com.wedoops.platinumnobleclub.fragment.ReminderFragment;
 
-public class NewsPagerAdapter extends FragmentStatePagerAdapter {
+public class RecordsPagerAdapter extends FragmentStatePagerAdapter {
 
     private Context mContext;
 
-    public NewsPagerAdapter(FragmentManager fm, Context context){
+    public RecordsPagerAdapter(FragmentManager fm, Context context){
         super(fm);
         this.mContext = context;
     }
@@ -25,14 +27,14 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment notificationFragment = new NotificationFragment();
-        Fragment reminderFragment = new ReminderFragment();
+        Fragment recordsListPtsFragment = new RecordsListPtsFragment();
+        Fragment recordsListCreditFragment = new RecordsListCreditFragment();
 
         if(position == 0){
-            return notificationFragment;
+            return recordsListPtsFragment;
 
         }else{
-            return reminderFragment;
+            return recordsListCreditFragment;
 
         }
 
@@ -47,13 +49,13 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        String noti = mContext.getResources().getString(R.string.news_notification);
-        String remind = mContext.getResources().getString(R.string.news_reminder);
+        String pts = mContext.getResources().getString(R.string.transaction_pts);
+        String credit = mContext.getResources().getString(R.string.transaction_credit);
 
         if(position == 0){
-            return noti;
+            return pts;
         }else{
-            return remind;
+            return credit;
         }
 
     }

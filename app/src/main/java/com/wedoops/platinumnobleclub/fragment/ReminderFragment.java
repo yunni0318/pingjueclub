@@ -1,4 +1,4 @@
-package com.wedoops.platinumnobleclub;
+package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.NotificationAdapter;
 import com.wedoops.platinumnobleclub.adapters.ReminderAdapter;
 
