@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:fillViewport="true"
+    android:orientation="vertical"
     tools:context=".fragment.ReservationFragment">
 
     <LinearLayout
@@ -86,7 +86,6 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/edit_text_background"
                     android:gravity="center_vertical|left"
-
                     android:hint="Date "
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -113,17 +112,72 @@
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/sp1"
-                style="@style/SpinnerTheme"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="15dp"
-                android:dropDownVerticalOffset="50dp"
-                android:popupBackground="@color/black"
-                android:spinnerMode="dropdown"
-                android:textColor="@color/white" />
+            <!--            <Spinner-->
+            <!--                android:id="@+id/sp1"-->
+            <!--                style="@style/SpinnerTheme"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:layout_marginBottom="15dp"-->
+            <!--                android:dropDownVerticalOffset="50dp"-->
+            <!--                android:popupBackground="@color/black"-->
+            <!--                android:spinnerMode="dropdown"-->
+            <!--                android:textColor="@color/white" />-->
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Room Type"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout3_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/reservation_roomtype_background"
+                    android:gravity="center"
+                    >
+
+                    <TextView
+                        android:id="@+id/hall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Hall"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout3_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/reservation_roomtype_background"
+                    android:gravity="center"
+                    >
+
+                    <TextView
+                        android:id="@+id/room"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Room"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/sp2"
@@ -132,8 +186,8 @@
                 android:layout_height="50dp"
                 android:dropDownVerticalOffset="50dp"
                 android:popupBackground="@color/black"
-                android:spinnerMode="dropdown"
-                android:textColor="@color/white" />
+                android:spinnerMode="dialog"
+                android:textColor="@color/black" />
 
             <Button
                 android:id="@+id/btn_reservation"
@@ -141,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-               android:background="@drawable/btn_reservation_unselected"
+                android:background="@drawable/btn_reservation_unselected"
                 android:text="Submit"
                 android:textColor="@color/black" />
         </LinearLayout>

@@ -1,10 +1,12 @@
 package com.wedoops.platinumnobleclub.fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -31,14 +33,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wedoops.platinumnobleclub.CustomProgressDialog;
+import com.wedoops.platinumnobleclub.ForgotPasswordActivity;
+import com.wedoops.platinumnobleclub.LoginActivity;
 import com.wedoops.platinumnobleclub.R;
+import com.wedoops.platinumnobleclub.RoomTypeSelection;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,15 +60,16 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     private View view;
     private Context app;
     private Spinner sp1, sp2;
-    private TextView textview_calendar, textview_time;
+    private TextView textview_calendar, textview_time, hall, room;
     private DatePickerDialog datePickerDialog;
     private Button submit;
     private EditText name, username, contact;
     private com.wdullaer.materialdatetimepicker.time.TimePickerDialog timePickerDialog;
     private int Year, Month, Day, Hour, Minute;
-    private long _eventId, reservationtime, reservationdate,convertmili;
-    private String Date;
+    private long _eventId, reservationtime, reservationdate, convertmili;
+    private String Date, resultfromRoomSelection;
     private static CustomProgressDialog customDialog;
+    private RelativeLayout relativelayout3_2, relativelayout3_1;
 
 
 //    public ReservationFragment() {
@@ -110,51 +118,53 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 DateTimeDialogPicker();
             }
         });
-        List<String> roomtype = new ArrayList<String>();
-        roomtype.add("Room Type");
-        roomtype.add("1");
-        roomtype.add("2");
-        roomtype.add("3");
-        roomtype.add("4");
-
-        ArrayAdapter<String> adapter_roomtype = new ArrayAdapter<String>(getContext(), R.layout.spinner_layout, roomtype) {
-            @Override
-            public boolean isEnabled(int position) {
-                if (position == 0) {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if (position == 0) {
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
-
-                } else {
-                    tv.setTextColor(Color.WHITE);
-                }
-                return view;
-            }
-        };
-        adapter_roomtype.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        sp1.setAdapter(adapter_roomtype);
-        sp1.setSelection(0, false);
+//        List<String> roomtype = new ArrayList<String>();
+//        roomtype.add("Room Type");
+//        roomtype.add("Hall");
+//        roomtype.add("Room");
+//        roomtype.add("Room 1");
+//        roomtype.add("Room 2");
+//        roomtype.add("Room 3");
+//        roomtype.add("Room 4");
+//
+//        ArrayAdapter<String> adapter_roomtype = new ArrayAdapter<String>(getContext(), R.layout.spinner_layout, roomtype) {
+//            @Override
+//            public boolean isEnabled(int position) {
+//                if (position == 0 || position == 2) {
+//                    // Disable the first item from Spinner
+//                    // First item will be use for hint
+//                    return false;
+//                } else {
+//                    return true;
+//                }
+//            }
+//
+//            @Override
+//            public View getDropDownView(int position, View convertView,
+//                                        ViewGroup parent) {
+//                View view = super.getDropDownView(position, convertView, parent);
+//                TextView tv = (TextView) view;
+//                if (position == 0 || position == 2) {
+//                    // Set the hint text color gray
+//                    tv.setTextColor(Color.GRAY);
+//
+//                } else {
+//                    tv.setTextColor(Color.WHITE);
+//                }
+//                return view;
+//            }
+//        };
+//        adapter_roomtype.setDropDownViewResource(R.layout.spinner_dropdown_item);
+//        sp1.setAdapter(adapter_roomtype);
+//        sp1.setSelection(0, false);
 
 
         List<String> pax = new ArrayList<String>();
         pax.add("Pax");
-        pax.add("1");
-        pax.add("2");
-        pax.add("3");
-        pax.add("4");
+
+        for (int i = 1; i <= 30; i++) {
+            pax.add(String.valueOf(i));
+        }
 
         ArrayAdapter<String> adapter_pax = new ArrayAdapter<String>(getContext(), R.layout.spinner_layout, pax) {
             @Override
@@ -172,6 +182,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
+//                view.setBackgroundColor(Color.BLACK);
                 TextView tv = (TextView) view;
                 if (position == 0) {
                     // Set the hint text color gray
@@ -184,15 +195,16 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
             }
         };
         adapter_pax.setDropDownViewResource(R.layout.spinner_dropdown_item);
+//        adapter_pax.setDropDownViewResource(android.R.layout.simple_spinner_item);
+
         sp2.setAdapter(adapter_pax);
-        sp2.setSelection(0, false);
 
         return view;
     }
 
     private void setupDeclaration() {
 
-        sp1 = view.findViewById(R.id.sp1);
+//        sp1 = view.findViewById(R.id.sp1);
         sp2 = view.findViewById(R.id.sp2);
         textview_calendar = view.findViewById(R.id.textview_calendar);
         textview_time = view.findViewById(R.id.textview_time);
@@ -200,6 +212,10 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         username = view.findViewById(R.id.username);
         contact = view.findViewById(R.id.contact);
         submit = view.findViewById(R.id.btn_reservation);
+        relativelayout3_1 = view.findViewById(R.id.relativelayout3_1);
+        relativelayout3_2 = view.findViewById(R.id.relativelayout3_2);
+        hall = view.findViewById(R.id.hall);
+        room = view.findViewById(R.id.room);
 
         submit.setOnClickListener(new View.OnClickListener() {
 
@@ -371,26 +387,31 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 }
             }
         });
-        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (validateUsername() & validatename() & isValidDate() & isValidMobile() & isValidTime() & isvalidroom() & isvalidpax()) {
-                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_selected));
-                    submit.setEnabled(true);
-                } else {
-                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_unselected));
-                    submit.setTextColor(getResources().getColor(R.color.white));
-
-                    submit.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
+//        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                if (validateUsername() & validatename() & isValidDate() & isValidMobile() & isValidTime() & isvalidroom() & isvalidpax()) {
+//                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_selected));
+//                    submit.setEnabled(true);
+//                } else {
+//                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_unselected));
+//                    submit.setTextColor(getResources().getColor(R.color.white));
+//
+//                    submit.setEnabled(false);
+//                }
+//
+//                String input = sp1.getItemAtPosition(position).toString();
+//                input = input.replace("     - ", "");
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//                // your code here
+//            }
+//
+//        });
 
         sp2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -411,6 +432,42 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
             }
 
         });
+        relativelayout3_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                relativelayout3_1.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background_selected));
+                relativelayout3_2.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background));
+                hall.setTextColor(Color.WHITE);
+                room.setTextColor(Color.parseColor("#AAAAAA"));
+                room.setText("Room");
+            }
+        });
+        relativelayout3_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                relativelayout3_2.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background_selected));
+                relativelayout3_1.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background));
+                room.setTextColor(Color.WHITE);
+                hall.setTextColor(Color.parseColor("#AAAAAA"));
+                Intent intent = new Intent(getContext(), RoomTypeSelection.class);
+                startActivityForResult(intent, 101);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 101) {
+            if (resultCode == Activity.RESULT_OK) {
+                resultfromRoomSelection = data.getStringExtra("result");
+                room.setText(resultfromRoomSelection);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
     private void DateTimeDialogPicker() {
@@ -516,7 +573,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-        if(timeSet == "PM"){
+        if (timeSet == "PM") {
             hours = hours + 12;
         }
         long milliseconds = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(hours) + TimeUnit.MINUTES.toSeconds(mins));
@@ -608,12 +665,12 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     }
 
     private boolean isvalidroom() {
-        int count = sp1.getSelectedItemPosition();
-        if (count == 0) {
-            return false;
-        } else {
-            return true;
-        }
+//        int count = sp1.getSelectedItemPosition();
+//        if (count == 0) {
+//            return false;
+//        } else {
+        return true;
+//        }
     }
 
     private boolean isvalidpax() {

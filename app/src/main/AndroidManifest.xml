@@ -23,13 +23,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <!--        &lt;!&ndash;Advertisement Data&ndash;&gt;-->
-        <!--        <meta-data-->
-        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-        <!--            android:value="ca-app-pub-2772663182449117~6667300148" />-->
-
-
+        <activity android:name=".RoomTypeSelection"></activity>
+        <!-- &lt;!&ndash;Advertisement Data&ndash;&gt; -->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.gms.ads.APPLICATION_ID" -->
+        <!-- android:value="ca-app-pub-2772663182449117~6667300148" /> -->
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
@@ -38,13 +36,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
-
             <intent-filter android:priority="0">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -53,7 +48,6 @@
                 <data android:scheme="geo" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait" /> <!-- Sugar ORM -->
@@ -98,6 +92,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <service
             android:name="firebase.NotificationHandler"
             android:enabled="true"
@@ -107,4 +102,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>

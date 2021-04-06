@@ -32,23 +32,25 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Api_Constants {
+    //    testing environment
+    private static String url_authentication = "http://103.15.107.152:5770/api/Authentication/";
+    private static String url_dashboard = "http://103.15.107.152:5770/api/Dashboard/";
+    private static String url_event = "http://103.15.107.152:5770/api/Event/";
+    private static String url_eventbooking = "http://103.15.107.152:5770/api/EventBooking/";
+    private static String url_member = "http://103.15.107.152:5770/api/Member/";
+    private static String url_userwallet = "http://103.15.107.152:5770/api/UserWallet/";
+    private static String url_services = "http://103.15.107.152:5770/api/Services/";
+    private static String url_internat = "http://103.15.107.152:5770/api/Internet/";
 
-//    private static String url_authentication = "http://103.198.194.228:54126/api/Authentication/";
-//    private static String url_dashboard = "http://103.198.194.228:54126/api/Dashboard/";
-//    private static String url_event = "http://103.198.194.228:54126/api/Event/";
-//    private static String url_eventbooking = "http://103.198.194.228:54126/api/EventBooking/";
-//    private static String url_member = "http://103.198.194.228:54126/api/Member/";
-//    private static String url_userwallet = "http://103.198.194.228:54126/api/UserWallet/";
-//    private static String url_services = "http://103.198.194.228:54126/api/Services/";
 
-    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
-    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
-    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
-    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
-    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
-    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
-    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
-    private static String url_internat = "http://api.platinumnobleclub.com/api/Internet/";
+//    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
+//    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
+//    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
+//    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
+//    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
+//    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
+//    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
+//    private static String url_internat = "http://api.platinumnobleclub.com/api/Internet/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
@@ -95,17 +97,17 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(response),API_MEMBER_LOGIN_V2);
+                                    ((LoginActivity) context).processWSData(convertResponseToJsonObject(response), API_MEMBER_LOGIN_V2);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    if(error.networkResponse != null){
-                                        ((LoginActivity) context).processWSData(convertResponseToJsonObject(""),API_MEMBER_LOGIN_V2);
+                                    if (error.networkResponse != null) {
+                                        ((LoginActivity) context).processWSData(convertResponseToJsonObject(""), API_MEMBER_LOGIN_V2);
 
-                                    }else{
+                                    } else {
                                         ((LoginActivity) context).processWSData(null, API_MEMBER_LOGIN_V2);
 
                                     }
@@ -185,7 +187,7 @@ public class Api_Constants {
                                 public void onErrorResponse(VolleyError error) {
 
 
-                                    if(error.networkResponse != null){
+                                    if (error.networkResponse != null) {
                                         if (error.networkResponse.statusCode == 401) {
                                             MemberDashboardFragment.processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_DASHBOARDV2);
                                         } else {
@@ -193,7 +195,7 @@ public class Api_Constants {
 
 //                                        new DisplayAlertDialog().displayAlertDialogError(error.networkResponse.statusCode, context);
                                         }
-                                    }else{
+                                    } else {
                                         MemberDashboardFragment.processWSData(null, API_MEMBER_DASHBOARDV2);
 
                                     }
@@ -662,7 +664,7 @@ public class Api_Constants {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    if(error.networkResponse != null){
+                                    if (error.networkResponse != null) {
                                         if (error.networkResponse.statusCode == 401) {
                                             ((MainActivity) context).processWSData(convertResponseToJsonObject("{\"Success\":true,\"StatusCode\":401}"), API_MEMBER_QUICK_PROFILE);
                                         } else {
@@ -670,7 +672,7 @@ public class Api_Constants {
                                             ((MainActivity) context).processWSData(null, API_MEMBER_QUICK_PROFILE);
 
                                         }
-                                    }else{
+                                    } else {
                                         ((MainActivity) context).processWSData(null, API_MEMBER_QUICK_PROFILE);
 
                                     }
@@ -825,7 +827,7 @@ public class Api_Constants {
                     break;
                 }
 
-                case API_UPDATE_DEVICE_ID:{
+                case API_UPDATE_DEVICE_ID: {
 
                     StringRequest postRequest = new StringRequest(Request.Method.POST, url_authentication + "UpdateDeviceID",
                             new Response.Listener<String>() {
