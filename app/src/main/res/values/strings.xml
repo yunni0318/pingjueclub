@@ -77,6 +77,8 @@
     <string name="transaction_report_type_title">Type</string>
     <string name="transaction_report_amount_title">Amount</string>
     <string name="transaction_report_remarks_title">Remarks</string>
+    <string name="transaction_pts">Points Transaction</string>
+    <string name="transaction_credit">Credit Transaction</string>
     <string name="search_bar_hint">Key in ID No. to search</string>
     <string name="filter_all">All</string>
     <string name="filter_weekly">Weekly</string>
@@ -107,6 +109,10 @@
     <!-- Pay Fragment -->
     <string name="success_pay_msg">Success, Thank You!</string>
     <string name="success_transfer_msg">Points Have Been Transfer To </string>
+
+    <!-- News Fragment -->
+    <string name="news_notification">Notification</string>
+    <string name="news_reminder">Reminder</string>
 
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">Dashboard</string>

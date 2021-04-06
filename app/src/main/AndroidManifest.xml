@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission  android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application
         android:name=".helper.ApplicationClass"
@@ -23,6 +24,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <receiver android:name="firebase.ReminderBroadcast"/>
+
+        <!--        &lt;!&ndash;Advertisement Data&ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+        <!--            android:value="ca-app-pub-2772663182449117~6667300148" />-->
+
+
         <activity android:name=".RoomTypeSelection"></activity>
         <!-- &lt;!&ndash;Advertisement Data&ndash;&gt; -->
         <!-- <meta-data -->
@@ -75,7 +85,7 @@
             android:value="platinumnobleclub.db" />
         <meta-data
             android:name="VERSION"
-            android:value="4" />
+            android:value="5" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

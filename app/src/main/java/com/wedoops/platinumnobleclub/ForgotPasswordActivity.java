@@ -138,5 +138,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     }
 
+    public void button_back(View view){
+        this.onBackPressed();
+    }
+
 }
 

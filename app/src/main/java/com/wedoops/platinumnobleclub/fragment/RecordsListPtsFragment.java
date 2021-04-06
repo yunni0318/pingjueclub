@@ -40,7 +40,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.List;
 
-public class RecordsListFragment extends Fragment {
+public class RecordsListPtsFragment extends Fragment {
 
     private static RecyclerView recyclerview_transaction;
     private static View view;
@@ -378,7 +378,7 @@ public class RecordsListFragment extends Fragment {
                         ud_list.get(0).setRefreshToken(response_object.getString("RefreshToken"));
 
                         ud_list.get(0).save();
-                        RecordsListFragment.callCashWalletTransactionWebService();
+                        RecordsListPtsFragment.callCashWalletTransactionWebService();
                     } else {
 
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), get_activity.getApplicationContext(), get_activity);

@@ -21,7 +21,7 @@ import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
-import com.wedoops.platinumnobleclub.fragment.RecordsListFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.ServiceDetails;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 
@@ -75,7 +75,7 @@ public class Api_Constants {
     public static final int API_SERVICE_MERCHANT_LIST = 18;
     public static final int API_UPDATE_DEVICE_ID = 19;
     public static final int API_DISTRIBUTE_PENDING_AMOUNT = 20;
-
+    public static final int API_GET_ENCRYPTED_STRING = 21;
 
     public static final String COMMAND = "command";
 
@@ -577,14 +577,14 @@ public class Api_Constants {
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    RecordsListFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListPtsFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_V2);
                                 }
                             },
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
 
-                                    RecordsListFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
+                                    RecordsListPtsFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_V2);
 
                                 }
                             }
@@ -900,6 +900,50 @@ public class Api_Constants {
 
                     break;
                 }
+                case API_GET_ENCRYPTED_STRING:{
+
+                    String input= b.getString("memberID");
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_internal + "GetEncryptedString?input="+input,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ((MainActivity) context).processWSData(convertResponseToJsonObject(response), API_GET_ENCRYPTED_STRING);
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.toString());
+                                    ((MainActivity) context).processWSData(null, API_GET_ENCRYPTED_STRING);
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            Map<String, String> params = new HashMap<String, String>();
+                            //params.put("input", b.getString("memberID"));
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
                 default: {
                     break;
                 }

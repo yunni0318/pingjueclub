@@ -20,10 +20,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="25dp"
+            android:paddingLeft="20dp"
             android:paddingTop="15dp"
-            android:paddingRight="25dp"
+            android:paddingRight="20dp"
             android:paddingBottom="20dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="10dp"
+                android:onClick="button_back"
+                android:src="@drawable/back_arrow" />
 
             <ImageView
                 android:layout_width="230dp"

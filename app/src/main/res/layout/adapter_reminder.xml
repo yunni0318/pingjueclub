@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/remind_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_noti_dark"
+        android:layout_marginBottom="10dp"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/remind_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/remind_icon_white"
+            android:adjustViewBounds="true"/>
+
+        <TextView
+            android:id="@+id/remind_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/remind_icon"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Remember to include BEARER then follow by your ACCESSTOKEN in order to send your request."
+            />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
