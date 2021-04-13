@@ -44,7 +44,6 @@ public class RecordsListCreditFragment extends Fragment {
 
     private static RecyclerView recyclerview_transaction;
     private static View view;
-    private static Activity get_activity;
     private static Context get_context;
     private LinearLayout dateSelection, dateChoices;
     private static TextView dateType, weekly, monthly, yearly, dateAll;
@@ -72,16 +71,208 @@ public class RecordsListCreditFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        get_activity = getActivity();
-
-    }
-
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        customDialog = new CustomProgressDialog();
+        setupDeclaration();
+        recordFilter();
+    }
 
+    private void setupDeclaration() {
+        recyclerview_transaction = view.findViewById(R.id.recyclerview_credit);
+        dateType = view.findViewById(R.id.dateType_credit);
+        dateSelection = view.findViewById(R.id.dateSelection_credit);
+        dateChoices = view.findViewById(R.id.dateChoices);
+        dateAll = view.findViewById(R.id.dateAll_credit);
+        weekly = view.findViewById(R.id.dateWeekly_credit);
+        monthly = view.findViewById(R.id.dateMonthly_credit);
+        yearly = view.findViewById(R.id.dateYearly_credit);
+    }
+
+    private void recordFilter() {
+
+        dateSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dateChoices.getVisibility() == View.VISIBLE) {
+                    dateChoices.setVisibility(View.GONE);
+                } else {
+                    dateChoices.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        final String lang = new ApplicationClass().readFromSharedPreferences(get_context, KEY_LANG);
+
+        dateAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("All");
+                } else {
+                    dateType.setText("全部");
+                }
+
+                dateChoices.setVisibility(View.GONE);
+
+//                customDialog.showDialog(get_context);
+//
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<TransactionsReportData> trd_list_all = TransactionsReportData.listAll(TransactionsReportData.class);
+//
+//                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
+//
+//                        recyclerview_transaction.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                customDialog.hideDialog();
+//                            }
+//                        });
+//                    }
+//                }, 500);
+
+            }
+        });
+
+        weekly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("Weekly");}
+                else{
+                    dateType.setText("每星期");
+                }
+
+                Calendar cl = Calendar.getInstance();
+                cl.setFirstDayOfWeek(1);
+
+                //first day of week
+                cl.set(Calendar.DAY_OF_WEEK, 1);
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                //last day of week
+                cl.set(Calendar.DAY_OF_WEEK, 7);
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+//                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+//                String tdate_field = StringUtil.toSQLName("TDate");
+//
+//                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+                dateChoices.setVisibility(View.GONE);
+//
+//                customDialog.showDialog(get_context);
+//
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
+//
+//                        recyclerview_transaction.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                customDialog.hideDialog();
+//                            }
+//                        });
+//                    }
+//                }, 500);
+
+            }
+        });
+
+        monthly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("Monthly");}
+                else{
+                    dateType.setText("每个月");
+                }
+                Calendar cl = Calendar.getInstance();
+
+                //first day of month
+                cl.set(Calendar.DAY_OF_MONTH, cl.getActualMinimum(Calendar.DAY_OF_MONTH));
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+                //last day of week
+                cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+
+//                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+//                String tdate_field = StringUtil.toSQLName("TDate");
+//
+//                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+//
+//                customDialog.showDialog(get_context);
+                dateChoices.setVisibility(View.GONE);
+//
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
+//                        recyclerview_transaction.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                customDialog.hideDialog();
+//
+//                            }
+//                        });
+//                    }
+//                }, 500);
+
+            }
+        });
+
+        yearly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
+                    dateType.setText("Yearly");}
+                else{
+                    dateType.setText("每年");
+                }
+
+                Calendar cl = Calendar.getInstance();
+
+                //first day of year
+                cl.set(Calendar.DAY_OF_YEAR, cl.getActualMinimum(Calendar.DAY_OF_YEAR));
+                String date1 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+                //last day of year
+                cl.set(Calendar.DAY_OF_YEAR, cl.getActualMaximum(Calendar.DAY_OF_YEAR));
+                String date2 = DateFormat.format("yyyy-MM-dd'T'HH:mm:ss.sss", cl).toString();
+
+//                String table_name = TransactionsReportData.getTableName(TransactionsReportData.class);
+//                String tdate_field = StringUtil.toSQLName("TDate");
+//
+//                final List<TransactionsReportData> trd_list_all = TransactionsReportData.findWithQuery(TransactionsReportData.class, "SELECT * from " + table_name + " where " + tdate_field + " between '" + date1 + "' " + " and " + "'" + date2 + "'");
+//
+//                customDialog.showDialog(get_context);
+//
+                dateChoices.setVisibility(View.GONE);
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        records_list_adapter.UpdateRecordListAdapter(trd_list_all);
+//                        recyclerview_transaction.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                customDialog.hideDialog();
+//
+//                            }
+//                        });
+//                    }
+//                }, 500);
+
+            }
+        });
     }
 }
