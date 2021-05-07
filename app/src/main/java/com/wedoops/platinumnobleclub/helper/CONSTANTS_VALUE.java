@@ -8,6 +8,9 @@ public class CONSTANTS_VALUE {
     public static final String USER_LEVEL_CODE_SILVER = "SILVER";
     public static final String USER_LEVEL_CODE_GOLD = "GOLD";
     public static final String USER_LEVEL_CODE_PLATINUM = "PLATINUM";
+    public static final String USER_LEVEL_CODE_KNIGHT = "KNIGHT";
+    public static final String USER_LEVEL_CODE_MARQUESS = "MARQUESS";
+    public static final String USER_LEVEL_CODE_DUKE = "UDKE";
     public static final String EVENT_TOP_BANNER_ADVERTISEMENT = "ADVERTISEMENT";
     public static final String EVENT_TOP_BANNER_NEWTRIP = "NEWTRIP";
     public static final String EVENT_CATEGORY_CLASS = "CLASS";

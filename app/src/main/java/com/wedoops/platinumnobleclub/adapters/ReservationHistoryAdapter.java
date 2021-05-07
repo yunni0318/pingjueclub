@@ -1,5 +1,7 @@
 package com.wedoops.platinumnobleclub.adapters;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.MyBookingList;
+import com.wedoops.platinumnobleclub.database.Reservation_History;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
 import java.math.BigDecimal;
@@ -31,12 +34,13 @@ import java.util.TimeZone;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationHistoryAdapter.MyViewHolder> {
-    private List<MyBookingList> mbl;
+    private List<Reservation_History> mbl;
     private View.OnClickListener mOnItemClickListener;
+    private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView remind_title, remind_desc, date_month, date_day, date_time;
+        public TextView reservation_roomtype, remind_desc, date_month, date_day, date_time, ReservationNumber, reservation_pax, reservation_status;
 
         public MyViewHolder(View v) {
             super(v);
@@ -45,8 +49,12 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
             date_month = v.findViewById(R.id.date_month);
             date_time = v.findViewById(R.id.date_time);
             date_day = v.findViewById(R.id.date_day);
-            remind_title = v.findViewById(R.id.remind_title);
-            remind_desc = v.findViewById(R.id.remind_desc);
+            reservation_roomtype = v.findViewById(R.id.reservation_roomtype);
+            reservation_pax = v.findViewById(R.id.reservation_pax);
+            reservation_status = v.findViewById(R.id.reservation_status);
+            remind_desc = v.findViewById(R.id.reservation_desc);
+            ReservationNumber = v.findViewById(R.id.reservation_number);
+
 
             Typeface typeface = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/poppins-v6-latin-regular.ttf");
 //            remind_icon.setTypeface(typeface);
@@ -58,8 +66,9 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ReservationHistoryAdapter(List<MyBookingList> mbl) {
+    public ReservationHistoryAdapter(List<Reservation_History> mbl,Context context) {
         this.mbl = mbl;
+        this.context = context;
     }
 
     @NonNull
@@ -75,7 +84,7 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
     @Override
     public void onBindViewHolder(@NonNull final ReservationHistoryAdapter.MyViewHolder myViewHolder, int i) {
 
-        String ts = mbl.get(i).getEventStartDate();
+        String ts = mbl.get(i).getReservationtDate();
         String date = ts.split("T")[0];
         String[] splitDate = date.split("-");
         String day = splitDate[2];
@@ -84,6 +93,31 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         //Getting months as 1,2 instead of 01,02
         month = Integer.valueOf(month).toString();
 
+
+        String time = ts.split("T")[1];
+        String[] splittime = time.split(":");
+        String hours = splittime[0];
+        String min = splittime[1];
+        String timeSet, strMin;
+        int h = Integer.parseInt(hours);
+        int m = Integer.parseInt(min);
+        if (h > 12) {
+            h -= 12;
+            timeSet = "PM";
+        } else if (h == 0) {
+            h += 12;
+            timeSet = "AM";
+        } else if (h == 12)
+            timeSet = "PM";
+        else
+            timeSet = "AM";
+        //=====Adding zero in one dightleft  and right======
+        if (m < 10)
+            strMin = "0" + m;
+        else
+            strMin = String.valueOf(m);
+        String aTime = new StringBuilder().append(pad(h)).append(':')
+                .append(pad(Integer.parseInt(strMin))).append(" ").append(timeSet).toString();
         //Change Month name from Month Numbers
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat month_date = new SimpleDateFormat("MMM");
@@ -94,9 +128,33 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
 
         myViewHolder.date_month.setText(month_name);
         myViewHolder.date_day.setText(day);
-        myViewHolder.date_time.setText("5.00 PM");
-        myViewHolder.remind_desc.setText(mbl.get(i).getEventDescription());
-        myViewHolder.remind_title.setText(mbl.get(i).getEventName());
+        myViewHolder.date_time.setText(aTime);
+        myViewHolder.remind_desc.setText(mbl.get(i).getProductDescription());
+        myViewHolder.reservation_roomtype.setText(context.getString(R.string.reservations_room_type) + mbl.get(i).getProductName());
+        myViewHolder.reservation_pax.setText(context.getString(R.string.reservations_pax) + mbl.get(i).getEstimateParticipant());
+        myViewHolder.ReservationNumber.setText(context.getString(R.string.reservations_ReservationNumber) + mbl.get(i).getReservationNumber());
+        if (mbl.get(i).getReservationStatus().equals("NEW")) {
+            myViewHolder.reservation_status.setTextColor(Color.YELLOW);
+            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
+
+        } else if (mbl.get(i).getReservationStatus().equals("APPROVED")) {
+            myViewHolder.reservation_status.setTextColor(Color.GREEN);
+            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_APPROVED));
+
+        } else if (mbl.get(i).getReservationStatus().equals("REJECTED")) {
+            myViewHolder.reservation_status.setTextColor(Color.RED);
+            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_REJECTED));
+
+        }
+
+
+    }
+
+    private String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
     }
 
     public void setOnBookingListItemClickListener(View.OnClickListener itemClickListener) {

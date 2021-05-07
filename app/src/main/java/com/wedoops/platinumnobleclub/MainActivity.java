@@ -1,6 +1,7 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.graphics.Color;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,9 +21,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.BuildConfig;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,6 +54,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,6 +64,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
@@ -434,6 +446,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 QRcodeDialog qRcodeDialog = new QRcodeDialog(MainActivity.this);
                 qRcodeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 qRcodeDialog.show();
+//                Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+//                dialog.setContentView(R.layout.qrcode_dialog);
+//                dialog.show();
+
             }
         });
 
@@ -600,6 +616,20 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 textview_user_rank.setText(getResources().getString(R.string.userrank_platinum));
             }
 
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
+                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                textview_user_rank.setText(getResources().getString(R.string.userrank_knight));
+            }
+
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                textview_user_rank.setText(getResources().getString(R.string.userrank_marquess));
+            }
+
+            if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
+                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                textview_user_rank.setText(getResources().getString(R.string.userrank_duke));
+            }
 
             textview_user_nickname.setText(ud.get(0).getNickName());
 
@@ -1086,7 +1116,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
                         Bundle b = new Bundle();
                         b.putString("access_token", ud_list2.get(0).getAccessToken());
-                        b.putString("memberID", "1234567890"); //put memberID to process encryption
+                        b.putString("memberID", ud_list2.get(0).getCardID()); //put memberID to process encryption
                         b.putInt(Api_Constants.COMMAND, Api_Constants.API_GET_ENCRYPTED_STRING);
 
                         new CallWebServices(Api_Constants.API_GET_ENCRYPTED_STRING, MainActivity.this, true).execute(b);
@@ -1262,4 +1292,54 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .withMaxResultSize(300, 300)
                 .start(this);
     }
+//    private void displayResult() {
+//
+//        List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
+//
+////        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.default_profile).into(imageview_user_profile);
+//        Glide.with(c)
+//                .asBitmap()
+//                .load(ud_list.get(0).getProfilePictureImagePath())
+//                .timeout(10000)
+//                .placeholder(R.drawable.default_profile)
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        userImage.setImageBitmap(resource);
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                    }
+//                });
+//
+//        memberName.setText(ud_list.get(0).getName());
+//        memberID.setText("ID: "+ud_list.get(0).getLoginID());
+//        String text = ud_list.get(0).getCardID();
+//        text = text.substring(0, 4) + "-" +text.substring(4, 8) + "-" + text.substring(8, text.length());
+//
+//        member_num.setText(text);
+//
+//    }
+//
+//    private void genQRcode() {
+//
+//        List<MemberIDEncryted> memID = MemberIDEncryted.listAll(MemberIDEncryted.class);
+//        String s = memID.get(0).getEncryptedString();
+//
+//        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+//        try {
+//            Map<EncodeHintType, Object> hintMap = new HashMap<EncodeHintType, Object>();
+//            hintMap.put(EncodeHintType.MARGIN, new Integer(1));
+//            BitMatrix bitMatrix = multiFormatWriter.encode(s, BarcodeFormat.QR_CODE, 800, 800, hintMap);
+//            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+//            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+//            qrcode.setImageBitmap(bitmap);
+//
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
 }

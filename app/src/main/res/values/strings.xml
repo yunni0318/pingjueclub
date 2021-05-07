@@ -200,6 +200,9 @@
     <string name="userrank_silver">SILVER</string>
     <string name="userrank_gold">GOLD</string>
     <string name="userrank_platinum">PLATINUM</string>
+    <string name="userrank_knight">KNIGHT</string>
+    <string name="userrank_marquess">MARQUESS</string>
+    <string name="userrank_duke">DUKE</string>
     <string-array name="imagePicker">
         <item>From Gallery</item>
         <item>From Camera</item>
@@ -211,4 +214,21 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_menu_Notification">Notification</string>
+    <string name="reservations_customer_information">Customer Information:</string>
+    <string name="reservations_member_id_username">Member ID / Username</string>
+    <string name="name">Name</string>
+    <string name="reservations_contact_number">Contact Number</string>
+    <string name="reservations_date">"Date "</string>
+    <string name="reservations_time">Time</string>
+    <string name="reservations_hall">Hall</string>
+    <string name="reservations_room">Private Room</string>
+    <string name="reservations_pax">Pax </string>
+    <string name="reservations_room_type">Room Type </string>
+    <string name="reservations_ReservationNumber">"Reservation # "</string>
+    <string name="reservations_NEW">NEW</string>
+    <string name="reservations_APPROVED">APPROVED</string>
+    <string name="reservations_REJECTED">REJECTED</string>
+    <string name="EstimateParticipant">"EstimateParticipant :  "</string>
+    <string name="Profile_title">Profile</string>
+    <string name="credit_title">Credit</string>
 </resources>

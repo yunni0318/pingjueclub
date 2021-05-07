@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,10 +7,21 @@
     tools:context=".RoomTypeSelection"
     android:background="@color/black">
 
+    <ImageView
+        android:id="@+id/toolbar_back"
+        android:layout_width="30dp"
+        android:layout_height="?actionBarSize"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:onClick="button_back"
+        android:src="@drawable/back_arrow_gold"/>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/toolbar_back"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-      />
+        android:layout_height="match_parent"      />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

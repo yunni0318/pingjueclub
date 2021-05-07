@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="15dp"
-                android:text="Customer Information:"
+                android:text="@string/reservations_customer_information"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
@@ -34,7 +34,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/edit_text_background"
-                android:hint="Member ID / Username"
+                android:hint="@string/reservations_member_id_username"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:singleLine="true"
@@ -48,7 +48,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/edit_text_background"
-                android:hint="Name"
+                android:hint="@string/name"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:singleLine="true"
@@ -62,7 +62,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/edit_text_background"
-                android:hint="Contact Number"
+                android:hint="@string/reservations_contact_number"
                 android:inputType="number"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -86,7 +86,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/edit_text_background"
                     android:gravity="center_vertical|left"
-                    android:hint="Date "
+                    android:hint="@string/reservations_date"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:singleLine="true"
@@ -101,7 +101,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/edit_text_background"
                     android:gravity="center_vertical|left"
-                    android:hint="Time"
+                    android:hint="@string/reservations_time"
                     android:paddingLeft="20dp"
 
                     android:paddingRight="20dp"
@@ -126,7 +126,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Room Type"
+                android:text="@string/reservations_room_type"
                 android:layout_marginBottom="5dp"
                 android:textColor="@color/white"/>
 
@@ -151,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="Hall"
+                        android:text="@string/reservations_hall"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="14sp" />
 
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="Room"
+                        android:text="@string/reservations_room"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="14sp" />
 
@@ -196,7 +196,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/btn_reservation_unselected"
-                android:text="Submit"
+                android:text="@string/forgotpassword_activity_button_submit"
                 android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>

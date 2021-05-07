@@ -7,6 +7,7 @@ public class UserDetails extends SugarRecord {
     private String refreshToken;
     private String Srno;
     private String LoginID;
+    private String CardID;
     private String Name;
     private String NickName;
     private String DOB;
@@ -26,13 +27,14 @@ public class UserDetails extends SugarRecord {
 
     }
 
-    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String name, String nickname, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet, boolean gotNewTopUp) {
+    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String cardID, String name, String nickName, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet, boolean gotNewTopUp) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         Srno = srno;
         LoginID = loginID;
+        CardID = cardID;
         Name = name;
-        this.NickName = nickname;
+        NickName = nickName;
         this.DOB = DOB;
         Email = email;
         Phone = phone;
@@ -44,7 +46,15 @@ public class UserDetails extends SugarRecord {
         UserLevelCode = userLevelCode;
         JoinedDate = joinedDate;
         CashWallet = cashWallet;
-        this.GotNewTopUp = gotNewTopUp;
+        GotNewTopUp = gotNewTopUp;
+    }
+
+    public String getCardID() {
+        return CardID;
+    }
+
+    public void setCardID(String cardID) {
+        CardID = cardID;
     }
 
     public String getAccessToken() {

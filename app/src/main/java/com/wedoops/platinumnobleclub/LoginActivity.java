@@ -251,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         String Srno = String.valueOf(user_profile_object.getInt("Srno"));
                         String LoginID = user_profile_object.getString("LoginID");
+                        String CardID = user_profile_object.getString("CardID");
                         String Name = user_profile_object.getString("Name");
                         String NickName = user_profile_object.getString("NickName");
                         String DOB = user_profile_object.getString("DOB");
@@ -267,7 +268,7 @@ public class LoginActivity extends AppCompatActivity {
                         boolean gotnewtopup = user_profile_object.getBoolean("GotNewTopUp");
 
 
-                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet, gotnewtopup);
+                        UserDetails ud = new UserDetails(accessToken, refreshToken, Srno, LoginID, CardID, Name, NickName, DOB, Email, Phone, CountryCode, StateCode, Address, Gender, ProfilePictureImagePath, UserLevelCode, JoinedDate, CashWallet, gotnewtopup);
                         ud.save();
 
                         new ApplicationClass(this).writeIntoSharedPreferences(this, CONSTANTS_VALUE.SHAREDPREFECENCE_MEMBER_LOGIN_PASSWORD, edittext_password.getText().toString());

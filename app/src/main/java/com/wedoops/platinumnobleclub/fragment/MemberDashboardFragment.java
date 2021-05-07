@@ -647,6 +647,7 @@ public class MemberDashboardFragment extends Fragment {
 
                         ud.setSrno(user_quick_profile_object.getString("Srno"));
                         ud.setLoginID(user_quick_profile_object.getString("LoginID"));
+                        ud.setCardID(user_quick_profile_object.getString("CardID"));
                         ud.setName(user_quick_profile_object.getString("Name"));
                         ud.setNickName(user_quick_profile_object.getString("NickName"));
                         ud.setDOB(user_quick_profile_object.getString("DOB"));

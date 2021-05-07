@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,15 +34,19 @@ import com.wedoops.platinumnobleclub.database.MemberIDEncryted;
 import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class QRcodeDialog extends Dialog implements View.OnClickListener {
 
     public Context c;
     public ImageView qrcode, btn_close, userImage;
-    private TextView memberName, memberID;
+    private TextView memberName, memberID,member_num;
 
     public QRcodeDialog(@NonNull Context context) {
         super(context);
@@ -52,12 +58,17 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.qrcode_dialog);
+        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        int screenWidth = (int) (metrics.widthPixels * 0.99);
+
+
+        getWindow().setLayout(screenWidth, ViewGroup.LayoutParams.MATCH_PARENT);
         qrcode = findViewById(R.id.QRCode_image);
         btn_close = findViewById(R.id.btn_close);
         userImage = findViewById(R.id.qr_user_profile);
         memberName = findViewById(R.id.member_name);
         memberID = findViewById(R.id.member_ID);
-
+        member_num = findViewById(R.id.member_ID_number);
         btn_close.setOnClickListener(this);
         displayResult();
         genQRcode();
@@ -87,6 +98,10 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
 
         memberName.setText(ud_list.get(0).getName());
         memberID.setText("ID: "+ud_list.get(0).getLoginID());
+        String text = ud_list.get(0).getCardID();
+        text = text.substring(0, 4) + "-" +text.substring(4, 8) + "-" + text.substring(8, text.length());
+
+        member_num.setText(text);
 
     }
 

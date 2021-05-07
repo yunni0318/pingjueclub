@@ -33,6 +33,9 @@ android {
             debuggable = false
         }
     }
+    packagingOptions {
+        pickFirst '**/*.so'
+    }
 
     bundle {
         language {
@@ -65,6 +68,7 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation "com.github.skydoves:powermenu:2.1.2"
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.sdsmdg.harjot:longshadows:1.0.1'
 
 
     api 'com.theartofdev.edmodo:android-image-cropper:2.7.0'

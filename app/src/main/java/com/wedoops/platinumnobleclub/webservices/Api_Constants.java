@@ -23,6 +23,8 @@ import com.wedoops.platinumnobleclub.MyBookingDetail;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.ServiceDetails;
+import com.wedoops.platinumnobleclub.fragment.ReservationFragment;
+import com.wedoops.platinumnobleclub.fragment.ReservationHistoryFragment;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
 
 import org.json.JSONObject;
@@ -40,8 +42,8 @@ public class Api_Constants {
     private static String url_member = "http://103.15.107.152:5770/api/Member/";
     private static String url_userwallet = "http://103.15.107.152:5770/api/UserWallet/";
     private static String url_services = "http://103.15.107.152:5770/api/Services/";
-    private static String url_internal = "http://103.15.107.152:5770/api/Internet/";
-
+    private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
+    private static String url_Reservation = "http://103.15.107.152:5770/api/Reservation/";
 
 //    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
 //    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
@@ -76,6 +78,12 @@ public class Api_Constants {
     public static final int API_UPDATE_DEVICE_ID = 19;
     public static final int API_DISTRIBUTE_PENDING_AMOUNT = 20;
     public static final int API_GET_ENCRYPTED_STRING = 21;
+    public static final int API_MakeReservation = 22;
+    public static final int API_MyReservationList = 23;
+    public static final int API_MyReservation = 24;
+    public static final int API_ProductDetails = 25;
+    public static final int API_RetriveAllProduct = 26;
+
 
     public static final String COMMAND = "command";
 
@@ -900,11 +908,11 @@ public class Api_Constants {
 
                     break;
                 }
-                case API_GET_ENCRYPTED_STRING:{
+                case API_GET_ENCRYPTED_STRING: {
 
-                    String input= b.getString("memberID");
+                    String input = b.getString("memberID");
 
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_internal + "GetEncryptedString?input="+input,
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_internal + "GetEncryptedString?input=" + input,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -938,6 +946,119 @@ public class Api_Constants {
                             return params;
                         }
 
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+                case API_MakeReservation: {
+
+
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url_Reservation + "MakeReservation",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ReservationFragment.processWSData(convertResponseToJsonObject(response), API_MakeReservation);
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error.Response", error.toString());
+                                    ReservationFragment.processWSData(null, API_MakeReservation);
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("ProductGUID", b.getString("ProductGUID"));
+                            params.put("ReservationName", b.getString("ReservationName"));
+                            params.put("ReservationDate", b.getString("ReservationDate"));
+                            params.put("NumberPax", b.getString("NumberPax"));
+                            params.put("Remark", b.getString("Remark"));
+
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+                case API_RetriveAllProduct: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_Reservation + "RetriveAllProduct",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ReservationFragment.processWSData(convertResponseToJsonObject(response), API_RetriveAllProduct);
+                                    Log.e("Response", response.toString());
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    ReservationFragment.processWSData(null, API_RetriveAllProduct);
+                                    Log.e("Error.Response", error.toString());
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+                case API_MyReservationList: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_Reservation + "MyReservationList",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    ReservationHistoryFragment.processWSData(convertResponseToJsonObject(response), API_MyReservationList);
+                                    Log.e("Response", response.toString());
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    ReservationHistoryFragment.processWSData(null, API_MyReservationList);
+                                    Log.e("Error.Response", error.toString());
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
                     };
                     queue.add(postRequest);
 

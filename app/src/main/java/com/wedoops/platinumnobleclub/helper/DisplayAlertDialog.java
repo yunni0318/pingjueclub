@@ -14,6 +14,7 @@ import com.wedoops.platinumnobleclub.EventDetailActivity;
 import com.wedoops.platinumnobleclub.LoginActivity;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.UserDetails;
+import com.wedoops.platinumnobleclub.fragment.ReservationFragment;
 
 import java.util.List;
 
@@ -131,7 +132,6 @@ public class DisplayAlertDialog {
             @Override
             public void onClick(View v) {
                 alert.dismiss();
-
             }
         });
 
@@ -390,6 +390,10 @@ public class DisplayAlertDialog {
             }
             case 3505: {
                 message = context.getString(R.string.error_3505);
+                break;
+            }
+            case 200: {
+                message = context.getString(R.string.success_title);
                 break;
             }
 
