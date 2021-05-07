@@ -21,6 +21,7 @@ import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
+import com.wedoops.platinumnobleclub.fragment.RecordsListCreditFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
 import com.wedoops.platinumnobleclub.ServiceDetails;
 import com.wedoops.platinumnobleclub.fragment.ServicesFragment;
@@ -76,6 +77,7 @@ public class Api_Constants {
     public static final int API_UPDATE_DEVICE_ID = 19;
     public static final int API_DISTRIBUTE_PENDING_AMOUNT = 20;
     public static final int API_GET_ENCRYPTED_STRING = 21;
+    public static final int API_CASH_WALLET_TRANSACTION_CLUB = 22;
 
     public static final String COMMAND = "command";
 
@@ -939,6 +941,43 @@ public class Api_Constants {
                         }
 
                     };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_CASH_WALLET_TRANSACTION_CLUB: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_userwallet + "CashWalletTransactionClub",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    RecordsListCreditFragment.processWSData(convertResponseToJsonObject(response), API_CASH_WALLET_TRANSACTION_CLUB);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    RecordsListCreditFragment.processWSData(null, API_CASH_WALLET_TRANSACTION_CLUB);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                    };
+                    postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                            20000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     queue.add(postRequest);
 
                     break;
