@@ -2,6 +2,8 @@ package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private String currentPhotoPath = "";
     private static CustomProgressDialog customDialog;
     private AlertDialog alert;
-
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupViewByID();
         setupToolbar();
         setupNavigationDrawer();
-
+        getNotification();
 
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
@@ -446,10 +448,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 QRcodeDialog qRcodeDialog = new QRcodeDialog(MainActivity.this);
                 qRcodeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 qRcodeDialog.show();
-//                Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
-//                dialog.setContentView(R.layout.qrcode_dialog);
-//                dialog.show();
-
             }
         });
 
@@ -1292,54 +1290,16 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .withMaxResultSize(300, 300)
                 .start(this);
     }
-//    private void displayResult() {
-//
-//        List<UserDetails> ud_list = UserDetails.listAll(UserDetails.class);
-//
-////        Glide.with(view.getContext()).load(ud_list.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).timeout(10000).placeholder(R.drawable.default_profile).into(imageview_user_profile);
-//        Glide.with(c)
-//                .asBitmap()
-//                .load(ud_list.get(0).getProfilePictureImagePath())
-//                .timeout(10000)
-//                .placeholder(R.drawable.default_profile)
-//                .into(new CustomTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                        userImage.setImageBitmap(resource);
-//
-//                    }
-//
-//                    @Override
-//                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                    }
-//                });
-//
-//        memberName.setText(ud_list.get(0).getName());
-//        memberID.setText("ID: "+ud_list.get(0).getLoginID());
-//        String text = ud_list.get(0).getCardID();
-//        text = text.substring(0, 4) + "-" +text.substring(4, 8) + "-" + text.substring(8, text.length());
-//
-//        member_num.setText(text);
-//
-//    }
-//
-//    private void genQRcode() {
-//
-//        List<MemberIDEncryted> memID = MemberIDEncryted.listAll(MemberIDEncryted.class);
-//        String s = memID.get(0).getEncryptedString();
-//
-//        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-//        try {
-//            Map<EncodeHintType, Object> hintMap = new HashMap<EncodeHintType, Object>();
-//            hintMap.put(EncodeHintType.MARGIN, new Integer(1));
-//            BitMatrix bitMatrix = multiFormatWriter.encode(s, BarcodeFormat.QR_CODE, 800, 800, hintMap);
-//            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-//            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-//            qrcode.setImageBitmap(bitmap);
-//
-//        } catch (WriterException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
+    private void getNotification() {
+
+        mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("com.wedoops.platinumnobleclub")) {
+                }
+            }
+        };
+    }
 }
