@@ -70,6 +70,11 @@ public class NotificationHandler extends FirebaseMessagingService {
                     sendNotification(remoteMessage);
                 }
             }
+            else {
+                if (remoteMessage.getData().get("IsSuccess").equals("true")) {
+                    sendNotification(remoteMessage);
+                }
+            }
         }
 
     }

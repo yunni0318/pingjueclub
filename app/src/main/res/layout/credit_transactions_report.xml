@@ -57,7 +57,7 @@
             android:layout_weight="0.04" />
 
         <LinearLayout
-            android:id="@+id/dateSelection"
+            android:id="@+id/dateSelection_credit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -71,7 +71,7 @@
 
 
             <TextView
-                android:id="@+id/dateType"
+                android:id="@+id/dateType_credit"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:drawableEnd="@drawable/ic_play_arrow_black_24dp"
@@ -103,7 +103,7 @@
             android:paddingBottom="20dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_transaction"
+                android:id="@+id/recyclerview_credit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp" />
@@ -129,7 +129,7 @@
             app:layout_anchorGravity="end">
 
             <TextView
-                android:id="@+id/dateAll"
+                android:id="@+id/dateAll_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -140,7 +140,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/dateWeekly"
+                android:id="@+id/dateWeekly_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -151,7 +151,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/dateMonthly"
+                android:id="@+id/dateMonthly_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -163,7 +163,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/dateYearly"
+                android:id="@+id/dateYearly_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

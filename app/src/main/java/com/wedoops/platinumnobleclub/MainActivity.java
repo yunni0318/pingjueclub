@@ -1,6 +1,8 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -141,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private String currentPhotoPath = "";
     private static CustomProgressDialog customDialog;
     private AlertDialog alert;
-
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupViewByID();
         setupToolbar();
         setupNavigationDrawer();
-
+        getNotification();
 
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
@@ -1261,5 +1263,17 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .withAspectRatio(1, 1)
                 .withMaxResultSize(300, 300)
                 .start(this);
+    }
+
+    private void getNotification() {
+
+        mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("com.wedoops.platinumnobleclub")) {
+                }
+            }
+        };
     }
 }
