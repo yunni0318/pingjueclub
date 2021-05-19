@@ -1,11 +1,12 @@
 package com.wedoops.platinumnobleclub.fragment;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,8 +34,10 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orm.StringUtil;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wedoops.platinumnobleclub.CustomProgressDialog;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.RoomTypeSelection;
@@ -59,14 +62,14 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
-public class ReservationFragment extends Fragment implements com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener {
+public class ReservationFragment extends Fragment implements com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
 
     private View view;
     private static Context app;
     private static Activity getactivity;
     private Spinner sp1, sp2;
     private TextView textview_calendar, textview_time, hall, room;
-    private DatePickerDialog datePickerDialog;
+    private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
     private Button submit;
     private EditText name, username, contact;
     private com.wdullaer.materialdatetimepicker.time.TimePickerDialog timePickerDialog;
@@ -489,60 +492,106 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
     private void DateTimeDialogPicker() {
 
-        final Calendar cldr = Calendar.getInstance();
-        final int day = cldr.get(Calendar.DAY_OF_MONTH);
-        final int month = cldr.get(Calendar.MONTH);
-        final int year = cldr.get(Calendar.YEAR);
         // date picker dialog
-        datePickerDialog = new DatePickerDialog(getContext(), R.style.TimePickerTheme,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Year = year;
-                        Month = monthOfYear;
-                        Day = dayOfMonth;
+        datePickerDialog = DatePickerDialog.newInstance(ReservationFragment.this, Year, Month, Day);
+        datePickerDialog.setThemeDark(false);
+        datePickerDialog.setAccentColor(getResources().getColor(R.color.colorPrimary));
 
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(0);
-                        cal.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
-                        Date chosenDate = cal.getTime();
-                        Date cldrDate = cldr.getTime();
-                        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        String DateTime = newFormat.format(chosenDate);
-                        SimpleDateFormat newFormat1 = new SimpleDateFormat("dd MMM yyyy");
-                        String DateTime2 = newFormat1.format(chosenDate);
-                        Date = DateTime2;
-//                        Date_for_API =  DateTime;
-                        reservationdate = cal.getTimeInMillis();
-                        textview_calendar.setText(DateTime2);
-                        timeDialogPicker();
-//                        if (DateTime2.equals(DateTime3)) {
-//                            reservationdate = DateTime2;
-//                            textview_calendar.setText(reservationdate);
-//                            timeDialogPicker();
+
+        // Setting Min Date to today date
+        Calendar min_date_c = Calendar.getInstance();
+        datePickerDialog.setMinDate(min_date_c);
+
+
+        // Setting Max Date to next 2 years
+        Calendar max_date_c = Calendar.getInstance();
+        max_date_c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        max_date_c.add(Calendar.DATE, 15); //2 week after
+
+        datePickerDialog.setMaxDate(max_date_c);
+
+
+
+        //Disable all SUNDAYS and SATURDAYS between Min and Max Dates
+        for (Calendar loopdate = min_date_c; min_date_c.before(max_date_c); min_date_c.add(Calendar.DATE, 1), loopdate = min_date_c) {
+            int dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == Calendar.SUNDAY) {
+                Calendar[] disabledDays =  new Calendar[1];
+                disabledDays[0] = loopdate;
+                datePickerDialog.setDisabledDays(disabledDays);
+            }
+        }
+
+
+        datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+    }
+
+//        datePickerDialog = new DatePickerDialog(getContext(), R.style.TimePickerTheme,
+//                new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                        Year = year;
+//                        Month = monthOfYear;
+//                        Day = dayOfMonth;
 //
-//                        } else if (cldr.before(cal)) {
-//                            reservationdate = DateTime2;
-//                            textview_calendar.setText(reservationdate);
-//                            timeDialogPicker();
+//                        Calendar cal = Calendar.getInstance();
+//                        cal.setTimeInMillis(0);
+//                        cal.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+//                        Date chosenDate = cal.getTime();
+//                        Date cldrDate = cldr.getTime();
+//                        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                        String DateTime = newFormat.format(chosenDate);
+//                        SimpleDateFormat newFormat1 = new SimpleDateFormat("dd MMM yyyy");
+//                        String DateTime2 = newFormat1.format(chosenDate);
+//                        Date = DateTime2;
+////                        Date_for_API =  DateTime;
+//                        reservationdate = cal.getTimeInMillis();
+//                        textview_calendar.setText(DateTime2);
+//                        timeDialogPicker();
+////                        if (DateTime2.equals(DateTime3)) {
+////                            reservationdate = DateTime2;
+////                            textview_calendar.setText(reservationdate);
+////                            timeDialogPicker();
+////
+////                        } else if (cldr.before(cal)) {
+////                            reservationdate = DateTime2;
+////                            textview_calendar.setText(reservationdate);
+////                            timeDialogPicker();
+////
+////                        } else {
+////                            Toast.makeText(app, "Invalid Date", Toast.LENGTH_LONG).show();
+////                        }
 //
-//                        } else {
-//                            Toast.makeText(app, "Invalid Date", Toast.LENGTH_LONG).show();
-//                        }
+//                    }
+//
+//                }, year, month, day);
+//
+//        //set Dates of start and end of current week
+//        Calendar calen = Calendar.getInstance();
+//        calen.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//        calen.add(Calendar.DATE, 14); //2 week after
+//        long after2week = calen.getTimeInMillis();
+//
+//        //if tomorrow  need add  +  (System.currentTimeMillis() 24 * 60 * 60 * 1000)
+//        datePickerDialog.setMinDate(System.currentTimeMillis());
+//        datePickerDialog.setMaxDate(after2week);
+//        datePickerDialog.show();
 
-                    }
+    @Override
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
-                }, year, month, day);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        cal.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+        Date chosenDate = cal.getTime();
 
-        //set Dates of start and end of current week
-        Calendar calen = Calendar.getInstance();
-        calen.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        calen.add(Calendar.DATE, 6);
-        long after2week = calen.getTimeInMillis();
-        //if tomorrow  need add  +  (System.currentTimeMillis() 24 * 60 * 60 * 1000)
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        datePickerDialog.getDatePicker().setMaxDate(after2week);
-        datePickerDialog.show();
+        SimpleDateFormat newFormat1 = new SimpleDateFormat("dd MMM yyyy");
+        String DateTime2 = newFormat1.format(chosenDate);
+        Date = DateTime2;
+        reservationdate = cal.getTimeInMillis();
+        textview_calendar.setText(DateTime2);
+
+        timeDialogPicker();
 
     }
 
@@ -570,7 +619,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
         //timePickerDialog.showYearPickerFirst(false);
 //        timePickerDialog.setTimeInterval(1, 30, 60);
-        timePickerDialog.setAccentColor(ContextCompat.getColor(getContext(), R.color.colorPrimary_dark));
+        timePickerDialog.setAccentColor(getResources().getColor(R.color.colorPrimary_dark));
 //
 //        timePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 //
@@ -837,6 +886,8 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
 
     }
+
+
 
 
     //    https://developer.android.com/guide/topics/providers/calendar-provider#add-event
