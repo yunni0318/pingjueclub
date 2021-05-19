@@ -48,7 +48,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MyBookingDetail extends Activity {
     private ImageView imageview_eventdetail;
-    private ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
+    private ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum, imageview_user_rank_knight, imageview_user_rank_marquess, imageview_user_rank_duke;
     private Button event_detail_button_jointrip;
     private WebView event_detail_webview;
     public TextView textview_upfront_payment, textview_event_end_date, textview_join_trip_amount, textview_event_name, textview_event_price, textview_join_trip_payment;
@@ -138,7 +138,9 @@ public class MyBookingDetail extends Activity {
         imageview_user_rank_silver = findViewById(R.id.imageview_user_rank_silver);
         imageview_user_rank_gold = findViewById(R.id.imageview_user_rank_gold);
         imageview_user_rank_platinum = findViewById(R.id.imageview_user_rank_platinum);
-
+        imageview_user_rank_knight = findViewById(R.id.imageview_user_rank_knight);
+        imageview_user_rank_marquess = findViewById(R.id.imageview_user_rank_marquess);
+        imageview_user_rank_duke = findViewById(R.id.imageview_user_rank_duke);
         textview_upfront_payment = findViewById(R.id.textview_upfront_payment);
         textview_event_end_date = findViewById(R.id.textview_event_end_date);
         textview_join_trip_amount = findViewById(R.id.textview_join_trip_amount);
@@ -282,6 +284,10 @@ public class MyBookingDetail extends Activity {
         imageview_user_rank_silver.setVisibility(View.GONE);
         imageview_user_rank_gold.setVisibility(View.GONE);
         imageview_user_rank_platinum.setVisibility(View.GONE);
+        imageview_user_rank_platinum.setVisibility(View.GONE);
+        imageview_user_rank_marquess.setVisibility(View.GONE);
+        imageview_user_rank_duke.setVisibility(View.GONE);
+        imageview_user_rank_knight.setVisibility(View.GONE);
 
         if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             imageview_user_rank_bronze.setVisibility(View.VISIBLE);
@@ -299,6 +305,16 @@ public class MyBookingDetail extends Activity {
             imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
 
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
+            imageview_user_rank_knight.setVisibility(View.VISIBLE);
+        }
+
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
+            imageview_user_rank_duke.setVisibility(View.VISIBLE);
+        }
+        if (mbed_all.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+            imageview_user_rank_marquess.setVisibility(View.VISIBLE);
+        }
 //        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_eventdate_upfront_payment);
 //        textview_upfront_payment.setAnimation(rotate);
 

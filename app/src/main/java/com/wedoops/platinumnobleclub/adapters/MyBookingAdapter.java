@@ -29,7 +29,7 @@ import java.util.TimeZone;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyViewHolder> {
+public class  MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyViewHolder> {
     private List<MyBookingList> mbl;
     private View.OnClickListener mOnItemClickListener;
 
@@ -40,7 +40,7 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
 //        public TextView textview_event_start_date;
         public TextView textview_event_end_date;
         public TextView textview_join_trip_amount;
-        public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
+        public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum, imageview_user_rank_knight, imageview_user_rank_marquess, imageview_user_rank_duke;
         public TextView textview_event_name;
         public TextView textview_event_price;
 
@@ -57,6 +57,9 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
             imageview_user_rank_silver = v.findViewById(R.id.imageview_user_rank_silver);
             imageview_user_rank_gold = v.findViewById(R.id.imageview_user_rank_gold);
             imageview_user_rank_platinum = v.findViewById(R.id.imageview_user_rank_platinum);
+            imageview_user_rank_knight = v.findViewById(R.id.imageview_user_rank_knight);
+            imageview_user_rank_marquess = v.findViewById(R.id.imageview_user_rank_marquess);
+            imageview_user_rank_duke = v.findViewById(R.id.imageview_user_rank_duke);
             textview_event_name = v.findViewById(R.id.textview_event_name);
             textview_event_price = v.findViewById(R.id.textview_event_price);
 
@@ -239,6 +242,10 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
         myViewHolder.imageview_user_rank_gold.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_platinum.setVisibility(View.GONE);
 
+        myViewHolder.imageview_user_rank_marquess.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_duke.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_knight.setVisibility(View.GONE);
+
         if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
             myViewHolder.imageview_user_rank_bronze.setVisibility(View.VISIBLE);
         }
@@ -254,6 +261,16 @@ public class MyBookingAdapter extends RecyclerView.Adapter<MyBookingAdapter.MyVi
             myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
         }
 
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
+            myViewHolder.imageview_user_rank_knight.setVisibility(View.VISIBLE);
+        }
+
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
+            myViewHolder.imageview_user_rank_duke.setVisibility(View.VISIBLE);
+        }
+        if (mbl.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+            myViewHolder.imageview_user_rank_marquess.setVisibility(View.VISIBLE);
+        }
 
 //        RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(myViewHolder.textview_upfront_payment.getContext(), R.anim.animation_eventdate_upfront_payment);
 //        myViewHolder.textview_upfront_payment.setAnimation(rotate);
