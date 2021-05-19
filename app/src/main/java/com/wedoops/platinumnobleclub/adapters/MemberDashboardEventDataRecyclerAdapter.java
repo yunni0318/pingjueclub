@@ -39,7 +39,7 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         public TextView textview_upfront_payment;
         public TextView textview_event_end_date;
         public TextView textview_join_trip_amount;
-        public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum;
+        public ImageView imageview_user_rank_bronze, imageview_user_rank_silver, imageview_user_rank_gold, imageview_user_rank_platinum, imageview_user_rank_knight, imageview_user_rank_marquess, imageview_user_rank_duke;
         public TextView textview_event_name;
         public TextView textview_event_price;
 
@@ -55,6 +55,9 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             imageview_user_rank_silver = v.findViewById(R.id.imageview_user_rank_silver);
             imageview_user_rank_gold = v.findViewById(R.id.imageview_user_rank_gold);
             imageview_user_rank_platinum = v.findViewById(R.id.imageview_user_rank_platinum);
+            imageview_user_rank_knight = v.findViewById(R.id.imageview_user_rank_knight);
+            imageview_user_rank_marquess = v.findViewById(R.id.imageview_user_rank_marquess);
+            imageview_user_rank_duke = v.findViewById(R.id.imageview_user_rank_duke);
             textview_event_name = v.findViewById(R.id.textview_event_name);
             textview_event_price = v.findViewById(R.id.textview_event_price);
 
@@ -247,6 +250,9 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
         myViewHolder.imageview_user_rank_silver.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_gold.setVisibility(View.GONE);
         myViewHolder.imageview_user_rank_platinum.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_marquess.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_duke.setVisibility(View.GONE);
+        myViewHolder.imageview_user_rank_knight.setVisibility(View.GONE);
 
         if(ed.get(i).getUserLevelCode() != null){
             if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
@@ -264,10 +270,18 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_PLATINUM)) {
                 myViewHolder.imageview_user_rank_platinum.setVisibility(View.VISIBLE);
             }
+
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
+                myViewHolder.imageview_user_rank_knight.setVisibility(View.VISIBLE);
+            }
+
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
+                myViewHolder.imageview_user_rank_duke.setVisibility(View.VISIBLE);
+            }
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+                myViewHolder.imageview_user_rank_marquess.setVisibility(View.VISIBLE);
+            }
         }
-
-
-
     }
 
     public void setOnEventDataItemClickListener(View.OnClickListener itemClickListener) {
