@@ -449,8 +449,21 @@ public class EditProfileFragment extends Fragment {
         } else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_GOLD)) {
             imageview_user_rank.setImageResource(R.drawable.gold_medal);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_gold));
+        }
+        else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
+            imageview_user_rank.setImageResource(R.drawable.bronze_medal);
+            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_bronze));
 
-        } else {
+        }
+        else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
+            imageview_user_rank.setImageResource(R.drawable.knight_medal);
+            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_knight));
+        }
+        else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
+            imageview_user_rank.setImageResource(R.drawable.duke_medal);
+            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_duke));
+        }
+        else {
             imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_platinum));
         }

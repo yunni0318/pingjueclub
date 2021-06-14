@@ -307,7 +307,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_knight"
-                            android:layout_width="15dp"
+                            android:layout_width="16dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginEnd="5dp"
@@ -317,7 +317,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_marquess"
-                            android:layout_width="15dp"
+                            android:layout_width="16dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/imageview_user_rank_knight"
@@ -327,7 +327,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_duke"
-                            android:layout_width="15dp"
+                            android:layout_width="16dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/imageview_user_rank_marquess"
@@ -337,7 +337,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_bronze"
-                            android:layout_width="17dp"
+                            android:layout_width="20dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:adjustViewBounds="true"
@@ -348,7 +348,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_silver"
-                            android:layout_width="17dp"
+                            android:layout_width="20dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/imageview_user_rank_bronze"
@@ -359,7 +359,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_gold"
-                            android:layout_width="17dp"
+                            android:layout_width="20dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/imageview_user_rank_silver"
@@ -370,7 +370,7 @@
 
                         <ImageView
                             android:id="@+id/imageview_user_rank_platinum"
-                            android:layout_width="15dp"
+                            android:layout_width="17dp"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/imageview_user_rank_gold"
                             android:adjustViewBounds="true"
@@ -381,19 +381,20 @@
 
                     <TextView
                         android:id="@+id/textview_event_end_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@id/relativelayout_group"
-                        android:layout_toEndOf="@id/linearlayout_event_detail"
-                        android:gravity="center"
+                        android:layout_below="@id/linearlayout_event_detail"
+                        android:gravity="left"
+                        android:layout_marginTop="3dp"
                         android:text="12 May 2019 - 31 May 2019"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp" />
 
                     <RelativeLayout
                         android:id="@+id/relativelayout_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/linearlayout_event_detail"
                         android:layout_alignParentEnd="true">
 
                         <ImageView
@@ -413,7 +414,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@+id/imageview_group"
                             android:text="0/40"
-                            android:textColor="#ffffff"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="10sp" />
                     </RelativeLayout>
 
