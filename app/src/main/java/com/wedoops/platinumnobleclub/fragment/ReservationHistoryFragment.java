@@ -108,6 +108,14 @@ public class ReservationHistoryFragment extends Fragment {
                         }
 
 
+                        Reservation_History reservation_history = new Reservation_History(1, "1", "22", 4, "324", "testing", "ProductName", "Category",
+                                "ProductDescription", "ProductImage", "UserLevelCode", "ReservationDate", "APPROVED", "CreatedBy", "CreatedDate");
+                        reservation_history.save();
+
+                        Reservation_History reservation_history1 = new Reservation_History(1, "1", "22", 4, "325", "testing", "ProductName", "Category",
+                                "ProductDescription", "ProductImage", "UserLevelCode", "ReservationDate", "REJECTED", "CreatedBy", "CreatedDate");
+                        reservation_history1.save();
+
                         List<Reservation_History> mbl1 = Reservation_History.listAll(Reservation_History.class);
                         String table_name = Reservation_History.getTableName(Reservation_History.class);
                         String ReservationtDate = StringUtil.toSQLName("ReservationtDate");
@@ -117,7 +125,7 @@ public class ReservationHistoryFragment extends Fragment {
 
                         recyclerview_bookingdata = view.findViewById(R.id.recyclerview_bookingdata);
 
-                        reservationHistoryAdapter = new ReservationHistoryAdapter(ud_list, get_context);
+                        reservationHistoryAdapter = new ReservationHistoryAdapter(mbl1, get_context);
 
                         RecyclerView.LayoutManager booking_list_mLayoutManager = new LinearLayoutManager(view.getContext());
                         recyclerview_bookingdata.setLayoutManager(booking_list_mLayoutManager);
