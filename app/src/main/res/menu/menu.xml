@@ -45,10 +45,10 @@
             android:icon="@drawable/termcond"
             android:title="@string/nav_menu_term_condition" />
 
-        <item
-            android:id="@+id/menu_notification"
-            android:icon="@drawable/notification"
-            android:title="@string/nav_menu_Notification" />
+<!--        <item-->
+<!--            android:id="@+id/menu_notification"-->
+<!--            android:icon="@drawable/notification"-->
+<!--            android:title="@string/nav_menu_Notification" />-->
 
     </group>
 

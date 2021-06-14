@@ -49,42 +49,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:651135377124:android:0962533ec2e6f84daf16f1",
-        "android_client_info": {
-          "package_name": "com.wedoops.platinumnobleclub"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "651135377124-c5vrm8rn41cu7nsekhbjcp0i2o61b9o3.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC2uRtHrZaYn0DqGudSrYLVSV7gnHc7vqw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "651135377124-c5vrm8rn41cu7nsekhbjcp0i2o61b9o3.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "651135377124-5gposg7ot34bko2c748v6k7598brnbp5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.wedoops.pnclifestyle"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"
