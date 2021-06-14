@@ -615,17 +615,17 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             }
 
             if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
-                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                imageview_user_rank.setImageResource(R.drawable.knight_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_knight));
             }
 
             if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
-                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                imageview_user_rank.setImageResource(R.drawable.marquess_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_marquess));
             }
 
             if (ud.get(0).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
-                imageview_user_rank.setImageResource(R.drawable.user_level_platinum);
+                imageview_user_rank.setImageResource(R.drawable.duke_medal);
                 textview_user_rank.setText(getResources().getString(R.string.userrank_duke));
             }
 
