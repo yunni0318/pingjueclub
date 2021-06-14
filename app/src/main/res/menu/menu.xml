@@ -3,6 +3,10 @@
 
     <group android:layout_gravity="end"  android:checkableBehavior="single">
         <item
+            android:id="@+id/menu_memberQR"
+            android:icon="@drawable/qrcode"
+            android:title="@string/nav_menu_memberQR" />
+        <item
             android:id="@+id/menu_dashboard"
             android:icon="@drawable/home"
             android:title="@string/nav_menu_dashboard" />

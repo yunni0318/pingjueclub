@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,13 @@ public class ReservationHistoryFragment extends Fragment {
     private static View view;
     private static Activity getActivity;
     private static ReservationHistoryAdapter reservationHistoryAdapter;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.reservation_history_fragment, container, false);
@@ -106,15 +114,6 @@ public class ReservationHistoryFragment extends Fragment {
                                     ProductDescription, ProductImage, UserLevelCode, ReservationDate, ReservationStatus, CreatedBy, CreatedDate);
                             reservation_history.save();
                         }
-
-
-                        Reservation_History reservation_history = new Reservation_History(1, "1", "22", 4, "324", "testing", "ProductName", "Category",
-                                "ProductDescription", "ProductImage", "UserLevelCode", "ReservationDate", "APPROVED", "CreatedBy", "CreatedDate");
-                        reservation_history.save();
-
-                        Reservation_History reservation_history1 = new Reservation_History(1, "1", "22", 4, "325", "testing", "ProductName", "Category",
-                                "ProductDescription", "ProductImage", "UserLevelCode", "ReservationDate", "REJECTED", "CreatedBy", "CreatedDate");
-                        reservation_history1.save();
 
                         List<Reservation_History> mbl1 = Reservation_History.listAll(Reservation_History.class);
                         String table_name = Reservation_History.getTableName(Reservation_History.class);

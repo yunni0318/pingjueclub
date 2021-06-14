@@ -115,6 +115,8 @@
     <string name="news_reminder">Reminder</string>
 
     <!-- Navigation Drawer Menu -->
+    <string name="nav_menu_memberQR">Member QR</string>
+
     <string name="nav_menu_dashboard">Dashboard</string>
     <string name="nav_menu_account">Account</string>
     <string name="nav_menu_my_booking">My Booking</string>
@@ -232,4 +234,5 @@
     <string name="Profile_title">Profile</string>
     <string name="credit_title">Credit</string>
     <string name="reservations_ReservationRemark">Remark: </string>
+    <string name="reservations_remark">Remark</string>
 </resources>

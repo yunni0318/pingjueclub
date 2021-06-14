@@ -28,6 +28,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.MainActivity;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.database.CountryList;
 import com.wedoops.platinumnobleclub.database.MemberIDEncryted;
@@ -136,6 +137,7 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_close:
+               MainActivity.redirectDashboard();
                 dismiss();
                 break;
             default:

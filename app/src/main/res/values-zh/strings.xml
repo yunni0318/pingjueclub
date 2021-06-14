@@ -196,7 +196,7 @@
     <string name="Reservation_time_error">时间不能为空。</string>
     <string name="Reservation_contact_error">请使用马来西亚电话号码格式。</string>
     <string name="Reservation_contact_Length_error">电话号码格式不正确。</string>
-    <string name="reservation_history_title">记录</string>
+    <string name="reservation_history_title">会所预定记录</string>
     <string name="my_reservation_title">我的</string>
     <string name="reservations_customer_information">用户信息：</string>
     <string name="reservations_member_id_username">用户名</string>
@@ -212,4 +212,13 @@
     <string name="reservations_APPROVED">批准</string>
     <string name="reservations_REJECTED">拒绝</string>
     <string name="EstimateParticipant">"可容纳人数 ： "</string>
+    <string name="reservation_title">"会所预定资料 "</string>
+    <string name="nav_menu_my_reservation">会所预定</string>
+    <string name="nav_menu_memberQR">会员 QR</string>
+    <string name="reservations_ReservationRemark">备注</string>
+    <string name="Profile_title">个人资料</string>
+    <string name="credit_title">Credit 交易</string>
+    <string name="userrank_knight">爵士</string>
+    <string name="userrank_duke">"公爵 "</string>
+    <string name="userrank_marquess">"侯爵 "</string>
 </resources>

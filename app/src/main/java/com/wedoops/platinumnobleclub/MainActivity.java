@@ -35,6 +35,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -126,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
     private static final String TAG_DASHBOARD = "DASHBOARD";
+    private static final String TAG_MEMBERQR = "MEMBER QR";
+
     private static final String TAG_ACCOUNT = "ACCOUNT";
     private static final String TAG_NOTIFICATION = "NOTIFICATION";
     private static final String TAG_MY_BOOKING = "MYBOOKING";
@@ -141,9 +144,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private static final String KEY_LANG = "key_lang"; // preference key
     public static int navItemIndex = 0;
     public static String CURRENT_TAG = TAG_DASHBOARD;
+    private static Context app;
     boolean doubleBackToExitPressedOnce = false;
     private Toolbar toolbar;
-    private NavigationView navigationView;
+    private static NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
     private LinearLayout navFooter, homeBottomNav, recordBottomNav, navigationLayout;
@@ -167,13 +171,13 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupProgressDialog();
         setupAdvertisement();
         setContentView(R.layout.activity_main);
-
+        app = this;
         mHandler = new Handler();
         setupViewByID();
         setupToolbar();
         setupNavigationDrawer();
 
-        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(1).setChecked(true);
         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
     }
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         setupToolbar();
                         setupNavigationDrawer();
 
-                        navigationView.getMenu().getItem(0).setChecked(true);
+                        navigationView.getMenu().getItem(1).setChecked(true);
                         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
 
                     } else {
@@ -422,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 Menu menu = navigationView.getMenu();
 
                 if (!menu.getItem(0).isChecked()) {
-                    navigationView.getMenu().getItem(0).setChecked(true);
+                    navigationView.getMenu().getItem(1).setChecked(true);
                     navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
                 }
 
@@ -435,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 Menu menu = navigationView.getMenu();
 
                 if (!menu.getItem(5).isChecked()) {
-                    navigationView.getMenu().getItem(5).setChecked(true);
+                    navigationView.getMenu().getItem(6).setChecked(true);
                     navigationView.getMenu().performIdentifierAction(R.id.menu_my_transactions_report, 0);
                 }
 
@@ -475,57 +479,62 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.menu_dashboard:
+                    case R.id.menu_memberQR:
                         navItemIndex = 0;
+                        CURRENT_TAG = TAG_MEMBERQR;
+                        break;
+
+                    case R.id.menu_dashboard:
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_DASHBOARD;
 
                         break;
                     case R.id.menu_account:
-                        navItemIndex = 1;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_ACCOUNT;
 
                         break;
 
                     case R.id.menu_my_booking:
-                        navItemIndex = 2;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_MY_BOOKING;
 
                         break;
                     case R.id.menu_my_reservation:
-                        navItemIndex = 3;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_MY_RESERVATION;
 
                         break;
                     case R.id.menu_my_transactions_report:
-                        navItemIndex = 4;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_TRANSACTION_REPORT;
 
                         break;
                     case R.id.menu_services:
 
-                        navItemIndex = 5;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_SERVICE;
                         break;
                     case R.id.menu_butler_services:
 
-                        navItemIndex = 6;
+                        navItemIndex = 7;
                         CURRENT_TAG = TAG_BUTLER_SERVICE;
                         break;
 
                     case R.id.menu_guide:
-                        navItemIndex = 7;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_GUIDE;
 
                         break;
 
                     case R.id.menu_benefit:
-                        navItemIndex = 8;
+                        navItemIndex = 9;
                         CURRENT_TAG = TAG_BENEFIT;
 
                         break;
 
                     case R.id.menu_termNCond:
-                        navItemIndex = 9;
+                        navItemIndex = 10;
                         CURRENT_TAG = TAG_TERMNCOND;
 
                         break;
@@ -773,13 +782,17 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
+                QRcodeDialog qRcodeDialog = new QRcodeDialog(MainActivity.this);
+                qRcodeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                qRcodeDialog.show();
+            case 1:
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 MemberDashboardFragment dashboardFragment = new MemberDashboardFragment();
                 checkAndRequestPermissions();
                 return dashboardFragment;
-            case 1:
+            case 2:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -787,7 +800,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 EditProfileFragment accountFragment = new EditProfileFragment();
                 return accountFragment;
 
-            case 2:
+            case 3:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -795,49 +808,49 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 MyBookingFragment bookingFragment = new MyBookingFragment();
                 return bookingFragment;
 
-            case 3:
+            case 4:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_my_reservation));
                 MyReservationFragment reservationFragment = new MyReservationFragment();
                 return reservationFragment;
-            case 4:
+            case 5:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_transactions_report));
                 RecordsFragment transactionsReportFragment = new RecordsFragment();
                 return transactionsReportFragment;
-            case 5:
+            case 6:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_service));
                 ServicesFragment servicesFragment = new ServicesFragment();
                 return servicesFragment;
-            case 6:
+            case 7:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_butler_service));
                 ButlerServiceFragment butler_service = new ButlerServiceFragment();
                 return butler_service;
-            case 7:
+            case 8:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_guide));
                 GuideFragment guideFragment = new GuideFragment();
                 return guideFragment;
-            case 8:
+            case 9:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
                 toolbar_title.setText(getString(R.string.nav_menu_benefit));
                 BenefitFragment benefitFragment = new BenefitFragment();
                 return benefitFragment;
-            case 9:
+            case 10:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -845,7 +858,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 TermNCondFragment termNCondFragment = new TermNCondFragment();
                 return termNCondFragment;
 
-            case 10:
+            case 11:
                 toolbar_title.setVisibility(View.VISIBLE);
                 toolbar_logo.setVisibility(View.GONE);
                 toolbar_camera.setVisibility(View.VISIBLE);
@@ -863,7 +876,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
     }
 
-    private void selectNavMenu() {
+    private static void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
@@ -1289,6 +1302,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .withAspectRatio(1, 1)
                 .withMaxResultSize(300, 300)
                 .start(this);
+    }
+    public static void redirectDashboard(){
+        navItemIndex = 1;
+        CURRENT_TAG = TAG_DASHBOARD;
+        navigationView.getMenu().getItem(1).setChecked(true);
     }
 
 }
