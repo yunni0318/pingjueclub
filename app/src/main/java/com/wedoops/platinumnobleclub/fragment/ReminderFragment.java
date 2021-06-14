@@ -91,7 +91,7 @@ public class ReminderFragment extends Fragment {
                 AlarmManager alarmManager = (AlarmManager) get_context.getSystemService(Context.ALARM_SERVICE);
 
                 long timeAtButtonClick = System.currentTimeMillis();
-                long tenSecondsInMillis = 1000 * 20;
+                long tenSecondsInMillis = 1000 * 2;
                 alarmManager.set(AlarmManager.RTC_WAKEUP,
                         timeAtButtonClick + tenSecondsInMillis, pendingIntent);
             }

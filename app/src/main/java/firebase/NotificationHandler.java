@@ -2,9 +2,11 @@ package firebase;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -32,10 +34,11 @@ public class NotificationHandler extends FirebaseMessagingService {
     public NotificationHandler() {
     }
 
-
     @Override
     public void onNewToken(String token) {
 
+        super.onNewToken(token);
+        Log.d("Token", token);
         new ApplicationClass(getApplicationContext()).writeIntoSharedPreferences(getApplicationContext(), CONSTANTS_VALUE.SHAREDPREFECENCE_NEW_TOKEN, token);
 
 //        try {
@@ -72,6 +75,7 @@ public class NotificationHandler extends FirebaseMessagingService {
             }
             else {
                 if (remoteMessage.getData().get("IsSuccess").equals("true")) {
+
                     sendNotification(remoteMessage);
                 }
             }
@@ -84,9 +88,11 @@ public class NotificationHandler extends FirebaseMessagingService {
         JSONObject SuccessMessage_Object = convertResponseToJsonObject(remoteMessage.getData().get("SuccessMessage"));
         String success_message;
         String bodyTitle;
+        Bitmap bitmap = null;
         try {
             success_message = SuccessMessage_Object.getString("MessageEN");
             bodyTitle = remoteMessage.getNotification().getBody();
+
         } catch (Exception e) {
             success_message = "";
             bodyTitle = "";
@@ -100,6 +106,7 @@ public class NotificationHandler extends FirebaseMessagingService {
                         .bigText(success_message))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setAutoCancel(true)
+//                .setLargeIcon(bitmap)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         createNotificationChannel();

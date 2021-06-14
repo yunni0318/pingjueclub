@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -66,6 +67,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -155,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private String currentPhotoPath = "";
     private static CustomProgressDialog customDialog;
     private AlertDialog alert;
-    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,15 +168,14 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         setupAdvertisement();
         setContentView(R.layout.activity_main);
 
-
         mHandler = new Handler();
         setupViewByID();
         setupToolbar();
         setupNavigationDrawer();
-        getNotification();
 
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.getMenu().performIdentifierAction(R.id.menu_dashboard, 0);
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
     }
 
     private void setupProgressDialog() {
@@ -530,11 +530,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
                         break;
 
-                    case R.id.menu_notification:
-                        navItemIndex = 10;
-                        CURRENT_TAG = TAG_NOTIFICATION;
-
-                        break;
+//                    case R.id.menu_notification:
+//                        navItemIndex = 10;
+//                        CURRENT_TAG = TAG_NOTIFICATION;
+//
+//                        break;
 
                     default:
                         navItemIndex = 0;
@@ -1291,15 +1291,4 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .start(this);
     }
 
-    private void getNotification() {
-
-        mReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("com.wedoops.platinumnobleclub")) {
-                }
-            }
-        };
-    }
 }
