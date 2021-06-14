@@ -40,7 +40,8 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView reservation_roomtype, remind_desc, date_month, date_day, date_time, ReservationNumber, reservation_pax, reservation_status;
+        public TextView reservation_roomtype, remind_desc, date_month, date_day, date_time, ReservationNumber, reservation_pax, reservation_status, reservation_remark;
+        public ImageView image_new;
 
         public MyViewHolder(View v) {
             super(v);
@@ -54,6 +55,8 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
             reservation_status = v.findViewById(R.id.reservation_status);
             remind_desc = v.findViewById(R.id.reservation_desc);
             ReservationNumber = v.findViewById(R.id.reservation_number);
+            reservation_remark = v.findViewById(R.id.reservation_remark);
+            image_new = v.findViewById(R.id.image_new);
 
 
             Typeface typeface = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/poppins-v6-latin-regular.ttf");
@@ -66,7 +69,7 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ReservationHistoryAdapter(List<Reservation_History> mbl,Context context) {
+    public ReservationHistoryAdapter(List<Reservation_History> mbl, Context context) {
         this.mbl = mbl;
         this.context = context;
     }
@@ -83,68 +86,78 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
 
     @Override
     public void onBindViewHolder(@NonNull final ReservationHistoryAdapter.MyViewHolder myViewHolder, int i) {
-
-        String ts = mbl.get(i).getReservationtDate();
-        String date = ts.split("T")[0];
-        String[] splitDate = date.split("-");
-        String day = splitDate[2];
-        String month = splitDate[1];
-        String year = splitDate[0];
-        //Getting months as 1,2 instead of 01,02
-        month = Integer.valueOf(month).toString();
-
-
-        String time = ts.split("T")[1];
-        String[] splittime = time.split(":");
-        String hours = splittime[0];
-        String min = splittime[1];
-        String timeSet, strMin;
-        int h = Integer.parseInt(hours);
-        int m = Integer.parseInt(min);
-        if (h > 12) {
-            h -= 12;
-            timeSet = "PM";
-        } else if (h == 0) {
-            h += 12;
-            timeSet = "AM";
-        } else if (h == 12)
-            timeSet = "PM";
-        else
-            timeSet = "AM";
-        //=====Adding zero in one dightleft  and right======
-        if (m < 10)
-            strMin = "0" + m;
-        else
-            strMin = String.valueOf(m);
-        String aTime = new StringBuilder().append(pad(h)).append(':')
-                .append(pad(Integer.parseInt(strMin))).append(" ").append(timeSet).toString();
-        //Change Month name from Month Numbers
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat month_date = new SimpleDateFormat("MMM");
-        int monthnum = Integer.parseInt(month);
-        cal.set(Calendar.MONTH, monthnum);
-        String month_name = month_date.format(cal.getTime());
-
-
-        myViewHolder.date_month.setText(month_name);
-        myViewHolder.date_day.setText(day);
-        myViewHolder.date_time.setText(aTime);
+//
+//        String ts = mbl.get(i).getReservationtDate();
+//        String date = ts.split("T")[0];
+//        String[] splitDate = date.split("-");
+//        String day = splitDate[2];
+//        String month = splitDate[1];
+//        String year = splitDate[0];
+//        //Getting months as 1,2 instead of 01,02
+//        month = Integer.valueOf(month).toString();
+//
+//
+//        String time = ts.split("T")[1];
+//        String[] splittime = time.split(":");
+//        String hours = splittime[0];
+//        String min = splittime[1];
+//        String timeSet, strMin;
+//        int h = Integer.parseInt(hours);
+//        int m = Integer.parseInt(min);
+//        if (h > 12) {
+//            h -= 12;
+//            timeSet = "PM";
+//        } else if (h == 0) {
+//            h += 12;
+//            timeSet = "AM";
+//        } else if (h == 12)
+//            timeSet = "PM";
+//        else
+//            timeSet = "AM";
+//        //=====Adding zero in one dightleft  and right======
+//        if (m < 10)
+//            strMin = "0" + m;
+//        else
+//            strMin = String.valueOf(m);
+//        String aTime = new StringBuilder().append(pad(h)).append(':')
+//                .append(pad(Integer.parseInt(strMin))).append(" ").append(timeSet).toString();
+//        //Change Month name from Month Numbers
+//        Calendar cal = Calendar.getInstance();
+//        SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+//        int monthnum = Integer.parseInt(month);
+//        cal.set(Calendar.MONTH, monthnum);
+//        String month_name = month_date.format(cal.getTime());
+//
+//
+//        myViewHolder.date_month.setText(month_name);
+//        myViewHolder.date_day.setText(day);
+//        myViewHolder.date_time.setText(aTime);
         myViewHolder.remind_desc.setText(mbl.get(i).getProductDescription());
-        myViewHolder.reservation_roomtype.setText(context.getString(R.string.reservations_room_type) + mbl.get(i).getProductName());
-        myViewHolder.reservation_pax.setText(context.getString(R.string.reservations_pax) + mbl.get(i).getEstimateParticipant());
-        myViewHolder.ReservationNumber.setText(context.getString(R.string.reservations_ReservationNumber) + mbl.get(i).getReservationNumber());
+        myViewHolder.reservation_roomtype.setText(context.getString(R.string.reservations_room_type) + " "+ mbl.get(i).getProductName());
+        myViewHolder.reservation_pax.setText(context.getString(R.string.reservations_pax) +" "+  mbl.get(i).getEstimateParticipant());
+        myViewHolder.ReservationNumber.setText(context.getString(R.string.reservations_ReservationNumber) +  mbl.get(i).getReservationNumber());
+        myViewHolder.reservation_remark.setText(context.getString(R.string.reservations_ReservationRemark) +" "+ mbl.get(i).getRemark());
         if (mbl.get(i).getReservationStatus().equals("NEW")) {
             myViewHolder.reservation_status.setTextColor(Color.YELLOW);
-            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
+//            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
+            myViewHolder.reservation_status.setVisibility(View.GONE);
+            myViewHolder.image_new.setVisibility(View.VISIBLE);
+            myViewHolder.reservation_remark.setVisibility(View.GONE);
 
         } else if (mbl.get(i).getReservationStatus().equals("APPROVED")) {
             myViewHolder.reservation_status.setTextColor(Color.GREEN);
             myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_APPROVED));
+            myViewHolder.image_new.setVisibility(View.INVISIBLE);
+            myViewHolder.reservation_status.setVisibility(View.VISIBLE);
+            myViewHolder.reservation_remark.setVisibility(View.GONE);
+
 
         } else if (mbl.get(i).getReservationStatus().equals("REJECTED")) {
             myViewHolder.reservation_status.setTextColor(Color.RED);
             myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_REJECTED));
-
+            myViewHolder.image_new.setVisibility(View.INVISIBLE);
+            myViewHolder.reservation_status.setVisibility(View.VISIBLE);
+            myViewHolder.reservation_remark.setVisibility(View.VISIBLE);
         }
 
 
