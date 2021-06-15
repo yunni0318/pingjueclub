@@ -115,7 +115,6 @@ public class ReservationHistoryFragment extends Fragment {
                             reservation_history.save();
                         }
 
-                        List<Reservation_History> mbl1 = Reservation_History.listAll(Reservation_History.class);
                         String table_name = Reservation_History.getTableName(Reservation_History.class);
                         String ReservationtDate = StringUtil.toSQLName("ReservationtDate");
                         String ReservationStatus = StringUtil.toSQLName("ReservationStatus");

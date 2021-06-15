@@ -122,14 +122,24 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         String aTime = new StringBuilder().append(pad(h)).append(':')
                 .append(pad(Integer.parseInt(strMin))).append(" ").append(timeSet).toString();
         //Change Month name from Month Numbers
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat month_date = new SimpleDateFormat("MMM");
-        int monthnum = Integer.parseInt(month);
-        cal.set(Calendar.MONTH, monthnum);
-        String month_name = month_date.format(cal.getTime());
+
+//        Calendar cal = Calendar.getInstance();
+//        int monthnum = Integer.parseInt(month);
+//        cal.set(Calendar.MONTH, monthnum);
+//        String month_name = month_date.format(cal.getTime());
 
 
-        myViewHolder.date_month.setText(month_name);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("M");
+        try {
+            Date d = sdf.parse(month);
+            sdf.applyPattern("MMM");
+            myViewHolder.date_month.setText(sdf.format(d));
+        } catch (ParseException ex) {
+            Log.v("Exception", ex.getLocalizedMessage());
+        }
+
+
         myViewHolder.date_day.setText(day);
         myViewHolder.date_time.setText(aTime);
         myViewHolder.remind_desc.setText(mbl.get(i).getProductDescription());

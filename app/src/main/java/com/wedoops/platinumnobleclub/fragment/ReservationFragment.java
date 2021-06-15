@@ -581,21 +581,24 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
-        Year = year;
-        Month = monthOfYear;
-        Day = dayOfMonth;
+//        Year = year;
+//        Month = monthOfYear + 1;
+//        Day = dayOfMonth;
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         cal.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
         Date chosenDate = cal.getTime();
 
+        Year = cal.get(Calendar.YEAR);
+        Month = cal.get(Calendar.MONTH) + 1;
+        Day = cal.get(Calendar.DAY_OF_MONTH);
+
+
         SimpleDateFormat newFormat1 = new SimpleDateFormat("dd MMM yyyy");
         String DateTime2 = newFormat1.format(chosenDate);
-        Date = DateTime2;
         reservationdate = cal.getTimeInMillis();
         textview_calendar.setText(DateTime2);
-
         timeDialogPicker();
 
     }
