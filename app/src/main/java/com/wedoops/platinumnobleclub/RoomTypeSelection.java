@@ -34,12 +34,20 @@ public class RoomTypeSelection extends AppCompatActivity implements RoomTypeSele
         onClickListener = this;
 
         List<Reservation_roomType> mbl = Reservation_roomType.listAll(Reservation_roomType.class);
-
+        for(int i =0; i < mbl.size();i++){
+            if(mbl.get(i).getProductName().equals("HALL")){
+                mbl.get(i).delete();
+            }
+        }
         String table_name = Reservation_roomType.getTableName(Reservation_roomType.class);
-        String loginid_field = StringUtil.toSQLName("ProductCatagory");
+        String EstimateParticipant = StringUtil.toSQLName("EstimateParticipant");
 
-        List<Reservation_roomType> ud_list = Reservation_roomType.findWithQuery(Reservation_roomType.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", "ROOM");
+        List<Reservation_roomType> ud_list = Reservation_roomType.findWithQuery(Reservation_roomType.class, "SELECT * from " + table_name + "  ORDER BY " + EstimateParticipant + " ASC " , null);
 
+
+
+
+        List<Reservation_roomType> mb2 = Reservation_roomType.listAll(Reservation_roomType.class);
 
         roomTypeSelectionAdapter = new RoomTypeSelectionAdapter(ud_list,onClickListener,this);
         RecyclerView.LayoutManager booking_list_mLayoutManager = new LinearLayoutManager(this);

@@ -84,12 +84,12 @@ public class RecordsCreditAdapter extends RecyclerView.Adapter<RecordsCreditAdap
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
             holder.textview_transaction_id.setText(String.format("ID: %s", tc_Data.get(position).getTRederenceCode()));
             holder.textview_remarks.setText(String.format("%s", tc_Data.get(position).getRemarks()));
-            holder.textview_points_amount.setText(String.format("- %.2f pts", tc_Data.get(position).getPointAmount()));
+            holder.textview_points_amount.setText(String.format("- %.2f MYR", tc_Data.get(position).getPointAmount()));
             holder.textview_transaction_type.setText(String.format("%s", tc_Data.get(position).getType()));
         } else {
             holder.textview_transaction_id.setText(String.format("ID: %s", tc_Data.get(position).getTRederenceCode()));
             holder.textview_remarks.setText(String.format("%s", tc_Data.get(position).getRemarks()));
-            holder.textview_points_amount.setText(String.format("- %.2f pts", tc_Data.get(position).getPointAmount()));
+            holder.textview_points_amount.setText(String.format("- %.2f MYR", tc_Data.get(position).getPointAmount()));
             holder.textview_transaction_type.setText(String.format("%s", tc_Data.get(position).getType()));
         }
 

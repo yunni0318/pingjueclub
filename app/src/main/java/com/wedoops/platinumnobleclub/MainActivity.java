@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private View navHeader;
     private LinearLayout navFooter, homeBottomNav, recordBottomNav, navigationLayout;
     private FloatingActionButton floatingActionButton;
-    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet,textview_e_wallet, toolbar_title;
+    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, textview_e_wallet, toolbar_title, textview_e_wallet1, textview_user_wallet1;
     private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
     private Handler mHandler;
     private RoundedImageView imageview_user_profile;
@@ -355,7 +355,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         textview_user_rank = navHeader.findViewById(R.id.textview_user_rank);
         textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
-        textview_e_wallet= navHeader.findViewById(R.id.textview_e_wallet);
+        textview_user_wallet1 = navHeader.findViewById(R.id.textview_user_wallet1);
+        textview_e_wallet = navHeader.findViewById(R.id.textview_e_wallet);
+        textview_e_wallet1 = navHeader.findViewById(R.id.textview_e_wallet1);
+
 
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_logo = findViewById(R.id.toolbar_logo);
@@ -642,12 +645,13 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             textview_user_nickname.setText(ud.get(0).getNickName());
 
 
+            List<UserDetails> uds = UserDetails.listAll(UserDetails.class);
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-            String cash_wallet = decimalFormat.format(Double.parseDouble(ud.get(0).getCashWallet()));
-            String e_wallet = decimalFormat.format(Double.parseDouble(ud.get(0).geteWallet()));
+            String cash_wallet = decimalFormat.format(Double.parseDouble(uds.get(0).getCashWallet()));
+            String e_wallet = decimalFormat.format(Double.parseDouble(uds.get(0).geteWallet()));
 
-            textview_e_wallet.setText(String.format("%s CREDITS", e_wallet));
-            textview_user_wallet.setText(String.format("%s POINTS", cash_wallet ));
+            textview_e_wallet.setText(String.format("%s ", e_wallet));
+            textview_user_wallet.setText(String.format("%s ", cash_wallet));
 
             Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).timeout(10000).into(imageview_user_profile);
 
@@ -655,10 +659,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             textview_user_nickname.setTypeface(typeface);
 
             Typeface typeface_crimson_700 = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-700.ttf");
-            textview_user_wallet.setTypeface(typeface_crimson_700);
+//            textview_user_wallet.setTypeface(typeface_crimson_700);
             textview_user_rank.setTypeface(typeface_crimson_700);
-            textview_e_wallet.setTypeface(typeface_crimson_700);
-
+//            textview_e_wallet.setTypeface(typeface_crimson_700);
+            textview_e_wallet1.setTypeface(typeface_crimson_700);
+            textview_user_wallet1.setTypeface(typeface_crimson_700);
             Menu m = navigationView.getMenu();
             for (int i = 0; i < m.size(); i++) {
                 MenuItem mi = m.getItem(i);
@@ -1120,7 +1125,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         ud.setUserLevelCode(UserLevelCode);
                         ud.setJoinedDate(JoinedDate);
                         ud.setCashWallet(CashWallet);
-                        ud.setCashWallet(eWallet);
+                        ud.seteWallet(eWallet);
                         ud.save();
 
                         setupNavigationDrawer();
@@ -1309,7 +1314,8 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 .withMaxResultSize(300, 300)
                 .start(this);
     }
-    public static void redirectDashboard(){
+
+    public static void redirectDashboard() {
         navItemIndex = 1;
         CURRENT_TAG = TAG_DASHBOARD;
         navigationView.getMenu().getItem(1).setChecked(true);

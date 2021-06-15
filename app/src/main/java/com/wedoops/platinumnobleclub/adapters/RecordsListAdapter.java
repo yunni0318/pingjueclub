@@ -115,12 +115,12 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             discount_amount_bd = discount_amount_bd.setScale(3, BigDecimal.ROUND_DOWN);
             discount_amount_bd = discount_amount_bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-            holder.textview_points_amount.setText(String.format("- %s pts", discount_amount_bd.toString()));
+            holder.textview_points_amount.setText(String.format("- %s PTS", discount_amount_bd.toString()));
 
             holder.textview_currency_amount.setText("");
             holder.textview_transaction_type.setText(mContext.getResources().getString(R.string.merchant_payment));
             if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
-                holder.textview_transaction_type_amount.setText(String.format("Discount %.2f%% out of %.2f pts", trd_list_all.get(position).getDiscountRate(), trd_list_all.get(position).getActualAmount()));
+                holder.textview_transaction_type_amount.setText(String.format("Discount %.2f%% out of %.2f PTS", trd_list_all.get(position).getDiscountRate(), trd_list_all.get(position).getActualAmount()));
 
             } else {
                 holder.textview_transaction_type_amount.setText(String.format(" %.2f 数额折扣 %.2f%%", trd_list_all.get(position).getActualAmount(), trd_list_all.get(position).getDiscountRate()));
@@ -148,10 +148,10 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             }
 
             if (trd_list_all.get(position).isCashIn()) {
-                holder.textview_points_amount.setText(String.format("+ %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("+ %.2f PTS", trd_list_all.get(position).getPointAmount()));
 
             } else {
-                holder.textview_points_amount.setText(String.format("- %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("- %.2f PTS", trd_list_all.get(position).getPointAmount()));
             }
 
             holder.textview_currency_amount.setText("");
@@ -180,10 +180,10 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             }
 
             if (trd_list_all.get(position).isCashIn()) {
-                holder.textview_points_amount.setText(String.format("+ %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("+ %.2f PTS", trd_list_all.get(position).getPointAmount()));
 
             } else {
-                holder.textview_points_amount.setText(String.format("- %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("- %.2f PTS", trd_list_all.get(position).getPointAmount()));
             }
 
             holder.textview_currency_amount.setText("");
@@ -199,10 +199,10 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
             holder.textview_transaction_id.setText(String.format("ID: %s", trd_list_all.get(position).getTRederenceCode()));
 
             if (trd_list_all.get(position).isCashIn()) {
-                holder.textview_points_amount.setText(String.format("+ %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("+ %.2f PTS", trd_list_all.get(position).getPointAmount()));
 
             } else {
-                holder.textview_points_amount.setText(String.format("- %.2f pts", trd_list_all.get(position).getPointAmount()));
+                holder.textview_points_amount.setText(String.format("- %.2f PTS", trd_list_all.get(position).getPointAmount()));
             }
 
             holder.textview_currency_amount.setText("");
@@ -243,7 +243,7 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecordsListAdapter.
         } else if (trd_list_all.get(position).getType().contains(DATA_TYPE_PAYMENT_FULL)) {
             holder.textview_transaction_id.setText(String.format("ID: %s", trd_list_all.get(position).getTRederenceCode()));
 
-            holder.textview_points_amount.setText(String.format("- %.2f pts", trd_list_all.get(position).getPointAmount()));
+            holder.textview_points_amount.setText(String.format("- %.2f PTS", trd_list_all.get(position).getPointAmount()));
 
 
             holder.textview_currency_amount.setText("");

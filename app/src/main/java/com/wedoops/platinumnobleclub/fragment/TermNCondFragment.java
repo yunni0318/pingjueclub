@@ -88,9 +88,9 @@ public class TermNCondFragment extends Fragment {
 
         webView.setBackgroundColor(Color.parseColor("#191919"));
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
-            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+            webView.loadUrl("https://web.platinumnobleclub.com/tnc");
         } else {
-            webView.loadUrl("http://web.platinumnobleclub.com/tnc");
+            webView.loadUrl("https://web.platinumnobleclub.com/tnc");
         }
 //        webView.loadUrl("http://103.198.194.228:54153/tnc");
         webView.getSettings().setJavaScriptEnabled(true);

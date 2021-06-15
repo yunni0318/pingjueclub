@@ -67,6 +67,17 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/wording_foruseonlypts"
+
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
 
             <View
                 android:layout_width="match_parent"

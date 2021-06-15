@@ -77,8 +77,8 @@
     <string name="transaction_report_type_title">Type</string>
     <string name="transaction_report_amount_title">Amount</string>
     <string name="transaction_report_remarks_title">Remarks</string>
-    <string name="transaction_pts">Points Transaction</string>
-    <string name="transaction_credit">Credit Transaction</string>
+    <string name="transaction_pts">PTS Transaction</string>
+    <string name="transaction_credit">MYR Transaction</string>
     <string name="search_bar_hint">Key in ID No. to search</string>
     <string name="filter_all">All</string>
     <string name="filter_weekly">Weekly</string>
@@ -236,4 +236,5 @@
     <string name="reservations_ReservationRemark">Remark: </string>
     <string name="reservations_remark">Remark (optional)</string>
     <string name="reservations_CHECKIN">CHECK IN</string>
+    <string name="wording_foruseonlypts">(Temporarily only available for points)</string>
 </resources>

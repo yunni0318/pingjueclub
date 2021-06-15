@@ -732,10 +732,12 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         if (username1.isEmpty()) {
             name.setError(null);
             return false;
-        } else if (username1.length() < 6) {
-            username.setError(getResources().getString(R.string.Reservation_name_Length_error));
-            return false;
-        } else {
+        }
+//        else if (username1.length() < 6) {
+//            username.setError(getResources().getString(R.string.Reservation_name_Length_error));
+//            return false;
+//        }
+        else {
             username.setError(null);
             return true;
         }
