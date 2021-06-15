@@ -540,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         break;
 
 //                    case R.id.menu_notification:
-//                        navItemIndex = 10;
+//                        navItemIndex = 11;
 //                        CURRENT_TAG = TAG_NOTIFICATION;
 //
 //                        break;

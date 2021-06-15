@@ -3,9 +3,9 @@ package firebase;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -13,23 +13,25 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.R;
-import com.wedoops.platinumnobleclub.database.UserDetails;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
-import com.wedoops.platinumnobleclub.webservices.Api_Constants;
-import com.wedoops.platinumnobleclub.webservices.CallWebServices;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
 
 public class NotificationHandler extends FirebaseMessagingService {
 
     private static String channel_name = "MAKE_QR_PAYMENT";
     private static String channel_description = "MAKE_QR_PAYMENT_DESCRIPTION";
-
+    private static String notiImage, notiMessage, notiTitle, isSuccess;
+    private static Bitmap remote_picture = null;
 
     public NotificationHandler() {
     }
@@ -68,27 +70,36 @@ public class NotificationHandler extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         if (remoteMessage.getData().size() > 0) {
-            if (remoteMessage.getData().get("ServiceName").equals("MakeQRPayment")) {
-                if (remoteMessage.getData().get("IsSuccess").equals("true")) {
-                    sendNotification(remoteMessage);
+            try {
+                if (remoteMessage.getData().get("ServiceName").equals("MakeQRPayment")) {
+                    if (remoteMessage.getData().get("IsSuccess").equals("true")) {
+                        sendNotificationPayment(remoteMessage);
+                    }
                 }
-            }
-            else {
-                if (remoteMessage.getData().get("IsSuccess").equals("true")) {
+            } catch (Exception e) {
+                try {
+
+                    Map<String, String> data = remoteMessage.getData();
+                    notiTitle = data.get("Title");
+                    isSuccess = data.get("IsSuccess");
+                    notiMessage = data.get("Message");
+                    notiImage = data.get("image");
 
                     sendNotification(remoteMessage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         }
-
     }
 
-    private void sendNotification(RemoteMessage remoteMessage) {
+    private void sendNotificationPayment(RemoteMessage remoteMessage) {
 
         JSONObject SuccessMessage_Object = convertResponseToJsonObject(remoteMessage.getData().get("SuccessMessage"));
+
         String success_message;
         String bodyTitle;
-        Bitmap bitmap = null;
+
         try {
             success_message = SuccessMessage_Object.getString("MessageEN");
             bodyTitle = remoteMessage.getNotification().getBody();
@@ -106,11 +117,43 @@ public class NotificationHandler extends FirebaseMessagingService {
                         .bigText(success_message))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setAutoCancel(true)
-//                .setLargeIcon(bitmap)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         createNotificationChannel();
 
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(0, builder.build());
+
+    }
+
+    private void sendNotification(RemoteMessage remoteMessage) {
+
+        try {
+            URL url = new URL(notiImage);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            remote_picture = BitmapFactory.decodeStream(input);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "0")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(notiTitle)
+                .setContentText(notiMessage)
+                .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(remote_picture))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setAutoCancel(true)
+                .setLargeIcon(remote_picture)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        createNotificationChannel();
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
