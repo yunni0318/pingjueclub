@@ -120,11 +120,12 @@ public class ReservationHistoryFragment extends Fragment {
                         String ReservationtDate = StringUtil.toSQLName("ReservationtDate");
                         String ReservationStatus = StringUtil.toSQLName("ReservationStatus");
 
-                        List<Reservation_History> ud_list = Reservation_History.findWithQuery(Reservation_History.class, "SELECT * from " + table_name + "  ORDER BY " + ReservationStatus + " DESC, " + ReservationtDate, null);
+                        //will follow order by status -> date
+                        List<Reservation_History> ud_list = Reservation_History.findWithQuery(Reservation_History.class, "SELECT * from " + table_name + "  ORDER BY " + ReservationStatus + " ASC, " + ReservationtDate + " DESC ", null);
 
                         recyclerview_bookingdata = view.findViewById(R.id.recyclerview_bookingdata);
 
-                        reservationHistoryAdapter = new ReservationHistoryAdapter(mbl1, get_context);
+                        reservationHistoryAdapter = new ReservationHistoryAdapter(ud_list, get_context);
 
                         RecyclerView.LayoutManager booking_list_mLayoutManager = new LinearLayoutManager(view.getContext());
                         recyclerview_bookingdata.setLayoutManager(booking_list_mLayoutManager);

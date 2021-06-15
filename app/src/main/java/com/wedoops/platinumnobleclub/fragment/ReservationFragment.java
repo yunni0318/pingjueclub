@@ -68,7 +68,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     private static Context app;
     private static Activity getactivity;
     private Spinner sp1, sp2;
-    private TextView textview_calendar, textview_time, hall, room;
+    private TextView textview_calendar, textview_time, hall, room, remark;
     private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
     private Button submit;
     private EditText name, username, contact;
@@ -199,8 +199,10 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         room = view.findViewById(R.id.room);
         List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
         username.setText(ud.get(0).getName());
+        contact.setText(ud.get(0).getPhone());
+        name.setText(ud.get(0).getNickName());
         username.setEnabled(false);
-
+        remark = view.findViewById(R.id.remark);
         submit.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -247,7 +249,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 b.putString("ReservationName", ud_list.get(0).getName());
                 b.putString("ReservationDate", Date_for_API);
                 b.putString("NumberPax", String.valueOf(sp2.getSelectedItemPosition()));
-                b.putString("Remark", "");
+                b.putString("Remark", remark.getText().toString());
 
                 b.putString("access_token", ud_list.get(0).getAccessToken());
                 b.putInt(Api_Constants.COMMAND, Api_Constants.API_MakeReservation);
@@ -511,12 +513,11 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         datePickerDialog.setMaxDate(max_date_c);
 
 
-
         //Disable all SUNDAYS and SATURDAYS between Min and Max Dates
         for (Calendar loopdate = min_date_c; min_date_c.before(max_date_c); min_date_c.add(Calendar.DATE, 1), loopdate = min_date_c) {
             int dayOfWeek = loopdate.get(Calendar.DAY_OF_WEEK);
             if (dayOfWeek == Calendar.SUNDAY) {
-                Calendar[] disabledDays =  new Calendar[1];
+                Calendar[] disabledDays = new Calendar[1];
                 disabledDays[0] = loopdate;
                 datePickerDialog.setDisabledDays(disabledDays);
             }
@@ -580,6 +581,10 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
+        Year = year;
+        Month = monthOfYear;
+        Day = dayOfMonth;
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         cal.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
@@ -610,9 +615,9 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         Date now = new Date();
         if (now.compareTo(calendar.getTime()) < 0) {
             timePickerDialog.setMinTime(16, 0, 0);
-        }else{
+        } else {
             Calendar calendar1 = GregorianCalendar.getInstance();
-            timePickerDialog.setMinTime(calendar1.getTime().getHours(),calendar1.getTime().getMinutes(),calendar1.getTime().getSeconds());
+            timePickerDialog.setMinTime(calendar1.getTime().getHours(), calendar1.getTime().getMinutes(), calendar1.getTime().getSeconds());
         }
 //        timePickerDialog.setMinTime(16, 0, 0);
         timePickerDialog.setMaxTime(23, 59, 0);
@@ -739,10 +744,12 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         if (name1.isEmpty()) {
             name.setError(null);
             return false;
-        } else if (name1.length() < 6) {
-            name.setError(getResources().getString(R.string.Reservation_name_Length_error));
-            return false;
-        } else {
+        }
+//        else if (name1.length() < 6) {
+//            name.setError(getResources().getString(R.string.Reservation_name_Length_error));
+//            return false;
+//        }
+        else {
             return true;
         }
     }
@@ -886,8 +893,6 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
 
     }
-
-
 
 
     //    https://developer.android.com/guide/topics/providers/calendar-provider#add-event

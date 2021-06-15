@@ -3,9 +3,11 @@ package com.wedoops.platinumnobleclub.webservices;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -44,7 +46,8 @@ public class Api_Constants {
     private static String url_userwallet = "http://103.15.107.152:5770/api/UserWallet/";
     private static String url_services = "http://103.15.107.152:5770/api/Services/";
     private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
-    private static String url_Reservation = "http://103.15.107.152:5770/api/Reservation/";
+    private static String url_Reservation = "http://stg.platinumnobleclub.com/api/Reservation/";
+//    private static String url_Reservation = "http://103.15.107.152:5770/api/Reservation/";
 
 //    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
 //    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
@@ -966,8 +969,27 @@ public class Api_Constants {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error.Response", error.toString());
-                                    ReservationFragment.processWSData(null, API_MakeReservation);
+                                    NetworkResponse response = error.networkResponse;
+                                    String errorMsg = "";
+                                    if (response != null && response.data != null) {
+                                        String errorString = new String(response.data);
+                                        Log.i("log error", errorString);
+                                        Toast.makeText(context, errorString, Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                                    }
+
+
+
+
+
+
+
+
+
+//
+//                                    Log.e("Error.Response", error.toString());
+//                                    ReservationFragment.processWSData(null, API_MakeReservation);
                                 }
                             }
                     ) {

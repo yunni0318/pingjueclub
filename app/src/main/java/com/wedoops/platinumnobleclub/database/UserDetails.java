@@ -21,13 +21,14 @@ public class UserDetails extends SugarRecord {
     private String UserLevelCode;
     private String JoinedDate;
     private String CashWallet;
+    private String eWallet;
     private boolean GotNewTopUp;
 
     public UserDetails() {
 
     }
 
-    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String cardID, String name, String nickName, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet, boolean gotNewTopUp) {
+    public UserDetails(String accessToken, String refreshToken, String srno, String loginID, String cardID, String name, String nickName, String DOB, String email, String phone, String countryCode, String stateCode, String address, String gender, String profilePictureImagePath, String userLevelCode, String joinedDate, String cashWallet, String eWallet, boolean gotNewTopUp) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         Srno = srno;
@@ -46,7 +47,16 @@ public class UserDetails extends SugarRecord {
         UserLevelCode = userLevelCode;
         JoinedDate = joinedDate;
         CashWallet = cashWallet;
+        this.eWallet = eWallet;
         GotNewTopUp = gotNewTopUp;
+    }
+
+    public String geteWallet() {
+        return eWallet;
+    }
+
+    public void seteWallet(String eWallet) {
+        this.eWallet = eWallet;
     }
 
     public String getCardID() {

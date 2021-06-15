@@ -22,7 +22,7 @@
 
         <item
             android:id="@+id/menu_my_reservation"
-            android:icon="@drawable/reservation"
+            android:icon="@drawable/reservation_icon"
             android:title="@string/nav_menu_my_reservation" />
         <item
             android:id="@+id/menu_my_transactions_report"

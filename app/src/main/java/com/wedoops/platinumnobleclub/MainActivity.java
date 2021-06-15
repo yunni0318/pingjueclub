@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     private View navHeader;
     private LinearLayout navFooter, homeBottomNav, recordBottomNav, navigationLayout;
     private FloatingActionButton floatingActionButton;
-    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet, toolbar_title;
+    private TextView textview_user_rank, textview_user_nickname, textview_user_wallet,textview_e_wallet, toolbar_title;
     private ImageView imageview_user_rank, toolbar_logo, toolbar_camera;
     private Handler mHandler;
     private RoundedImageView imageview_user_profile;
@@ -355,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         textview_user_rank = navHeader.findViewById(R.id.textview_user_rank);
         textview_user_nickname = navHeader.findViewById(R.id.textview_user_nickname);
         textview_user_wallet = navHeader.findViewById(R.id.textview_user_wallet);
+        textview_e_wallet= navHeader.findViewById(R.id.textview_e_wallet);
 
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_logo = findViewById(R.id.toolbar_logo);
@@ -540,7 +541,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         break;
 
 //                    case R.id.menu_notification:
-//                        navItemIndex = 10;
+//                        navItemIndex = 11;
 //                        CURRENT_TAG = TAG_NOTIFICATION;
 //
 //                        break;
@@ -643,8 +644,10 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
             String cash_wallet = decimalFormat.format(Double.parseDouble(ud.get(0).getCashWallet()));
+            String e_wallet = decimalFormat.format(Double.parseDouble(ud.get(0).geteWallet()));
 
-            textview_user_wallet.setText(String.format("%s PTS", cash_wallet));
+            textview_e_wallet.setText(String.format("%s CREDITS", e_wallet));
+            textview_user_wallet.setText(String.format("%s POINTS", cash_wallet ));
 
             Glide.with(this).load(ud.get(0).getProfilePictureImagePath()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.default_profile).timeout(10000).into(imageview_user_profile);
 
@@ -654,6 +657,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             Typeface typeface_crimson_700 = Typeface.createFromAsset(this.getAssets(), "fonts/crimson-text-v9-latin-700.ttf");
             textview_user_wallet.setTypeface(typeface_crimson_700);
             textview_user_rank.setTypeface(typeface_crimson_700);
+            textview_e_wallet.setTypeface(typeface_crimson_700);
 
             Menu m = navigationView.getMenu();
             for (int i = 0; i < m.size(); i++) {
@@ -938,9 +942,9 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
         } else {
-            if (navItemIndex != 0) {
+            if (navItemIndex != 1) {
 
-                navItemIndex = 0;
+                navItemIndex = 1;
                 loadHomeFragment();
 
             } else {
@@ -1095,6 +1099,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         String UserLevelCode = response_object.getString("UserLevelCode");
                         String JoinedDate = response_object.getString("JoinedDate");
                         String CashWallet = String.valueOf(response_object.getString("CashWallet"));
+                        String eWallet = String.valueOf(response_object.getString("eWallet"));
 
                         List<UserDetails> ud_listall = UserDetails.listAll(UserDetails.class);
 
@@ -1115,6 +1120,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                         ud.setUserLevelCode(UserLevelCode);
                         ud.setJoinedDate(JoinedDate);
                         ud.setCashWallet(CashWallet);
+                        ud.setCashWallet(eWallet);
                         ud.save();
 
                         setupNavigationDrawer();

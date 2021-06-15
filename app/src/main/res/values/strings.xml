@@ -234,5 +234,6 @@
     <string name="Profile_title">Profile</string>
     <string name="credit_title">Credit</string>
     <string name="reservations_ReservationRemark">Remark: </string>
-    <string name="reservations_remark">Remark</string>
+    <string name="reservations_remark">Remark (optional)</string>
+    <string name="reservations_CHECKIN">CHECK IN</string>
 </resources>

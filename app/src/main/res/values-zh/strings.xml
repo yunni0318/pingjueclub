@@ -215,10 +215,12 @@
     <string name="reservation_title">"会所预定资料 "</string>
     <string name="nav_menu_my_reservation">会所预定</string>
     <string name="nav_menu_memberQR">会员 QR</string>
-    <string name="reservations_ReservationRemark">备注</string>
+    <string name="reservations_ReservationRemark">备注 : </string>
     <string name="Profile_title">个人资料</string>
     <string name="credit_title">Credit 交易</string>
     <string name="userrank_knight">爵士</string>
     <string name="userrank_duke">"公爵 "</string>
     <string name="userrank_marquess">"侯爵 "</string>
+    <string name="reservations_remark">"备注 : "</string>
+    <string name="reservations_CHECKIN">已报到</string>
 </resources>
