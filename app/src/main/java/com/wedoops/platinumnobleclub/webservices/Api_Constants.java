@@ -37,26 +37,27 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Api_Constants {
-    //    testing environment
-    private static String url_authentication = "http://103.15.107.152:5770/api/Authentication/";
-    private static String url_dashboard = "http://103.15.107.152:5770/api/Dashboard/";
-    private static String url_event = "http://103.15.107.152:5770/api/Event/";
-    private static String url_eventbooking = "http://103.15.107.152:5770/api/EventBooking/";
-    private static String url_member = "http://103.15.107.152:5770/api/Member/";
-    private static String url_userwallet = "http://103.15.107.152:5770/api/UserWallet/";
-    private static String url_services = "http://103.15.107.152:5770/api/Services/";
-    private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
-    private static String url_Reservation = "http://stg.platinumnobleclub.com/api/Reservation/";
 //    private static String url_Reservation = "http://103.15.107.152:5770/api/Reservation/";
+    //    testing environment
+//    private static String url_authentication = "http://103.15.107.152:5770/api/Authentication/";
+//    private static String url_dashboard = "http://103.15.107.152:5770/api/Dashboard/";
+//    private static String url_event = "http://103.15.107.152:5770/api/Event/";
+//    private static String url_eventbooking = "http://103.15.107.152:5770/api/EventBooking/";
+//    private static String url_member = "http://103.15.107.152:5770/api/Member/";
+//    private static String url_userwallet = "http://103.15.107.152:5770/api/UserWallet/";
+//    private static String url_services = "http://103.15.107.152:5770/api/Services/";
+//    private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
+//    private static String url_Reservation = "http://stg.platinumnobleclub.com/api/Reservation/";
 
-//    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
-//    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
-//    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
-//    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
-//    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
-//    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
-//    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
-//    private static String url_internal = "http://api.platinumnobleclub.com/api/Internet/";
+    private static String url_Reservation = "http://api.platinumnobleclub.com/api/Reservation/";
+    private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
+    private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
+    private static String url_event = "http://api.platinumnobleclub.com/api/Event/";
+    private static String url_eventbooking = "http://api.platinumnobleclub.com/api/EventBooking/";
+    private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
+    private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
+    private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
+    private static String url_internal = "http://api.platinumnobleclub.com/api/Internet/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
@@ -978,13 +979,6 @@ public class Api_Constants {
                                     } else {
                                         Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                                     }
-
-
-
-
-
-
-
 
 
 //

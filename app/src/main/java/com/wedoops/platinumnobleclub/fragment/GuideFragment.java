@@ -91,9 +91,9 @@ public class GuideFragment extends Fragment {
 
         guide_webview.setBackgroundColor(Color.parseColor("#191919"));
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
-            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_EN.html");
+            guide_webview.loadUrl("https://www.platinumnobleclub.com/PJ_FAQ_EN.html");
         } else {
-            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_CN.html");
+            guide_webview.loadUrl("https://www.platinumnobleclub.com/PJ_FAQ_CN.html");
         }
         guide_webview.getSettings().setJavaScriptEnabled(true);
         guide_webview.getSettings().setUseWideViewPort(true);
