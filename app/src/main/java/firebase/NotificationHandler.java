@@ -17,7 +17,6 @@ import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
 import com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -85,7 +84,11 @@ public class NotificationHandler extends FirebaseMessagingService {
                     notiMessage = data.get("Message");
                     notiImage = data.get("image");
 
-                    sendNotification(remoteMessage);
+                    if (notiImage.equals("")) {
+                        sendNotification(remoteMessage);
+                    } else {
+                        sendImageNotification(remoteMessage);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -130,6 +133,27 @@ public class NotificationHandler extends FirebaseMessagingService {
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "0")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(notiTitle)
+                .setContentText(notiMessage)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(notiMessage))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        createNotificationChannel();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(0, builder.build());
+
+    }
+
+    private void sendImageNotification(RemoteMessage remoteMessage) {
 
         try {
             URL url = new URL(notiImage);
