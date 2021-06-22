@@ -57,7 +57,7 @@ public class Api_Constants {
     private static String url_member = "http://api.platinumnobleclub.com/api/Member/";
     private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
     private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
-    private static String url_internal = "http://api.platinumnobleclub.com/api/Internet/";
+    private static String url_internal = "http://api.platinumnobleclub.com/api/Internal/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
@@ -929,7 +929,7 @@ public class Api_Constants {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Log.e("Error.Response", error.toString());
-                                    ((MainActivity) context).processWSData(null, API_GET_ENCRYPTED_STRING);
+                                        ((MainActivity) context).processWSData(null, API_GET_ENCRYPTED_STRING);
                                 }
                             }
                     ) {
