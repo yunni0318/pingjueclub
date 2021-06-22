@@ -84,11 +84,11 @@ public class NotificationHandler extends FirebaseMessagingService {
                     notiMessage = data.get("Message");
                     notiImage = data.get("image");
 
-                    if (notiImage.equals("")) {
+                    if (notiImage == null) {
                         sendNotification(remoteMessage);
                     } else {
                         sendImageNotification(remoteMessage);
-                    }
+                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
