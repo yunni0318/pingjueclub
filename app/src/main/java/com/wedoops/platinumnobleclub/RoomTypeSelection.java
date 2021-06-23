@@ -33,36 +33,36 @@ public class RoomTypeSelection extends AppCompatActivity implements RoomTypeSele
         recyclerView = findViewById(R.id.recyclerView);
         onClickListener = this;
 
-        List<Reservation_roomType> mbl = Reservation_roomType.listAll(Reservation_roomType.class);
-        for(int i =0; i < mbl.size();i++){
-            if(mbl.get(i).getProductName().equals("HALL")){
-                mbl.get(i).delete();
-            }
-        }
+//        List<Reservation_roomType> mbl = Reservation_roomType.listAll(Reservation_roomType.class);
+//        for(int i =0; i < mbl.size();i++){
+//            if(mbl.get(i).getProductName().equals("HALL")){
+//                mbl.get(i).delete();
+//            }
+//        }
         String table_name = Reservation_roomType.getTableName(Reservation_roomType.class);
         String EstimateParticipant = StringUtil.toSQLName("EstimateParticipant");
+        String ProductCatagory = StringUtil.toSQLName("ProductCatagory");
 
-        List<Reservation_roomType> ud_list = Reservation_roomType.findWithQuery(Reservation_roomType.class, "SELECT * from " + table_name + "  ORDER BY " + EstimateParticipant + " ASC " , null);
-
-
+        List<Reservation_roomType> ud_list = Reservation_roomType.findWithQuery(Reservation_roomType.class, "SELECT * from " + table_name  + " WHERE " + ProductCatagory + "=? " + " ORDER BY " + EstimateParticipant + " ASC ", "ROOM");
 
 
         List<Reservation_roomType> mb2 = Reservation_roomType.listAll(Reservation_roomType.class);
 
-        roomTypeSelectionAdapter = new RoomTypeSelectionAdapter(ud_list,onClickListener,this);
+        roomTypeSelectionAdapter = new RoomTypeSelectionAdapter(ud_list, onClickListener, this);
         RecyclerView.LayoutManager booking_list_mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(booking_list_mLayoutManager);
         recyclerView.setAdapter(roomTypeSelectionAdapter);
 
 
     }
-    @Override
-    public void onClickListener(String roomtitle,String productGUID) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("roomtitle",roomtitle);
-        returnIntent.putExtra("productGUID",productGUID);
 
-        setResult(Activity.RESULT_OK,returnIntent);
+    @Override
+    public void onClickListener(String roomtitle, String productGUID) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("roomtitle", roomtitle);
+        returnIntent.putExtra("productGUID", productGUID);
+
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
