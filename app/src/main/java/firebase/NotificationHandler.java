@@ -75,6 +75,11 @@ public class NotificationHandler extends FirebaseMessagingService {
                         sendNotificationPayment(remoteMessage);
                     }
                 }
+                else if(remoteMessage.getData().get("ServiceName").equals("Reservation")){
+                    if (remoteMessage.getData().get("IsSuccess").equals("true")) {
+                        sendNotificationReservation(remoteMessage);
+                    }
+                }
             } catch (Exception e) {
                 try {
 
@@ -118,6 +123,42 @@ public class NotificationHandler extends FirebaseMessagingService {
                 .setContentText(success_message)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(success_message))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        createNotificationChannel();
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(0, builder.build());
+
+    }
+
+    private void sendNotificationReservation(RemoteMessage remoteMessage) {
+
+        JSONObject SuccessMessage_Object = convertResponseToJsonObject(remoteMessage.getData().get("SuccessMessage"));
+
+        String en_message;
+        String bodyTitle;
+
+        try {
+            en_message = SuccessMessage_Object.getString("MessageEN");
+            bodyTitle = remoteMessage.getNotification().getTitle();
+
+        } catch (Exception e) {
+            en_message = "";
+            bodyTitle = "";
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "0")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(bodyTitle)
+                .setContentText(en_message)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(en_message))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
