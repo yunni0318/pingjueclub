@@ -124,7 +124,7 @@
 
     <string name="logout_confirmation">确定登出？</string>
     <string name="logout_title">注意</string>
-    <string name="edittext_nickname_empty_error">请输入您的昵称！ </string>
+    <string name="edittext_nickname_empty_error">请输入您的昵称 </string>
 
     <string name="edit_profile_change_password_empty_error">请输入您的密码。 </string>
     <string name="edit_profile_change_password_invalid_error">密码应包含字母和数字字符。 最小长度（6） - 最大长度（50）</string>
@@ -224,4 +224,7 @@
     <string name="reservations_remark">"备注 : "</string>
     <string name="reservations_CHECKIN">已报到</string>
     <string name="wording_foruseonlypts">( 目前只能使用PTS)</string>
+    <string name="Recommended_Allow_Permission">建议允许此应用程序的所有权限</string>
+    <string name="Enable_permission_setting">去设置并允许此应用程序的所有权限</string>
+    <string name="calendar_access_required">需要日历权限将能开启提醒预订功能</string>
 </resources>

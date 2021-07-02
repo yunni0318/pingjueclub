@@ -147,10 +147,14 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         myViewHolder.reservation_pax.setText(context.getString(R.string.reservations_pax) + " " + mbl.get(i).getEstimateParticipant());
         myViewHolder.ReservationNumber.setText(context.getString(R.string.reservations_ReservationNumber) + mbl.get(i).getReservationNumber());
         if (mbl.get(i).getReservationStatus().equals("NEW")) {
-            myViewHolder.reservation_status.setTextColor(Color.YELLOW);
-//            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
-            myViewHolder.reservation_status.setVisibility(View.GONE);
-            myViewHolder.image_new.setVisibility(View.VISIBLE);
+            myViewHolder.reservation_status.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
+            myViewHolder.image_new.setVisibility(View.INVISIBLE);
+
+//            myViewHolder.reservation_status.setVisibility(View.GONE);
+//            myViewHolder.image_new.setVisibility(View.VISIBLE);
+//            myViewHolder.reservation_status.setTextColor(Color.YELLOW);
+
 
 
         } else if (mbl.get(i).getReservationStatus().equals("APPROVED")) {

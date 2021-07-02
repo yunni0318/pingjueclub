@@ -1,5 +1,6 @@
 package com.wedoops.platinumnobleclub.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -8,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.orm.StringUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wedoops.platinumnobleclub.CustomProgressDialog;
@@ -78,6 +81,9 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     private String Date, Date_for_API, roomtype_for_api, EventTitle;
     private static CustomProgressDialog customDialog;
     private RelativeLayout relativelayout3_2, relativelayout3_1;
+    private boolean roomtypeIsClicked = false;
+
+
 
 
 //    public ReservationFragment() {
@@ -207,20 +213,29 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
             @Override
             public void onClick(View view) {
-                customDialog.showDialog(getContext());
+                customDialog.showDialog(app);
 
-                EventTitle = "品爵 Reservation on " + Date;
-                ContentResolver cr = getActivity().getApplicationContext().getContentResolver();
-                ContentValues values = new ContentValues();
-                values.put(Events.DTSTART, reservationdate);
-                values.put(Events.DTEND, reservationtime);
-                values.put(Events.TITLE, EventTitle);
-                values.put(Events.DESCRIPTION, "Reservation");
-                values.put(Events.CALENDAR_ID, 1);
-                values.put(Events.EVENT_LOCATION, "KL");
-                values.put(Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-                Uri uri = cr.insert(Events.CONTENT_URI, values);
-                _eventId = Long.parseLong(uri.getLastPathSegment());
+
+                PackageManager pm = getContext().getPackageManager();
+                int hasPerm = pm.checkPermission(
+                        Manifest.permission.WRITE_CALENDAR,
+                        getContext().getPackageName());
+                if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+
+                    EventTitle = "品爵 Reservation on " + Date;
+                    ContentResolver cr = getActivity().getApplicationContext().getContentResolver();
+                    ContentValues values = new ContentValues();
+                    values.put(Events.DTSTART, reservationdate);
+                    values.put(Events.DTEND, reservationtime);
+                    values.put(Events.TITLE, EventTitle);
+                    values.put(Events.DESCRIPTION, "Reservation");
+                    values.put(Events.CALENDAR_ID, 1);
+                    values.put(Events.EVENT_LOCATION, "KL");
+                    values.put(Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+                    Uri uri = cr.insert(Events.CONTENT_URI, values);
+                    _eventId = Long.parseLong(uri.getLastPathSegment());
+                }
+
 
 //                ContentValues values1 = new ContentValues();
 //                values1.put(CalendarContract.Reminders.MINUTES, 1440);
@@ -256,7 +271,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
                 new CallWebServices(Api_Constants.API_MakeReservation, view.getContext(), true).execute(b);
 
-                customDialog.hideDialog();
+//                customDialog.hideDialog();
 //                Fragment fragment = new reservation_successFragment();
 //                FragmentTransaction fragmentTransaction = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
 //                fragmentTransaction.replace(R.id.framelayout_fragment_container, fragment, "NAMELISTFRAGMENT");
@@ -396,31 +411,6 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 }
             }
         });
-//        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                if (validateUsername() & validatename() & isValidDate() & isValidMobile() & isValidTime() & isvalidroom() & isvalidpax()) {
-//                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_selected));
-//                    submit.setEnabled(true);
-//                } else {
-//                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_unselected));
-//                    submit.setTextColor(getResources().getColor(R.color.white));
-//
-//                    submit.setEnabled(false);
-//                }
-//
-//                String input = sp1.getItemAtPosition(position).toString();
-//                input = input.replace("     - ", "");
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                // your code here
-//            }
-//
-//        });
 
         sp2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -441,15 +431,27 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
             }
 
         });
+//
+//        hall.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                hall.setTextColor(Color.WHITE);
+//                hall.setText("Hall");
+//                room.setTextColor(Color.parseColor("#AAAAAA"));
+//                room.setText("Private Room");
+//                roomtypeIsClicked = true;
+//            }
+//        });
         relativelayout3_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 relativelayout3_1.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background_selected));
                 relativelayout3_2.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background));
                 hall.setTextColor(Color.WHITE);
+                hall.setText("Hall");
                 room.setTextColor(Color.parseColor("#AAAAAA"));
                 room.setText("Private Room");
-
+                roomtypeIsClicked = true;
 
                 List<Reservation_roomType> mbl = Reservation_roomType.listAll(Reservation_roomType.class);
 
@@ -467,9 +469,59 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 relativelayout3_2.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background_selected));
                 relativelayout3_1.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.reservation_roomtype_background));
                 room.setTextColor(Color.WHITE);
+                roomtypeIsClicked = true;
                 hall.setTextColor(Color.parseColor("#AAAAAA"));
                 Intent intent = new Intent(getContext(), RoomTypeSelection.class);
                 startActivityForResult(intent, 101);
+
+            }
+        });
+        hall.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                roomtypeIsClicked = true;
+                if (validateUsername() & validatename() & isValidDate() & isValidMobile() & isValidTime() & isvalidroom() & isvalidpax()) {
+                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_selected));
+                    submit.setEnabled(true);
+                } else {
+                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_unselected));
+                    submit.setTextColor(getResources().getColor(R.color.white));
+                    submit.setEnabled(false);
+                }
+            }
+        });
+        room.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (validateUsername() & validatename() & isValidDate() & isValidMobile() & isValidTime() & isvalidroom() & isvalidpax()) {
+                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_selected));
+                    submit.setEnabled(true);
+                } else {
+                    submit.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.btn_reservation_unselected));
+                    submit.setTextColor(getResources().getColor(R.color.white));
+
+                    submit.setEnabled(false);
+                }
             }
         });
     }
@@ -730,7 +782,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         String username1 = username.getText().toString().trim();
 
         if (username1.isEmpty()) {
-            name.setError(null);
+            username.setError(getResources().getString(R.string.edittext_nickname_empty_error));
             return false;
         }
 //        else if (username1.length() < 6) {
@@ -747,7 +799,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
         String name1 = name.getText().toString().trim();
 
         if (name1.isEmpty()) {
-            name.setError(null);
+            name.setError(getResources().getString(R.string.edittext_nickname_empty_error));
             return false;
         }
 //        else if (name1.length() < 6) {
@@ -805,12 +857,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
     }
 
     private boolean isvalidroom() {
-//        int count = sp1.getSelectedItemPosition();
-//        if (count == 0) {
-//            return false;
-//        } else {
-        return true;
-//        }
+        return roomtypeIsClicked;
     }
 
     private boolean isvalidpax() {
@@ -824,10 +871,11 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
     public static void processWSData(JSONObject returnedObject, int command) {
 //        customProgress.dismiss();
-        customDialog.hideDialog();
 
         if (command == Api_Constants.API_MakeReservation) {
             boolean isSuccess = false;
+            customDialog.hideDialog();
+
             try {
                 isSuccess = returnedObject.getBoolean("Success");
 
@@ -853,6 +901,7 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
                 new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, app, getactivity);
             }
         }
+
         if (command == Api_Constants.API_RetriveAllProduct) {
             boolean isSuccess = false;
             try {
@@ -898,7 +947,13 @@ public class ReservationFragment extends Fragment implements com.wdullaer.materi
 
 
     }
+    public static void processWSDataError(String response, int command) {
+        if (command == Api_Constants.API_MakeReservation) {
+            customDialog.hideDialog();
+            Toast.makeText(app, response, Toast.LENGTH_LONG).show();
 
+        }
+    }
 
     //    https://developer.android.com/guide/topics/providers/calendar-provider#add-event
 //    https://www.youtube.com/watch?v=UbO4W3Wm-YY&ab_channel=AndroidOutlook

@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                             AlertDialog.Builder builder = new AlertDialog.Builder(
                                     this);
                             builder.setTitle(this.getString(R.string.error_title));
-                            builder.setMessage("Calendar Permission required for this app");
+                            builder.setMessage(R.string.Recommended_Allow_Permission);
                             builder.setCancelable(false);
                             builder.setPositiveButton(this.getString(R.string.Ok),
                                     new DialogInterface.OnClickListener() {
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                             builder.show();
 
                         } else {
-                            Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG)
+                            Toast.makeText(this, R.string.Enable_permission_setting, Toast.LENGTH_LONG)
                                     .show();
                         }
                     }
@@ -297,6 +297,12 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
                 }
                 break;
             }
+            case CONSTANTS_VALUE.CALENDAR_REQUEST_CODE: {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                    Toast.makeText(this, R.string.calendar_access_required, Toast.LENGTH_SHORT).show();
+                break;
+            }
+
 
             case CONSTANTS_VALUE.ONLY_CAMERA_REQUEST_CODE: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)

@@ -973,14 +973,13 @@ public class Api_Constants {
                                     NetworkResponse response = error.networkResponse;
                                     String errorMsg = "";
                                     if (response != null && response.data != null) {
-                                        String errorString = new String(response.data);
-                                        Log.i("log error", errorString);
-                                        Toast.makeText(context, errorString, Toast.LENGTH_LONG).show();
+                                         errorMsg = new String(response.data);
+                                        Log.i("log error", errorMsg);
+                                        ReservationFragment.processWSDataError(errorMsg, API_MakeReservation);
+
                                     } else {
-                                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                                        ReservationFragment.processWSDataError(error.toString(), API_MakeReservation);
                                     }
-
-
 //
 //                                    Log.e("Error.Response", error.toString());
 //                                    ReservationFragment.processWSData(null, API_MakeReservation);

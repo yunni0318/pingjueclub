@@ -25,4 +25,6 @@ public class CONSTANTS_VALUE {
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+    public static final int CALENDAR_REQUEST_CODE = 614;
+
 }

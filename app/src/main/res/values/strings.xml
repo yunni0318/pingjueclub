@@ -141,7 +141,7 @@
     <string name="error_unknown">Unknown Error</string>
     <string name="logout_confirmation">Are you sure to logout?</string>
     <string name="logout_title">LOGOUT</string>
-    <string name="edittext_nickname_empty_error">Please Enter your Nickname!</string>
+    <string name="edittext_nickname_empty_error">Please Enter your name.</string>
 
     <string name="edit_profile_change_password_empty_error">Please enter your password.</string>
 
@@ -237,4 +237,7 @@
     <string name="reservations_remark">Remark (optional)</string>
     <string name="reservations_CHECKIN">CHECK IN</string>
     <string name="wording_foruseonlypts">(Temporarily only available for points)</string>
+    <string name="calendar_access_required">Allow calendar permission will remind for reservation function</string>
+    <string name="Recommended_Allow_Permission">Recommended to allow all Permission for this APP</string>
+    <string name="Enable_permission_setting">Go to settings and enable permissions</string>
 </resources>
