@@ -227,7 +227,7 @@
     <string name="reservations_pax">Pax: </string>
     <string name="reservations_room_type">Room Type: </string>
     <string name="reservations_ReservationNumber">"Reservation # "</string>
-    <string name="reservations_NEW">NEW</string>
+    <string name="reservations_NEW">PENDING REQUEST</string>
     <string name="reservations_APPROVED">APPROVED</string>
     <string name="reservations_REJECTED">REJECTED</string>
     <string name="EstimateParticipant">"EstimateParticipant :  "</string>
@@ -236,6 +236,8 @@
     <string name="reservations_ReservationRemark">Remark: </string>
     <string name="reservations_remark">Remark (optional)</string>
     <string name="reservations_CHECKIN">CHECK IN</string>
+    <string name="reservations_Cancel">CANCEL</string>
+
     <string name="wording_foruseonlypts">(Temporarily only available for points)</string>
     <string name="calendar_access_required">Allow calendar permission will remind for reservation function</string>
     <string name="Recommended_Allow_Permission">Recommended to allow all Permission for this APP</string>

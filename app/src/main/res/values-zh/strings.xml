@@ -208,7 +208,7 @@
     <string name="reservations_hall">会堂</string>
     <string name="reservations_room">房间</string>
     <string name="reservations_room_type">"房间类型 ： "</string>
-    <string name="reservations_NEW">新</string>
+    <string name="reservations_NEW">待处理</string>
     <string name="reservations_APPROVED">批准</string>
     <string name="reservations_REJECTED">拒绝</string>
     <string name="EstimateParticipant">"可容纳人数 ： "</string>
@@ -227,4 +227,5 @@
     <string name="Recommended_Allow_Permission">建议允许此应用程序的所有权限</string>
     <string name="Enable_permission_setting">去设置并允许此应用程序的所有权限</string>
     <string name="calendar_access_required">需要日历权限将能开启提醒预订功能</string>
+    <string name="reservations_Cancel">取消</string>
 </resources>

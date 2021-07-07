@@ -129,7 +129,6 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
 //        String month_name = month_date.format(cal.getTime());
 
 
-
         SimpleDateFormat sdf = new SimpleDateFormat("M");
         try {
             Date d = sdf.parse(month);
@@ -146,16 +145,14 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         myViewHolder.reservation_roomtype.setText(context.getString(R.string.reservations_room_type) + " " + mbl.get(i).getProductName());
         myViewHolder.reservation_pax.setText(context.getString(R.string.reservations_pax) + " " + mbl.get(i).getEstimateParticipant());
         myViewHolder.ReservationNumber.setText(context.getString(R.string.reservations_ReservationNumber) + mbl.get(i).getReservationNumber());
-        if (mbl.get(i).getReservationStatus().equals("NEW")) {
+
+        if (mbl.get(i).getReservationStatus().equals("PENDING REQUEST")) {
             myViewHolder.reservation_status.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_NEW));
             myViewHolder.image_new.setVisibility(View.INVISIBLE);
-
 //            myViewHolder.reservation_status.setVisibility(View.GONE);
 //            myViewHolder.image_new.setVisibility(View.VISIBLE);
 //            myViewHolder.reservation_status.setTextColor(Color.YELLOW);
-
-
 
         } else if (mbl.get(i).getReservationStatus().equals("APPROVED")) {
             myViewHolder.reservation_status.setTextColor(Color.GREEN);
@@ -163,19 +160,24 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
             myViewHolder.image_new.setVisibility(View.INVISIBLE);
             myViewHolder.reservation_status.setVisibility(View.VISIBLE);
 
-
         } else if (mbl.get(i).getReservationStatus().equals("REJECT")) {
             myViewHolder.reservation_status.setTextColor(Color.RED);
             myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_REJECTED));
             myViewHolder.image_new.setVisibility(View.INVISIBLE);
             myViewHolder.reservation_status.setVisibility(View.VISIBLE);
+
         } else if (mbl.get(i).getReservationStatus().equals("CHECKIN")) {
             myViewHolder.reservation_status.setTextColor(Color.parseColor("#7ad7f0"));
             myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_CHECKIN));
             myViewHolder.image_new.setVisibility(View.INVISIBLE);
             myViewHolder.reservation_status.setVisibility(View.VISIBLE);
-        }
 
+        } else if (mbl.get(i).getReservationStatus().equals("CANCEL")) {
+            myViewHolder.reservation_status.setTextColor(Color.RED);
+            myViewHolder.reservation_status.setText(context.getResources().getString(R.string.reservations_Cancel));
+            myViewHolder.image_new.setVisibility(View.INVISIBLE);
+            myViewHolder.reservation_status.setVisibility(View.VISIBLE);
+        }
         if (mbl.get(i).getRemark() == null) {
             myViewHolder.reservation_remark.setVisibility(View.GONE);
         } else {
@@ -204,4 +206,5 @@ public class ReservationHistoryAdapter extends RecyclerView.Adapter<ReservationH
         return mbl.size();
     }
 }
+
 //https://image.winudf.com/v2/image1/Y29tLnh5emNhcl9zY3JlZW5fM18xNTY3MDM3ODcwXzAzOQ/screen-3.jpg?fakeurl=1&type=.jpg
