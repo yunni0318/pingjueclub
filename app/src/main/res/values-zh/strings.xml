@@ -23,6 +23,7 @@
     <string name="member_dashboard_textview_popular_trip">热门旅行</string>
     <string name="member_dashboard_eventstartdate">%s %s月 %s</string>
     <string name="member_dashboard_eventenddate">%s %s月 %s</string>
+    <string name="no_event">没有活动</string>
 
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_dashboard">主页</string>

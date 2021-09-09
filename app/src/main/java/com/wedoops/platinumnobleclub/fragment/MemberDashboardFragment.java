@@ -59,7 +59,7 @@ public class MemberDashboardFragment extends Fragment {
     private static View view;
     private static RecyclerView recyclerview_top_banner, recyclerview_eventdata;
     private static ImageButton imagebutton_class, imagebutton_business, imagebutton_style;
-
+    private static TextView no_event;
     private static final Handler handler = new Handler();
     private static Runnable runnable;
     public static Activity get_activity;
@@ -117,7 +117,7 @@ public class MemberDashboardFragment extends Fragment {
 
                 String url = ed.get(position).getRedirectURL();
 
-                if(url.length() > 0){
+                if (url.length() > 0) {
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
                         url = "http://" + url;
                     }
@@ -330,6 +330,7 @@ public class MemberDashboardFragment extends Fragment {
         imagebutton_class = view.findViewById(R.id.imagebutton_class);
         imagebutton_business = view.findViewById(R.id.imagebutton_business);
         imagebutton_style = view.findViewById(R.id.imagebutton_style);
+        no_event = view.findViewById(R.id.no_event);
     }
 
     private void setupListener() {
@@ -346,10 +347,16 @@ public class MemberDashboardFragment extends Fragment {
 
                 List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_CLASS);
 
-                eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
-                recyclerview_eventdata.setAdapter(eventData_adapter);
-                eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
-                eventData_adapter.notifyDataSetChanged();
+                if (ed.size() > 0) {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
+                    no_event.setVisibility(View.GONE);
+                } else {
+                    no_event.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -365,10 +372,15 @@ public class MemberDashboardFragment extends Fragment {
 
                 List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
 
-                eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
-                recyclerview_eventdata.setAdapter(eventData_adapter);
-                eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
-                eventData_adapter.notifyDataSetChanged();
+                if (ed.size() > 0) {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
+                    no_event.setVisibility(View.GONE);
+                } else {
+                    no_event.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -385,10 +397,15 @@ public class MemberDashboardFragment extends Fragment {
 
                 List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_STYLE);
 
-                eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
-                recyclerview_eventdata.setAdapter(eventData_adapter);
-                eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
-                eventData_adapter.notifyDataSetChanged();
+                if (ed.size() > 0) {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
+                    no_event.setVisibility(View.GONE);
+                } else {
+                    no_event.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
