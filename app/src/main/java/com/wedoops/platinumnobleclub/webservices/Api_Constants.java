@@ -49,6 +49,8 @@ public class Api_Constants {
 //    private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
 //    private static String url_Reservation = "http://stg.platinumnobleclub.com/api/Reservation/";
 
+
+//    LIVE server environment
     private static String url_Reservation = "http://api.platinumnobleclub.com/api/Reservation/";
     private static String url_authentication = "http://api.platinumnobleclub.com/api/Authentication/";
     private static String url_dashboard = "http://api.platinumnobleclub.com/api/Dashboard/";
