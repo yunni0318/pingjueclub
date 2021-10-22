@@ -310,10 +310,10 @@ public class EditProfileFragment extends Fragment {
             isValid = false;
         }
 
-        if (!isValidPassword(current_password)) {
-            edittext_current_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
-            isValid = false;
-        }
+//        if (!isValidPassword(current_password)) {
+//            edittext_current_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
+//            isValid = false;
+//        }
 
         if (!isValidPassword(new_password)) {
             edittext_new_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
@@ -1088,7 +1088,7 @@ public class EditProfileFragment extends Fragment {
         Pattern pattern;
         Matcher matcher;
 
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{6,}$";
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{5,}$";
 
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
