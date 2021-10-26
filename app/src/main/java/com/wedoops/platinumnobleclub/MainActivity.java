@@ -1,6 +1,7 @@
 package com.wedoops.platinumnobleclub;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,6 +31,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.BuildConfig;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -123,7 +125,7 @@ import java.util.Map;
 import static com.wedoops.platinumnobleclub.helper.CONSTANTS_VALUE.PICK_IMAGE_GALLERY_REQUEST_CODE;
 
 
-public class MainActivity extends AppCompatActivity implements IImagePickerLister {
+public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
     private static final String TAG_DASHBOARD = "DASHBOARD";
@@ -314,8 +316,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
             case CONSTANTS_VALUE.ONLY_CAMERA_REQUEST_CODE: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
-
+                    ImagePicker.with(this)
+                            .crop(1f, 1f)                    //Crop image(Optional), Check Customization for more option
+                            .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                            .maxResultSize(620, 620)    //Final image resolution will be less than 1080 x 1080(Optional)
+                            .start();
                 else {
                     Toast.makeText(this, R.string.camera_access_required, Toast.LENGTH_SHORT).show();
                 }
@@ -323,7 +328,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
             }
             case CONSTANTS_VALUE.ONLY_STORAGE_REQUEST_CODE: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    new DisplayAlertDialog().displayImageSelectDialog(this, this);
+                    ImagePicker.with(this)
+                            .crop(1f, 1f)                    //Crop image(Optional), Check Customization for more option
+                            .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                            .maxResultSize(620, 620)    //Final image resolution will be less than 1080 x 1080(Optional)
+                            .start();
                 else {
                     Toast.makeText(this, R.string.storage_access_required, Toast.LENGTH_SHORT).show();
                 }
@@ -698,7 +707,11 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (new ApplicationClass().checkSelfPermissions(this)) {
-                new DisplayAlertDialog().displayImageSelectDialog(this, this);
+                ImagePicker.with(this)
+                        .crop(1f, 1f)                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(620, 620)    //Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
 
             }
         }
@@ -1214,39 +1227,29 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri uri = Uri.parse(currentPhotoPath);
-            openCropActivity(uri, uri);
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri uri = UCrop.getOutput(data);
-                showImage(uri);
-            }
-        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            try {
-                Uri sourceUri = data.getData();
-                File file = getImageFile();
-                Uri destinationUri = Uri.fromFile(file);
-                openCropActivity(sourceUri, destinationUri);
-            } catch (Exception e) {
-                Log.e("Error Image", e.toString());
-            }
+        if (resultCode == Activity.RESULT_OK) {
+
+            Uri imageUri = data.getData();
+            showImage(imageUri);
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.Task_Cancelled, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showImage(Uri imageUri) {
         try {
-            File file;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                file = com.wedoops.platinumnobleclub.helper.FileUtils.getFile(this, imageUri);
-            } else {
-                file = new File(currentPhotoPath);
+
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            InputStream inputStream = new FileInputStream(file);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//            imageView.setImageBitmap(bitmap);
-
+            imageview_user_profile.setImageURI(imageUri);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -1259,75 +1262,75 @@ public class MainActivity extends AppCompatActivity implements IImagePickerListe
         }
     }
 
-    @Override
-    public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
-        if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
-            openCamera();
-        else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
-            openImagesDocument();
-    }
-
-    private void openImagesDocument() {
-        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        pictureIntent.setType("image/*");
-        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
-            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        }
-        startActivityForResult(Intent.createChooser(pictureIntent, "Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);
-    }
-
-    private void openCamera() {
-        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file;
-        try {
-            file = getImageFile(); // 1
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) // 2
-            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
-        else
-            uri = Uri.fromFile(file); // 3
-        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 4
-        startActivityForResult(pictureIntent, CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE);
-    }
-
-    private File getImageFile() throws IOException {
-        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
-
-        System.out.println(storageDir.getAbsolutePath());
-        if (storageDir.exists()) {
-            System.out.println("File exists");
-        } else {
-            System.out.println("File not exists");
-            storageDir.mkdirs();
-        }
-        File file = File.createTempFile(
-                imageFileName, ".jpg", storageDir
-        );
-        currentPhotoPath = "file:" + file.getAbsolutePath();
-        return file;
-    }
-
-    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
-        UCrop.Options options = new UCrop.Options();
-        options.setCircleDimmedLayer(true);
-        options.setDimmedLayerColor(Color.parseColor("#50ffffff"));
-        options.setHideBottomControls(true);
-        options.setShowCropGrid(false);
-        options.setCropFrameStrokeWidth(5);
-        options.setCropFrameColor(Color.WHITE);
-        options.setShowCropFrame(false);
-        UCrop.of(sourceUri, destinationUri).withOptions(options)
-                .withAspectRatio(1, 1)
-                .withMaxResultSize(300, 300)
-                .start(this);
-    }
+//    @Override
+//    public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
+//        if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
+//            openCamera();
+//        else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
+//            openImagesDocument();
+//    }
+//
+//    private void openImagesDocument() {
+//        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//        pictureIntent.setType("image/*");
+//        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
+//            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+//        }
+//        startActivityForResult(Intent.createChooser(pictureIntent, "Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);
+//    }
+//
+//    private void openCamera() {
+//        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        File file;
+//        try {
+//            file = getImageFile(); // 1
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//        Uri uri;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) // 2
+//            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
+//        else
+//            uri = Uri.fromFile(file); // 3
+//        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 4
+//        startActivityForResult(pictureIntent, CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE);
+//    }
+//
+//    private File getImageFile() throws IOException {
+//        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
+//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+//
+//        System.out.println(storageDir.getAbsolutePath());
+//        if (storageDir.exists()) {
+//            System.out.println("File exists");
+//        } else {
+//            System.out.println("File not exists");
+//            storageDir.mkdirs();
+//        }
+//        File file = File.createTempFile(
+//                imageFileName, ".jpg", storageDir
+//        );
+//        currentPhotoPath = "file:" + file.getAbsolutePath();
+//        return file;
+//    }
+//
+//    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
+//        UCrop.Options options = new UCrop.Options();
+//        options.setCircleDimmedLayer(true);
+//        options.setDimmedLayerColor(Color.parseColor("#50ffffff"));
+//        options.setHideBottomControls(true);
+//        options.setShowCropGrid(false);
+//        options.setCropFrameStrokeWidth(5);
+//        options.setCropFrameColor(Color.WHITE);
+//        options.setShowCropFrame(false);
+//        UCrop.of(sourceUri, destinationUri).withOptions(options)
+//                .withAspectRatio(1, 1)
+//                .withMaxResultSize(300, 300)
+//                .start(this);
+//    }
 
     public static void redirectDashboard() {
         navItemIndex = 1;

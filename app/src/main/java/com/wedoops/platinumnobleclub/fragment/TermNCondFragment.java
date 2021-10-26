@@ -127,7 +127,7 @@ public class TermNCondFragment extends Fragment {
 
                 builder.setView(customLayout);
 
-                builder.setCancelable(false);
+                builder.setCancelable(true);
 
 
                 button_ok.setOnClickListener(new View.OnClickListener() {

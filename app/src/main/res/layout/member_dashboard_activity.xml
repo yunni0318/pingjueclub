@@ -57,7 +57,7 @@
                     android:background="@android:color/transparent"
                     android:paddingRight="10dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/category_business" />
+                    android:src="@drawable/category_business_inactive" />
 
                 <ImageButton
                     android:id="@+id/imagebutton_class"
@@ -68,7 +68,7 @@
                     android:background="@android:color/transparent"
                     android:paddingRight="10dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/category_class" />
+                    android:src="@drawable/category_class_inactive" />
 
 
                 <ImageButton
@@ -80,7 +80,7 @@
                     android:background="@android:color/transparent"
                     android:paddingRight="10dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/category_style" />
+                    android:src="@drawable/category_style_inactive" />
             </LinearLayout>
 
             <RelativeLayout

@@ -14,9 +14,9 @@ android {
         applicationId 'com.wedoops.platinumnobleclub'
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 21
-        versionName "1.0.21"
-//        7 / 7 / 2021
+        versionCode 23
+        versionName "1.0.23"
+//        26 / 10 / 2021
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
@@ -92,6 +92,6 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
-
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -30,6 +30,7 @@
     <string name="member_dashboard_eventstartdate">%s %s %s</string>
     <string name="member_dashboard_eventenddate">%s %s %s</string>
     <string name="no_event">No Event</string>
+    <string name="Task_Cancelled">Task Cancelled</string>
 
     <!-- Event Detail Activity -->
     <string name="event_detail_title">Event Detail</string>

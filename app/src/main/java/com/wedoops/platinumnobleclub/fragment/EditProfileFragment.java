@@ -36,12 +36,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.BuildConfig;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.orm.StringUtil;
 import com.wedoops.platinumnobleclub.CustomProgressDialog;
 import com.wedoops.platinumnobleclub.Dialog.QRcodeDialog;
@@ -188,16 +190,22 @@ public class EditProfileFragment extends Fragment {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (new ApplicationClass().checkSelfPermissions(get_activity)) {
-                        new DisplayAlertDialog().displayImageSelectDialog(get_context, new IImagePickerLister() {
-                            @Override
-                            public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
+//                        new DisplayAlertDialog().displayImageSelectDialog(get_context, new IImagePickerLister() {
+//                            @Override
+//                            public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
+//
+//                                if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
+//                                    openCamera();
+//                                else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
+//                                    openImagesDocument();
+//                            }
+//                        });
 
-                                if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA)
-                                    openCamera();
-                                else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY)
-                                    openImagesDocument();
-                            }
-                        });
+                        ImagePicker.with(get_activity)
+                                .crop(1f, 1f)                    //Crop image(Optional), Check Customization for more option
+                                .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                                .maxResultSize(620, 620)    //Final image resolution will be less than 1080 x 1080(Optional)
+                                .start();
 
                     }
                 }
@@ -1023,39 +1031,27 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CONSTANTS_VALUE.CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri uri = Uri.parse(currentPhotoPath);
-            openCropActivity(uri, uri);
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri uri = UCrop.getOutput(data);
-                showImage(uri);
-            }
-        } else if (requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            try {
-                Uri sourceUri = data.getData();
-                File file = getImageFile();
-                Uri destinationUri = Uri.fromFile(file);
-                openCropActivity(sourceUri, destinationUri);
-            } catch (Exception e) {
-                Log.e("Error Image", e.toString());
-            }
+        if (requestCode == Activity.RESULT_OK) {
+
+            Uri imageUri = data.getData();
+            showImage(imageUri);
+
+        } else if (requestCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(get_context, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(get_context, R.string.Task_Cancelled, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showImage(Uri imageUri) {
         try {
-            File file;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                file = com.wedoops.platinumnobleclub.helper.FileUtils.getFile(get_context, imageUri);
-            } else {
-                file = new File(currentPhotoPath);
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(get_activity.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            InputStream inputStream = new FileInputStream(file);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//            imageView.setImageBitmap(bitmap);
-
+            imageview_user_profile.setImageURI(imageUri);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();

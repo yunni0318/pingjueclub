@@ -47,7 +47,7 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
 
     public Context c;
     public ImageView qrcode, btn_close, userImage;
-    private TextView memberName, memberID,member_num;
+    private TextView memberName, memberID, member_num;
 
     public QRcodeDialog(@NonNull Context context) {
         super(context);
@@ -68,7 +68,7 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
         btn_close = findViewById(R.id.btn_close);
         userImage = findViewById(R.id.qr_user_profile);
         memberName = findViewById(R.id.member_name);
-        memberID = findViewById(R.id.member_ID);
+//        memberID = findViewById(R.id.member_ID);
         member_num = findViewById(R.id.member_ID_number);
         btn_close.setOnClickListener(this);
         displayResult();
@@ -97,8 +97,8 @@ public class QRcodeDialog extends Dialog implements View.OnClickListener {
                     }
                 });
 
-        memberName.setText(ud_list.get(0).getName());
-        memberID.setText("ID: "+ud_list.get(0).getLoginID());
+        memberName.setText(ud_list.get(0).getNickName());
+//        memberID.setText("ID: "+ud_list.get(0).getLoginID());
         String text = ud_list.get(0).getCardID();
         text = text.substring(0, 4) + "-" +text.substring(4, 8) + "-" + text.substring(8, text.length());
 

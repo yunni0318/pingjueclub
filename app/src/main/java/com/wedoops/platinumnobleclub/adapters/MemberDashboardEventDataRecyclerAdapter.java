@@ -274,13 +274,14 @@ public class MemberDashboardEventDataRecyclerAdapter extends RecyclerView.Adapte
             if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
                 myViewHolder.imageview_user_rank_knight.setVisibility(View.VISIBLE);
             }
+            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+                myViewHolder.imageview_user_rank_marquess.setVisibility(View.VISIBLE);
+            }
 
             if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_DUKE)) {
                 myViewHolder.imageview_user_rank_duke.setVisibility(View.VISIBLE);
             }
-            if (ed.get(i).getUserLevelCode().contains(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
-                myViewHolder.imageview_user_rank_marquess.setVisibility(View.VISIBLE);
-            }
+
         }
     }
 

@@ -86,14 +86,24 @@ public class MemberDashboardFragment extends Fragment {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
-            String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
+            if(currentSelectedCategory.equals("All")){
+                List<MemberDashboardEventData> all = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
 
-            List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", currentSelectedCategory);
+                Intent intent = new Intent(view.getContext(), EventDetailActivity.class);
+                intent.putExtra("eventGUID", all.get(position).getEventGUID());
+                view.getContext().startActivity(intent);
+            }
+            else {
+                String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
+                String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
 
-            Intent intent = new Intent(view.getContext(), EventDetailActivity.class);
-            intent.putExtra("eventGUID", ed.get(position).getEventGUID());
-            view.getContext().startActivity(intent);
+                List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", currentSelectedCategory);
+
+                Intent intent = new Intent(view.getContext(), EventDetailActivity.class);
+                intent.putExtra("eventGUID", ed.get(position).getEventGUID());
+                view.getContext().startActivity(intent);
+
+            }
 
         }
     };
@@ -150,9 +160,8 @@ public class MemberDashboardFragment extends Fragment {
         setupAdvertisement();
         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-        button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
+//        button_category_setTint(CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
     }
-
 
     private void setupAdvertisement() {
 
@@ -354,6 +363,10 @@ public class MemberDashboardFragment extends Fragment {
                     eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.GONE);
                 } else {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.VISIBLE);
                 }
 
@@ -379,6 +392,10 @@ public class MemberDashboardFragment extends Fragment {
                     eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.GONE);
                 } else {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.VISIBLE);
                 }
             }
@@ -404,6 +421,10 @@ public class MemberDashboardFragment extends Fragment {
                     eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.GONE);
                 } else {
+                    eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
+                    recyclerview_eventdata.setAdapter(eventData_adapter);
+                    eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+                    eventData_adapter.notifyDataSetChanged();
                     no_event.setVisibility(View.VISIBLE);
                 }
             }
@@ -414,13 +435,13 @@ public class MemberDashboardFragment extends Fragment {
 
         String tablename_tb = StringUtil.toSQLName("MemberDashboardTopBanner");
         List<MemberDashboardTopBanner> ud = MemberDashboardTopBanner.findWithQuery(MemberDashboardTopBanner.class, "Select * from " + tablename_tb);
-
-        String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
-        String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
-
-        List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
-        currentSelectedCategory = CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS;
         topBanner_adapter = new MemberDashboardTopBannerRecyclerAdapter(ud);
+
+//        String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
+//        String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
+//        List<MemberDashboardEventData> ed = MemberDashboardEventData.findWithQuery(MemberDashboardEventData.class, "Select * from " + tablename_ed + " where " + fieldname_category_code + " = ?", CONSTANTS_VALUE.EVENT_CATEGORY_BUSINESS);
+        currentSelectedCategory = "All";
+        List<MemberDashboardEventData> ed = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
         eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed);
 
         RecyclerView.LayoutManager eventdata_mLayoutManager = new LinearLayoutManager(view.getContext());
@@ -513,10 +534,14 @@ public class MemberDashboardFragment extends Fragment {
     }
 
     private static void setupAutoScroll() {
+
+        String tablename_tb = StringUtil.toSQLName("MemberDashboardTopBanner");
+        List<MemberDashboardTopBanner> ud = MemberDashboardTopBanner.findWithQuery(MemberDashboardTopBanner.class, "Select * from " + tablename_tb);
+
         runnable = new Runnable() {
             @Override
             public void run() {
-                if (position == 3) {
+                if (position == ud.size()) {
                     position = 0;
                 }
                 recyclerview_top_banner.smoothScrollToPosition(position);
@@ -598,6 +623,25 @@ public class MemberDashboardFragment extends Fragment {
 
     }
 
+    private static void initial_event() {
+
+        List<MemberDashboardEventData> ed1 = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
+
+        if (ed1.size() > 0) {
+            eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed1);
+            recyclerview_eventdata.setAdapter(eventData_adapter);
+            eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+            eventData_adapter.notifyDataSetChanged();
+            no_event.setVisibility(View.GONE);
+
+        } else {
+            eventData_adapter = new MemberDashboardEventDataRecyclerAdapter(ed1);
+            recyclerview_eventdata.setAdapter(eventData_adapter);
+            eventData_adapter.setOnEventDataItemClickListener(onEventDataItemClickListener);
+            eventData_adapter.notifyDataSetChanged();
+            no_event.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void button_category_setTint(String currentCategory) {
         if (currentCategory.equals(CONSTANTS_VALUE.EVENT_CATEGORY_CLASS)) {
@@ -708,6 +752,7 @@ public class MemberDashboardFragment extends Fragment {
 
                         checkTopUpStatus();
                         displayResult();
+                        initial_event();
 
                     } else {
                         new DisplayAlertDialog().displayAlertDialogError(returnedObject.getInt("StatusCode"), view.getContext(), get_activity);

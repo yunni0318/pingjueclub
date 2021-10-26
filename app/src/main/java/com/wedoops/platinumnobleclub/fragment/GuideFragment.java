@@ -26,8 +26,10 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.wedoops.platinumnobleclub.MainActivity;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.helper.ApplicationClass;
+import com.wedoops.platinumnobleclub.helper.DisplayAlertDialog;
 
 import java.util.Locale;
 
@@ -53,7 +55,7 @@ public class GuideFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         get_context = getContext();
-
+        get_activity = getActivity();
         setupDeclaration();
         loadLanguage();
         displayResult();
@@ -91,9 +93,9 @@ public class GuideFragment extends Fragment {
 
         guide_webview.setBackgroundColor(Color.parseColor("#191919"));
         if (lang.equals("en_us") || lang.equals("en_gb") || lang.equals("")) {
-            guide_webview.loadUrl("https://www.platinumnobleclub.com/PJ_FAQ_EN.html");
+            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_EN.html");
         } else {
-            guide_webview.loadUrl("https://www.platinumnobleclub.com/PJ_FAQ_CN.html");
+            guide_webview.loadUrl("http://www.platinumnobleclub.com/PJ_FAQ_CN.html");
         }
         guide_webview.getSettings().setJavaScriptEnabled(true);
         guide_webview.getSettings().setUseWideViewPort(true);
@@ -126,7 +128,7 @@ public class GuideFragment extends Fragment {
                 view.setBackgroundColor(Color.parseColor("#191919"));
                 view.loadUrl("about:blank");
 
-                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(view.getContext());
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(get_context);
 
                 View customLayout = getLayoutInflater().inflate(R.layout.dialog_ok_only_custom_layout, null);
                 TextView textview_title = customLayout.findViewById(R.id.textview_title);
@@ -135,17 +137,18 @@ public class GuideFragment extends Fragment {
 
                 textview_title.setText("Warning");
                 textview_message.setText("something went wrong, please try again later");
-                button_ok.setText(view.getContext().getString(R.string.Ok));
+                button_ok.setText(get_context.getString(R.string.Ok));
 
                 builder.setView(customLayout);
 
-                builder.setCancelable(false);
 
+                builder.setCancelable(true);
 
                 button_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         alert.dismiss();
+
                     }
                 });
 

@@ -124,7 +124,7 @@ public class ButlerServiceFragment extends Fragment {
 
                 builder.setView(customLayout);
 
-                builder.setCancelable(false);
+                builder.setCancelable(true);
 
                 button_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
