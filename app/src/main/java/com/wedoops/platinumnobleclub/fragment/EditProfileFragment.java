@@ -310,10 +310,10 @@ public class EditProfileFragment extends Fragment {
             isValid = false;
         }
 
-//        if (!isValidPassword(current_password)) {
-//            edittext_current_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
-//            isValid = false;
-//        }
+        if (!isValidPassword(current_password)) {
+            edittext_current_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
+            isValid = false;
+        }
 
         if (!isValidPassword(new_password)) {
             edittext_new_password.setError(view.getContext().getString(R.string.edit_profile_change_password_invalid_error));
@@ -450,9 +450,9 @@ public class EditProfileFragment extends Fragment {
             imageview_user_rank.setImageResource(R.drawable.gold_medal);
             textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_gold));
         }
-        else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_BRONZE)) {
-            imageview_user_rank.setImageResource(R.drawable.bronze_medal);
-            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_bronze));
+        else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_MARQUESS)) {
+            imageview_user_rank.setImageResource(R.drawable.marquess_medal);
+            textview_user_rank.setText(view.getContext().getResources().getString(R.string.userrank_marquess));
 
         }
         else if (ud_list.get(0).getUserLevelCode().equals(CONSTANTS_VALUE.USER_LEVEL_CODE_KNIGHT)) {
@@ -1088,7 +1088,7 @@ public class EditProfileFragment extends Fragment {
         Pattern pattern;
         Matcher matcher;
 
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{5,}$";
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{6,}$";
 
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
