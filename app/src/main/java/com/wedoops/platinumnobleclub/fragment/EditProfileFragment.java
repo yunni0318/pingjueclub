@@ -1031,7 +1031,7 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
             Uri imageUri = data.getData();
             showImage(imageUri);

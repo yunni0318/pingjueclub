@@ -9,14 +9,14 @@ android {
             keyPassword 'PL@TINUM'
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId 'com.wedoops.platinumnobleclub'
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 23
-        versionName "1.0.23"
-//        26 / 10 / 2021
+        versionCode 24
+        versionName "1.0.24"
+//        29 / 12 / 2021
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
