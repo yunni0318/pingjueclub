@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wedoops.platinumnobleclub.NotificationDetail;
 import com.wedoops.platinumnobleclub.fragment.EditProfileFragment;
 import com.wedoops.platinumnobleclub.EventDetailActivity;
 import com.wedoops.platinumnobleclub.ForgotPasswordActivity;
@@ -22,6 +23,7 @@ import com.wedoops.platinumnobleclub.MainActivity;
 import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.MyBookingDetail;
+import com.wedoops.platinumnobleclub.fragment.NotificationFragment;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsListCreditFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
@@ -48,7 +50,8 @@ public class Api_Constants {
 //    private static String url_services = "http://103.15.107.152:5770/api/Services/";
 //    private static String url_internal = "http://103.15.107.152:5770/api/Internal/";
 //    private static String url_Reservation = "http://stg.platinumnobleclub.com/api/Reservation/";
-
+//    private static String url_inbox = "http://stg.platinumnobleclub.com/api/Inbox/";
+//    private static String url_version = "http://stq.platinumnobleclub.com/api/version/";
 
 //    LIVE server environment
     private static String url_Reservation = "http://api.platinumnobleclub.com/api/Reservation/";
@@ -60,6 +63,8 @@ public class Api_Constants {
     private static String url_userwallet = "http://api.platinumnobleclub.com/api/UserWallet/";
     private static String url_services = "http://api.platinumnobleclub.com/api/Services/";
     private static String url_internal = "http://api.platinumnobleclub.com/api/Internal/";
+    private static String url_inbox = "http://api.platinumnobleclub.com/api/Inbox/";
+    private static String url_version = "http://api.platinumnobleclub.com/api/version/";
 
     private static String access_token_prefix = "bearer ";
     private static String device_type_static = "android";
@@ -91,6 +96,9 @@ public class Api_Constants {
     public static final int API_ProductDetails = 25;
     public static final int API_RetriveAllProduct = 26;
     public static final int API_CASH_WALLET_TRANSACTION_CLUB = 27;
+    public static final int API_Inbox = 28;
+    public static final int API_InboxDetail = 29;
+    public static final int API_TRACE_VERSION = 30;
 
     public static final String COMMAND = "command";
 
@@ -1116,6 +1124,109 @@ public class Api_Constants {
                             20000,
                             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_Inbox: {
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_inbox + "InboxList",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    MemberDashboardFragment.processWSData(convertResponseToJsonObject(response), API_Inbox);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    MemberDashboardFragment.processWSData(null, API_Inbox);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                    };
+                    postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                            20000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_InboxDetail: {
+
+                    int d = b.getInt("inboxId");
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_inbox + "InboxDetails?id=" + d,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    NotificationDetail.processWSData(convertResponseToJsonObject(response), API_InboxDetail);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    NotificationDetail.processWSData(null, API_InboxDetail);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            String auth_token = access_token_prefix + b.getString("access_token");
+                            params.put("Authorization", auth_token);
+
+                            return params;
+                        }
+
+                    };
+                    queue.add(postRequest);
+
+                    break;
+                }
+
+                case API_TRACE_VERSION: {
+
+                    StringRequest postRequest = new StringRequest(Request.Method.GET, url_version + "trace?os=android",
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    MemberDashboardFragment.processWSData(convertResponseToJsonObject(response), API_TRACE_VERSION);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    MemberDashboardFragment.processWSData(null, API_TRACE_VERSION);
+
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            return params;
+                        }
+
+                    };
                     queue.add(postRequest);
 
                     break;

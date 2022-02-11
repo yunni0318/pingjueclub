@@ -36,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -55,6 +56,7 @@ import android.text.SpannableString;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,6 +93,7 @@ import com.wedoops.platinumnobleclub.fragment.MemberDashboardFragment;
 import com.wedoops.platinumnobleclub.fragment.MyBookingFragment;
 import com.wedoops.platinumnobleclub.fragment.MyReservationFragment;
 import com.wedoops.platinumnobleclub.fragment.NewsFragment;
+import com.wedoops.platinumnobleclub.fragment.NotificationFragment;
 import com.wedoops.platinumnobleclub.fragment.PayFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsFragment;
 import com.wedoops.platinumnobleclub.fragment.RecordsListPtsFragment;
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 111;
     private static final String TAG_DASHBOARD = "DASHBOARD";
     private static final String TAG_MEMBERQR = "MEMBER QR";
-
+    private static final String TAG_INBOX = "INBOX";
     private static final String TAG_ACCOUNT = "ACCOUNT";
     private static final String TAG_NOTIFICATION = "NOTIFICATION";
     private static final String TAG_MY_BOOKING = "MYBOOKING";
@@ -163,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentPhotoPath = "";
     private static CustomProgressDialog customDialog;
     private AlertDialog alert;
+    public TextView inboxCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         loadLanguage();
         setupProgressDialog();
-        setupAdvertisement();
         setContentView(R.layout.activity_main);
         app = this;
         mHandler = new Handler();
@@ -189,11 +192,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupAdvertisement() {
-//        MobileAds.initialize(this, "ca-app-pub-2772663182449117/8882399941");
-//        MobileAds.initialize(this, "ca-app-pub-4167585096532227~2561120906");
+    public void setupNotificationCount(String inbox) {
 
-//        MobileAds.initialize(this, "ca-app-pub-3940256099942544/2247696110");
+        if (inbox.equals("0")) {
+            inboxCount.setVisibility(View.GONE);
+        }
+        else{
+            inboxCount.setVisibility(View.VISIBLE);
+            inboxCount.setText(inbox);
+        }
 
     }
 
@@ -381,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
         textview_user_wallet1 = navHeader.findViewById(R.id.textview_user_wallet1);
         textview_e_wallet = navHeader.findViewById(R.id.textview_e_wallet);
         textview_e_wallet1 = navHeader.findViewById(R.id.textview_e_wallet1);
-
+        inboxCount = (TextView) navigationView.getMenu().findItem(R.id.menu_inbox).getActionView().findViewById(R.id.noti);
 
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_logo = findViewById(R.id.toolbar_logo);
@@ -496,6 +503,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
+
+
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -503,12 +512,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+                //initializeCountDrawer();
+                int h = navigationView.getMenu().getItem(0).getActionView().getLayoutParams().height;
+
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.menu_memberQR:
+                    case R.id.menu_inbox:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_MEMBERQR;
+                        CURRENT_TAG = TAG_INBOX;
                         break;
 
                     case R.id.menu_dashboard:
@@ -614,6 +626,16 @@ public class MainActivity extends AppCompatActivity {
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
+    }
+
+    private void initializeCountDrawer(){
+
+        inboxCount.setGravity(Gravity.CENTER);
+        inboxCount.setTypeface(null, Typeface.BOLD);
+        inboxCount.setTextColor(getResources().getColor(R.color.white));
+        inboxCount.setTextSize(12);
+        inboxCount.setText("15");
+        inboxCount.setBackgroundResource(R.drawable.badge_background);
     }
 
     private void setupNavigationDrawer() {
@@ -818,9 +840,12 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                QRcodeDialog qRcodeDialog = new QRcodeDialog(MainActivity.this);
-                qRcodeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                qRcodeDialog.show();
+                toolbar_title.setVisibility(View.VISIBLE);
+                toolbar_logo.setVisibility(View.GONE);
+                toolbar_camera.setVisibility(View.VISIBLE);
+                toolbar_title.setText(getString(R.string.nav_menu_inbox));
+                NotificationFragment notiFragment = new NotificationFragment();
+                return notiFragment;
             case 1:
                 toolbar_title.setVisibility(View.GONE);
                 toolbar_logo.setVisibility(View.VISIBLE);

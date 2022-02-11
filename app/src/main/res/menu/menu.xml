@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:layout_gravity="end"  android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_memberQR"
-            android:icon="@drawable/qrcode"
-            android:title="@string/nav_menu_memberQR" />
+            android:id="@+id/menu_inbox"
+            android:icon="@drawable/sidebar_inbox"
+            android:title="@string/nav_menu_inbox"
+            app:actionLayout="@layout/custom_action_item_layout" />
         <item
             android:id="@+id/menu_dashboard"
             android:icon="@drawable/home"
