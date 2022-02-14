@@ -39,6 +39,7 @@ import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
 import com.wedoops.platinumnobleclub.database.CurrencyList;
+import com.wedoops.platinumnobleclub.database.EventDetailEventData;
 import com.wedoops.platinumnobleclub.database.InboxList;
 import com.wedoops.platinumnobleclub.database.MemberDashboardEventData;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
@@ -55,6 +56,7 @@ import com.wedoops.platinumnobleclub.webservices.RefreshTokenAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MemberDashboardFragment extends Fragment {
@@ -953,18 +955,52 @@ public class MemberDashboardFragment extends Fragment {
                         int LocalVersionCode = BuildConfig.VERSION_CODE;
                         String LocalVersionName = BuildConfig.VERSION_NAME;
 
-
                         if (MaintainanceStatus.toUpperCase().equals("ACTIVE")) {
                             if (!ServerVersion.equals(LocalVersionName)) {
-                                new DisplayAlertDialog().displayAlertDialogString(0, get_activity.getResources().getString(R.string.new_version_found), false, view.getContext(), get_activity);
-//                                try {
-//                                    get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.wedoops.platinumnobleclub")));
-//                                } catch (android.content.ActivityNotFoundException anfe) {
-//                                    get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.wedoops.platinumnobleclub")));
-//                                }
-//                                get_activity.finish();
-                            }
-                            else{
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+                                View customLayout = get_activity.getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                                TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                                TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                                Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+                                Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                                textview_title.setText(get_context.getString(R.string.warning_title));
+
+                                textview_message.setText(get_activity.getResources().getString(R.string.new_version_found));
+
+
+                                builder.setView(customLayout);
+
+                                builder.setCancelable(false);
+
+                                button_cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alert.dismiss();
+                                        get_activity.finish();
+                                    }
+                                });
+
+
+                                button_ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alert.dismiss();
+                                        try {
+                                            get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.wedoops.platinumnobleclub")));
+                                        } catch (android.content.ActivityNotFoundException anfe) {
+                                            get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.wedoops.platinumnobleclub")));
+                                        }
+                                        get_activity.finish();
+                                    }
+                                });
+
+                                alert = builder.create();
+
+                                alert.show();
+                            } else {
                                 customDialog.showDialog(get_context);
                                 callMemberDashboardWebService();
                             }

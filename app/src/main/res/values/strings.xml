@@ -198,7 +198,7 @@
     <string name="cancel">CANCEL</string>
     <string name="join_trip">JOIN EVENT</string>
     <string name="loading_please_wait">Loading...</string>
-    <string name="new_version_found">New Version Found.\nPress OK to download and install now. </string>
+    <string name="new_version_found">New Version Found\nPress OK to download and install now</string>
 
     <!-- Others -->
     <string name="userrank_bronze">BRONZE</string>
