@@ -118,7 +118,7 @@
 
     <!-- Navigation Drawer Menu -->
     <string name="nav_menu_memberQR">Member QR</string>
-
+    <string name="nav_menu_inbox">Inbox</string>
     <string name="nav_menu_dashboard">Dashboard</string>
     <string name="nav_menu_account">Account</string>
     <string name="nav_menu_my_booking">My Booking</string>
@@ -198,6 +198,7 @@
     <string name="cancel">CANCEL</string>
     <string name="join_trip">JOIN EVENT</string>
     <string name="loading_please_wait">Loading...</string>
+    <string name="new_version_found">New Version Found\nPress OK to download and install now</string>
 
     <!-- Others -->
     <string name="userrank_bronze">BRONZE</string>
@@ -244,4 +245,5 @@
     <string name="calendar_access_required">Allow calendar permission will remind for reservation function</string>
     <string name="Recommended_Allow_Permission">Recommended to allow all Permission for this APP</string>
     <string name="Enable_permission_setting">Go to settings and enable permissions</string>
+
 </resources>

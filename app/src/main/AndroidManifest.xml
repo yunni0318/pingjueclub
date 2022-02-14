@@ -81,13 +81,15 @@
         <activity
             android:name=".ServicesSubActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".NotificationDetail"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="DATABASE"
             android:value="platinumnobleclub.db" />
         <meta-data
             android:name="VERSION"
-            android:value="10" />
+            android:value="11" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

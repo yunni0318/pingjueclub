@@ -30,13 +30,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.orm.StringUtil;
+import com.wedoops.platinumnobleclub.BuildConfig;
 import com.wedoops.platinumnobleclub.CustomProgressDialog;
 import com.wedoops.platinumnobleclub.EventDetailActivity;
 import com.wedoops.platinumnobleclub.LoginActivity;
+import com.wedoops.platinumnobleclub.MainActivity;
 import com.wedoops.platinumnobleclub.R;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardEventDataRecyclerAdapter;
 import com.wedoops.platinumnobleclub.adapters.MemberDashboardTopBannerRecyclerAdapter;
 import com.wedoops.platinumnobleclub.database.CurrencyList;
+import com.wedoops.platinumnobleclub.database.EventDetailEventData;
+import com.wedoops.platinumnobleclub.database.InboxList;
 import com.wedoops.platinumnobleclub.database.MemberDashboardEventData;
 import com.wedoops.platinumnobleclub.database.MemberDashboardTopBanner;
 import com.wedoops.platinumnobleclub.database.UserDetails;
@@ -52,6 +56,7 @@ import com.wedoops.platinumnobleclub.webservices.RefreshTokenAPI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MemberDashboardFragment extends Fragment {
@@ -64,6 +69,7 @@ public class MemberDashboardFragment extends Fragment {
     private static Runnable runnable;
     public static Activity get_activity;
     public static Context get_context;
+    private static Boolean versionMatch;
 
     private static MemberDashboardTopBannerRecyclerAdapter topBanner_adapter;
     private static MemberDashboardEventDataRecyclerAdapter eventData_adapter;
@@ -86,14 +92,13 @@ public class MemberDashboardFragment extends Fragment {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
 
-            if(currentSelectedCategory.equals("All")){
+            if (currentSelectedCategory.equals("All")) {
                 List<MemberDashboardEventData> all = MemberDashboardEventData.listAll(MemberDashboardEventData.class);
 
                 Intent intent = new Intent(view.getContext(), EventDetailActivity.class);
                 intent.putExtra("eventGUID", all.get(position).getEventGUID());
                 view.getContext().startActivity(intent);
-            }
-            else {
+            } else {
                 String tablename_ed = StringUtil.toSQLName("MemberDashboardEventData");
                 String fieldname_category_code = StringUtil.toSQLName("EventCategoryCode");
 
@@ -328,7 +333,10 @@ public class MemberDashboardFragment extends Fragment {
             startActivity(intent);
         } else {
             customDialog.showDialog(get_context);
-            callMemberDashboardWebService();
+
+            callCheckVersionWebService();
+
+
         }
 
     }
@@ -556,6 +564,15 @@ public class MemberDashboardFragment extends Fragment {
     }
 
 
+    private static void callCheckVersionWebService() {
+
+        Bundle b = new Bundle();
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_TRACE_VERSION);
+
+        new CallWebServices(Api_Constants.API_TRACE_VERSION, view.getContext(), true).execute(b);
+
+    }
+
     private static void callMemberDashboardWebService() {
 //        CustomProgressDialog.showProgressDialog(get_context);
 
@@ -667,10 +684,10 @@ public class MemberDashboardFragment extends Fragment {
 
     public static void processWSData(JSONObject returnedObject, int command) {
 //        CustomProgressDialog.closeProgressDialog();
-        customDialog.hideDialog();
 
         if (command == Api_Constants.API_MEMBER_DASHBOARDV2) {
             boolean isSuccess = false;
+            customDialog.hideDialog();
             try {
                 isSuccess = returnedObject.getBoolean("Success");
 
@@ -749,7 +766,7 @@ public class MemberDashboardFragment extends Fragment {
                             CurrencyList cl_db = new CurrencyList(String.valueOf(cl.getInt("Srno")), cl.getString("CurrencyName"), cl.getString("CurrencyCode"), cl.getInt("CurrencyRate"), cl.getString("Status"), cl.getString("ImagePath"), cl.getString("CreatedDate"));
                             cl_db.save();
                         }
-
+                        callNotiListService();
                         checkTopUpStatus();
                         displayResult();
                         initial_event();
@@ -805,7 +822,7 @@ public class MemberDashboardFragment extends Fragment {
 
             }
         } else if (command == RefreshTokenAPI.API_REFRESH_TOKEN) {
-
+            customDialog.hideDialog();
             boolean isSuccess = false;
             try {
                 isSuccess = returnedObject.getBoolean("Success");
@@ -870,7 +887,149 @@ public class MemberDashboardFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("Error", e.toString());
             }
+        } else if (command == Api_Constants.API_Inbox) {
+            boolean isSuccess = false;
+            customDialog.hideDialog();
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+                        JSONArray response_object = returnedObject.getJSONArray("ResponseData");
+
+                        List<InboxList> tcd = InboxList.listAll(InboxList.class);
+                        if (tcd.size() > 0) {
+                            InboxList.deleteAll(InboxList.class);
+                        }
+
+                        for (int i = 0; i < response_object.length(); i++) {
+
+                            JSONObject inbox = response_object.getJSONObject(i);
+
+                            int boxid = inbox.getInt("id");
+                            String LoginID = inbox.getString("LoginID");
+                            String Title = inbox.getString("Title");
+                            String Status = inbox.getString("Status");
+                            boolean IsView = inbox.getBoolean("IsView");
+                            String Date = inbox.getString("Date");
+
+                            InboxList inboxList = new InboxList(boxid, LoginID, Title, Status, IsView, Date);
+                            inboxList.save();
+                        }
+                        int inbox = 0;
+                        List<InboxList> inboxLists = InboxList.listAll(InboxList.class);
+                        for (int i = 0; i < inboxLists.size(); i++) {
+                            if (inboxLists.get(i).getView().equals(false)) {
+                                inbox += 1;
+                            }
+                        }
+                        if (inbox > 99) {
+                            ((MainActivity) get_activity).setupNotificationCount("99+");
+                        } else {
+                            ((MainActivity) get_activity).setupNotificationCount(String.valueOf(inbox));
+                        }
+
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
+
+            }
+        } else if (command == Api_Constants.API_TRACE_VERSION) {
+            boolean isSuccess = false;
+            customDialog.hideDialog();
+            try {
+                isSuccess = returnedObject.getBoolean("Success");
+
+                if (isSuccess) {
+
+                    if (returnedObject.getInt("StatusCode") == 200) {
+                        JSONObject response_object = returnedObject.getJSONObject("ResponseData");
+
+                        String Platform = response_object.getString("Platform");
+                        String ServerVersion = response_object.getString("Version");
+                        String MaintainanceStatus = response_object.getString("Status");
+
+                        int LocalVersionCode = BuildConfig.VERSION_CODE;
+                        String LocalVersionName = BuildConfig.VERSION_NAME;
+
+                        if (MaintainanceStatus.toUpperCase().equals("ACTIVE")) {
+                            if (!ServerVersion.equals(LocalVersionName)) {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(get_context);
+
+                                View customLayout = get_activity.getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                                TextView textview_title = customLayout.findViewById(R.id.textview_title);
+                                TextView textview_message = customLayout.findViewById(R.id.textview_message);
+                                Button button_cancel = customLayout.findViewById(R.id.button_cancel);
+                                Button button_ok = customLayout.findViewById(R.id.button_ok);
+
+                                textview_title.setText(get_context.getString(R.string.warning_title));
+
+                                textview_message.setText(get_activity.getResources().getString(R.string.new_version_found));
+
+
+                                builder.setView(customLayout);
+
+                                builder.setCancelable(false);
+
+                                button_cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alert.dismiss();
+                                        get_activity.finish();
+                                    }
+                                });
+
+
+                                button_ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alert.dismiss();
+                                        try {
+                                            get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.wedoops.platinumnobleclub")));
+                                        } catch (android.content.ActivityNotFoundException anfe) {
+                                            get_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.wedoops.platinumnobleclub")));
+                                        }
+                                        get_activity.finish();
+                                    }
+                                });
+
+                                alert = builder.create();
+
+                                alert.show();
+                            } else {
+                                customDialog.showDialog(get_context);
+                                callMemberDashboardWebService();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                new DisplayAlertDialog().displayAlertDialogString(0, "Something Went Wrong, Please Try Again", false, view.getContext(), get_activity);
+
+            }
         }
+
+    }
+
+    private static void callNotiListService() {
+
+        List<UserDetails> ud = UserDetails.listAll(UserDetails.class);
+
+        String table_name = UserDetails.getTableName(UserDetails.class);
+        String loginid_field = StringUtil.toSQLName("LoginID");
+
+        List<UserDetails> ud_list = UserDetails.findWithQuery(UserDetails.class, "SELECT * from " + table_name + " where " + loginid_field + " = ?", ud.get(0).getLoginID());
+
+        Bundle b = new Bundle();
+        b.putString("access_token", ud_list.get(0).getAccessToken());
+        b.putInt(Api_Constants.COMMAND, Api_Constants.API_Inbox);
+
+        new CallWebServices(Api_Constants.API_Inbox, get_context, true).execute(b);
     }
 
     @Override
